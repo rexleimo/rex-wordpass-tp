@@ -1,0 +1,4909 @@
+{
+  "version": "2.14",
+  "children": [
+    {
+      "type": "frame",
+      "id": "My548",
+      "x": 0,
+      "y": 0,
+      "name": "VRAY 企业官网首页",
+      "clip": true,
+      "width": 1440,
+      "height": 1220,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Z5MeQt",
+          "name": "主导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "NfQmM",
+              "name": "VRAY 标识",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "BBK9J",
+                  "name": "标志圆环",
+                  "innerRadius": 0.78,
+                  "width": 38,
+                  "height": 38,
+                  "stroke": "$vray-navy",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "text",
+                  "id": "tU9u0",
+                  "name": "品牌字标",
+                  "fill": "$vray-navy",
+                  "content": "VRAY",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 21,
+                  "fontWeight": "700",
+                  "letterSpacing": 3
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "QhMER",
+              "name": "一级导航",
+              "gap": 30,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ai7l6",
+                  "name": "导航 · Home",
+                  "fill": "#0062FF",
+                  "content": "首页",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "QhWNr",
+                  "name": "导航 · Products ⌄",
+                  "fill": "#102033",
+                  "content": "商店 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "z9fO27",
+                  "name": "导航 · Resources ⌄",
+                  "fill": "#102033",
+                  "content": "3D 打印服务 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Iw53K",
+                  "name": "导航 · News & Event ⌄",
+                  "fill": "#102033",
+                  "content": "材料库",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "ivNmA",
+                  "name": "导航 · About Us ⌄",
+                  "fill": "#102033",
+                  "content": "案例展示",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Ijg7J",
+                  "name": "导航 · Contact Us",
+                  "fill": "#102033",
+                  "content": "关于我们",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "RsIds",
+                  "name": "导航 · Blog",
+                  "fill": "#102033",
+                  "content": "知识中心",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lPwn0",
+              "name": "获取报价",
+              "fill": "#0062FF",
+              "cornerRadius": 999,
+              "padding": [
+                12,
+                22
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "R4oMDJ",
+                  "name": "报价按钮文案",
+                  "fill": "#FFFFFF",
+                  "content": "上传模型询价  →",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dUjFT",
+          "name": "企业主视觉",
+          "width": "fill_container",
+          "height": 385,
+          "fill": "$vray-soft",
+          "gap": 58,
+          "padding": [
+            52,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "cV2RD",
+              "name": "主视觉文案",
+              "width": 560,
+              "layout": "vertical",
+              "gap": 15,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "X9WZeI",
+                  "name": "服务标签",
+                  "fill": "#0062FF",
+                  "content": "PRECISION 3D PRINTING",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                  "letterSpacing": 1.6
+                },
+                {
+                  "type": "text",
+                  "id": "lKc7y",
+                  "name": "主标题",
+                  "fill": "$vray-ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "从模型到实物，按你的方式制造。",
+                  "lineHeight": 1.02,
+                  "fontFamily": "$font-vray",
+                  "fontSize": 43,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "cfHkw",
+                  "name": "主说明",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "按需 3D 打印服务与可直接购买的模块化连接件。上传模型获得人工报价，或在线配置尺寸、材料与颜色并完成结算。",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "h0NOur",
+                  "name": "主视觉按钮组",
+                  "gap": 13,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Y2mFi",
+                      "name": "开始询价按钮",
+                      "fill": "#0062FF",
+                      "cornerRadius": 3,
+                      "padding": [
+                        12,
+                        21
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Nu78J",
+                          "name": "查看产品文案",
+                          "fill": "#FFFFFF",
+                          "content": "Explore Products",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 15,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BJJhX",
+                      "name": "浏览材料库按钮",
+                      "cornerRadius": 3,
+                      "stroke": "#0062FF",
+                      "strokeWidth": 1,
+                      "padding": [
+                        11,
+                        20
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "lTcsq",
+                          "name": "观看演示文案",
+                          "fill": "$vray-navy",
+                          "content": "Watch Demo",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AicZb",
+              "name": "3D 打印连接件示意",
+              "width": 460,
+              "height": 250,
+              "fill": "#102033",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 14,
+                  "id": "FE28A",
+                  "x": 130,
+                  "y": 52,
+                  "name": "连接件主体",
+                  "fill": "#F4F8FF",
+                  "width": 200,
+                  "height": 144
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "WQGe3",
+                  "x": 151,
+                  "y": 73,
+                  "name": "连接件内孔",
+                  "fill": "#0062FF",
+                  "width": 116,
+                  "height": 76
+                },
+                {
+                  "type": "path",
+                  "id": "w8QATF",
+                  "x": 161,
+                  "y": 84,
+                  "name": "层纹轮廓",
+                  "geometry": "M0 37l18-11 13 9 14-25 15 15 19-18 16 9",
+                  "viewBox": [
+                    0,
+                    0,
+                    95,
+                    45
+                  ],
+                  "fill": "#00000000",
+                  "width": 95,
+                  "height": 45,
+                  "stroke": "#DDEBFF",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "ellipse",
+                  "id": "W8zqeM",
+                  "x": 278,
+                  "y": 82,
+                  "name": "连接端口",
+                  "innerRadius": 0.5,
+                  "fill": "#0062FF",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "frame",
+                  "id": "sWvOP",
+                  "x": 30,
+                  "y": 33,
+                  "name": "技术注释",
+                  "width": 86,
+                  "height": 25,
+                  "fill": "#FFFFFF",
+                  "padding": [
+                    5,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lSrWM",
+                      "name": "材质标注",
+                      "fill": "#0062FF",
+                      "content": "PETG",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "W44Ed",
+                  "x": 318,
+                  "y": 29,
+                  "name": "技术注释",
+                  "width": 105,
+                  "height": 25,
+                  "fill": "#FFFFFF",
+                  "padding": [
+                    5,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "H1UT4c",
+                      "name": "颜色标注",
+                      "fill": "#0062FF",
+                      "content": "24 COLORS",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "NwrDt",
+                  "x": 310,
+                  "y": 202,
+                  "name": "技术注释",
+                  "width": 118,
+                  "height": 25,
+                  "fill": "#FFFFFF",
+                  "padding": [
+                    5,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ltUJu",
+                      "name": "精度标注",
+                      "fill": "#0062FF",
+                      "content": "±0.2 MM",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "wewQO",
+          "name": "信任指标",
+          "width": "fill_container",
+          "height": 90,
+          "fill": "#FFFFFF",
+          "padding": [
+            0,
+            118
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Uot7z",
+              "name": "指标 · Years in XRF",
+              "gap": 9,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PaMe6",
+                  "name": "指标数字",
+                  "fill": "$vray-navy",
+                  "content": "10+",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 24,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "Khweo",
+                  "name": "指标说明",
+                  "fill": "$vray-gray",
+                  "content": "Years in XRF",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "X2OcMj",
+              "name": "指标 · Countries served",
+              "gap": 9,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Sd6kV",
+                  "name": "指标数字",
+                  "fill": "$vray-navy",
+                  "content": "35+",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 24,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "Ny4ga",
+                  "name": "指标说明",
+                  "fill": "$vray-gray",
+                  "content": "Countries served",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MGpUk",
+              "name": "指标 · Technical response",
+              "gap": 9,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FB2Cr",
+                  "name": "指标数字",
+                  "fill": "$vray-navy",
+                  "content": "24h",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 24,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "zVBia",
+                  "name": "指标说明",
+                  "fill": "$vray-gray",
+                  "content": "Technical response",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Yj55u",
+              "name": "指标 · Quality workflow",
+              "gap": 9,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "OiFdU",
+                  "name": "指标数字",
+                  "fill": "$vray-navy",
+                  "content": "ISO",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 24,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "nU7T0",
+                  "name": "指标说明",
+                  "fill": "$vray-gray",
+                  "content": "Quality workflow",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "elHX3",
+          "name": "热门产品",
+          "width": "fill_container",
+          "height": 385,
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 21,
+          "padding": [
+            38,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "TTHIY",
+              "name": "产品区标题",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Dr504",
+                  "name": "产品标题组",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "F73F3",
+                      "name": "产品标题",
+                      "fill": "$vray-ink",
+                      "content": "直接购买的连接方案",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 29,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "L4Gt8l",
+                      "name": "产品说明",
+                      "fill": "$vray-gray",
+                      "content": "在线选择尺寸、材料、颜色与数量；价格和运费自动计算。",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "ihECh",
+                  "name": "查看全部产品",
+                  "fill": "#0062FF",
+                  "content": "进入商店  →",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 14,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Dx9aj",
+              "name": "商品卡片组",
+              "width": "fill_container",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Cb7Rt",
+                  "name": "商品 · 定制水管连接件",
+                  "width": "fill_container",
+                  "height": 212,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tE6C0",
+                      "name": "商品示意",
+                      "width": "fill_container",
+                      "height": 110,
+                      "fill": "#E7EDF7",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 10,
+                          "id": "oaj8P",
+                          "x": 120,
+                          "y": 20,
+                          "name": "设备模型",
+                          "fill": "#FFFFFF",
+                          "width": 120,
+                          "height": 70,
+                          "stroke": "$vray-navy",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "ZP8Au",
+                          "x": 137,
+                          "y": 34,
+                          "name": "设备屏幕",
+                          "fill": "$vray-navy",
+                          "width": 65,
+                          "height": 34
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "WSssd",
+                      "name": "商品信息",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "padding": [
+                        10,
+                        13
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yJZqm",
+                          "name": "商品名称",
+                          "fill": "$vray-ink",
+                          "content": "VRAY X7 Pro",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "guY1o",
+                          "name": "商品类别",
+                          "fill": "$vray-gray",
+                          "content": "Precious Metal Analyzer",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OdBos",
+                          "name": "商品价格",
+                          "fill": "$vray-red",
+                          "content": "从 ¥ 18,900 起",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Sekgj",
+                  "name": "商品 · DIY 家具连接套件",
+                  "width": "fill_container",
+                  "height": 212,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "vyXwh",
+                      "name": "商品示意",
+                      "width": "fill_container",
+                      "height": 110,
+                      "fill": "#F7ECEC",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 10,
+                          "id": "gtzxK",
+                          "x": 120,
+                          "y": 20,
+                          "name": "设备模型",
+                          "fill": "#FFFFFF",
+                          "width": 120,
+                          "height": 70,
+                          "stroke": "$vray-navy",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "mELUk",
+                          "x": 137,
+                          "y": 34,
+                          "name": "设备屏幕",
+                          "fill": "$vray-navy",
+                          "width": 65,
+                          "height": 34
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "HyFqd",
+                      "name": "商品信息",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "padding": [
+                        10,
+                        13
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pcdVU",
+                          "name": "商品名称",
+                          "fill": "$vray-ink",
+                          "content": "VRAY S2",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "EVACC",
+                          "name": "商品类别",
+                          "fill": "$vray-gray",
+                          "content": "Scrap Metal Analyzer",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "WwRGa",
+                          "name": "商品价格",
+                          "fill": "$vray-red",
+                          "content": "可配置 · 在线询价",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "La5uy",
+                  "name": "服务入口 · 材料库",
+                  "width": "fill_container",
+                  "height": 212,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "SdHlc",
+                      "name": "商品示意",
+                      "width": "fill_container",
+                      "height": 110,
+                      "fill": "#EDF2E8",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 10,
+                          "id": "WLu3y",
+                          "x": 120,
+                          "y": 20,
+                          "name": "设备模型",
+                          "fill": "#FFFFFF",
+                          "width": 120,
+                          "height": 70,
+                          "stroke": "$vray-navy",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "rYAEl",
+                          "x": 137,
+                          "y": 34,
+                          "name": "设备屏幕",
+                          "fill": "$vray-navy",
+                          "width": 65,
+                          "height": 34
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l3iEF",
+                      "name": "商品信息",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "padding": [
+                        10,
+                        13
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vZfhA",
+                          "name": "商品名称",
+                          "fill": "$vray-ink",
+                          "content": "VRAY M1",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ek9v6",
+                          "name": "商品类别",
+                          "fill": "$vray-gray",
+                          "content": "Mining & Soil Analyzer",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Ekesb",
+                          "name": "商品价格",
+                          "fill": "$vray-red",
+                          "content": "从 ¥ 22,600 起",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PEwGK",
+          "name": "购买与内容入口",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$vray-navy",
+          "gap": 55,
+          "padding": [
+            40,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "LstdJ",
+              "name": "购买引导",
+              "width": 600,
+              "layout": "vertical",
+              "gap": 13,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bM3ba",
+                  "name": "购买标题",
+                  "fill": "#FFFFFF",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "两条清晰流程，分别为效率而设。",
+                  "lineHeight": 1.05,
+                  "fontFamily": "$font-vray",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "s7LoMX",
+                  "name": "购买说明",
+                  "fill": "#D0DCF0",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "标准产品走完整电商流程：选规格、自动计算运费、信用卡付款；复杂打印项目则由工程师审核后提供正式报价。",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "HY5FM",
+                  "name": "进入产品中心",
+                  "fill": "#0062FF",
+                  "cornerRadius": 3,
+                  "padding": [
+                    12,
+                    19
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vuVec",
+                      "name": "购买按钮文案",
+                      "fill": "#FFFFFF",
+                      "content": "进入产品中心  →",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "USJ5l",
+              "name": "内容入口",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 11,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B3GR1Y",
+                  "name": "资源标题",
+                  "fill": "#96B4E7",
+                  "content": "MATERIALS · CASE STUDIES · KNOWLEDGE",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                  "letterSpacing": 1.3
+                },
+                {
+                  "type": "frame",
+                  "id": "ZJA3l",
+                  "name": "文章 · 如何选择贵金属分析仪",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "x4PH3",
+                      "name": "文章标题",
+                      "fill": "#FFFFFF",
+                      "content": "材料选择：PLA、PETG 与尼龙怎么选",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "w0NvM",
+                      "name": "阅读箭头",
+                      "fill": "#FFFFFF",
+                      "content": "→",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dwuay",
+                  "name": "文章 · 现场校准：获得稳定结果的 5 个步骤",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pJzlo",
+                      "name": "文章标题",
+                      "fill": "#FFFFFF",
+                      "content": "案例：定制夹具如何缩短装配时间",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Ilusl",
+                      "name": "阅读箭头",
+                      "fill": "#FFFFFF",
+                      "content": "→",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "owcnV",
+                  "name": "文章 · 案例：回收分拣效率提升 42%",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Dzq3f",
+                      "name": "文章标题",
+                      "fill": "#FFFFFF",
+                      "content": "连接件尺寸与承重的设计指南",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dtKUn",
+                      "name": "阅读箭头",
+                      "fill": "#FFFFFF",
+                      "content": "→",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "SJosl",
+      "x": 1519,
+      "y": 0,
+      "name": "VRAY 产品详情与结算",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ArEZ0",
+          "name": "产品页导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "PqYv9",
+              "name": "VRAY 标识",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "Rro3q",
+                  "name": "标志圆环",
+                  "innerRadius": 0.78,
+                  "width": 38,
+                  "height": 38,
+                  "stroke": "$vray-navy",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "text",
+                  "id": "s7KMjz",
+                  "name": "品牌字标",
+                  "fill": "$vray-navy",
+                  "content": "VRAY",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 21,
+                  "fontWeight": "700",
+                  "letterSpacing": 3
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ISTf1",
+              "name": "一级导航",
+              "gap": 30,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "aWBeG",
+                  "name": "导航 · Home",
+                  "fill": "#0062FF",
+                  "content": "首页",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Tb8l1",
+                  "name": "导航 · Products ⌄",
+                  "fill": "#102033",
+                  "content": "商店 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "cgmL1",
+                  "name": "导航 · Resources ⌄",
+                  "fill": "#102033",
+                  "content": "3D 打印服务 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "tn705",
+                  "name": "导航 · News & Event ⌄",
+                  "fill": "#102033",
+                  "content": "材料库",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "M9c8Yv",
+                  "name": "导航 · About Us ⌄",
+                  "fill": "#102033",
+                  "content": "案例展示",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "uEvmQ",
+                  "name": "导航 · Contact Us",
+                  "fill": "#102033",
+                  "content": "关于我们",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "vjiVb",
+                  "name": "导航 · Blog",
+                  "fill": "#102033",
+                  "content": "知识中心",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "QUGB2",
+              "name": "获取报价",
+              "fill": "#0062FF",
+              "cornerRadius": 999,
+              "padding": [
+                12,
+                22
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "R7bLi4",
+                  "name": "报价按钮文案",
+                  "fill": "#FFFFFF",
+                  "content": "上传模型询价  →",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FfFpW",
+          "name": "面包屑",
+          "width": "fill_container",
+          "height": 45,
+          "fill": "#FFFFFF",
+          "gap": 8,
+          "padding": [
+            0,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "tPqDU",
+              "name": "首页",
+              "fill": "$vray-gray",
+              "content": "Home",
+              "fontFamily": "$font-vray-body",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "O23gK9",
+              "name": "分隔",
+              "fill": "$vray-gray",
+              "content": "/",
+              "fontFamily": "$font-vray-body",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "qcIFv",
+              "name": "产品",
+              "fill": "$vray-gray",
+              "content": "Products",
+              "fontFamily": "$font-vray-body",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "yUDG4",
+              "name": "当前产品",
+              "fill": "$vray-ink",
+              "content": "VRAY X7 Pro",
+              "fontFamily": "$font-vray-body",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "neqk9",
+          "name": "商品配置主体",
+          "width": "fill_container",
+          "height": 580,
+          "fill": "#FFFFFF",
+          "gap": 55,
+          "padding": [
+            26,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "i9Zy0j",
+              "name": "产品展示区",
+              "width": 580,
+              "layout": "vertical",
+              "gap": 13,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CQeMU",
+                  "name": "产品主图",
+                  "width": "fill_container",
+                  "height": 390,
+                  "fill": "$vray-soft",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 22,
+                      "id": "YIjba",
+                      "x": 175,
+                      "y": 80,
+                      "name": "水管连接件主体",
+                      "fill": "#DDEBFF",
+                      "width": 238,
+                      "height": 165,
+                      "stroke": "#0062FF",
+                      "strokeWidth": 3,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#173B7830",
+                        "offset": {
+                          "x": 0,
+                          "y": 12
+                        },
+                        "blur": 18
+                      }
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 5,
+                      "id": "KFerJ",
+                      "x": 199,
+                      "y": 107,
+                      "name": "连接件内孔",
+                      "fill": "#0062FF",
+                      "width": 132,
+                      "height": 83
+                    },
+                    {
+                      "type": "path",
+                      "id": "zv7pZ",
+                      "x": 213,
+                      "y": 126,
+                      "name": "连接件轮廓",
+                      "geometry": "M0 30l14-10 15 9 19-25 13 20 18-15 26 12",
+                      "viewBox": [
+                        0,
+                        0,
+                        105,
+                        40
+                      ],
+                      "fill": "#00000000",
+                      "width": 105,
+                      "height": 40,
+                      "stroke": "#102033",
+                      "strokeWidth": 3
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "AlIWs",
+                      "x": 342,
+                      "y": 115,
+                      "name": "连接端口",
+                      "innerRadius": 0.47,
+                      "fill": "#102033",
+                      "width": 45,
+                      "height": 45
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wYDyn",
+                  "name": "产品缩略图",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "E6juLo",
+                      "name": "缩略 · 正面",
+                      "width": 102,
+                      "height": 54,
+                      "fill": "$vray-navy",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "N74xf",
+                          "name": "缩略文字",
+                          "fill": "#FFFFFF",
+                          "content": "正面",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "K2WWaI",
+                      "name": "缩略 · 侧面",
+                      "width": 102,
+                      "height": 54,
+                      "fill": "$vray-soft",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Te7O2",
+                          "name": "缩略文字",
+                          "fill": "$vray-gray",
+                          "content": "侧面",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "M4stdz",
+                      "name": "缩略 · 检测场景",
+                      "width": 102,
+                      "height": 54,
+                      "fill": "$vray-soft",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fJIRy",
+                          "name": "缩略文字",
+                          "fill": "$vray-gray",
+                          "content": "检测场景",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Ce6GE",
+              "name": "购买配置",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 15,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "giDS4",
+                  "name": "产品名称",
+                  "fill": "$vray-ink",
+                  "content": "定制 PVC 水管连接件",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 32,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "VtDK8",
+                  "name": "产品描述",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "按管径、角度、材料与颜色配置，适用于灌溉、DIY 管路和原型搭建。下单后自动计算价格与运费。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "zlubj",
+                  "name": "价格与库存",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "I2eetX",
+                      "name": "商品价格",
+                      "fill": "#0062FF",
+                      "content": "¥ 18 起",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 24,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NOtDG",
+                      "name": "库存状态",
+                      "fill": "#EAF6EE",
+                      "cornerRadius": 999,
+                      "padding": [
+                        5,
+                        9
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "u1bUix",
+                          "name": "库存文案",
+                          "fill": "#177044",
+                          "content": "● In stock",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n0uC4M",
+                  "name": "选项 · 探测器",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Bbq7t",
+                      "name": "选项标签",
+                      "fill": "$vray-ink",
+                      "content": "尺寸 / 管径",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zyEtT",
+                      "name": "选项选择器",
+                      "width": "fill_container",
+                      "height": 37,
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        11
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "WGRMF",
+                          "name": "选项值",
+                          "fill": "$vray-ink",
+                          "content": "SDD · 高精度",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "V23r1w",
+                          "name": "下拉箭头",
+                          "fill": "$vray-gray",
+                          "content": "⌄",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "A5ieXF",
+                  "name": "选项 · 软件套件",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "p5kPI",
+                      "name": "选项标签",
+                      "fill": "$vray-ink",
+                      "content": "材料",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TZEVj",
+                      "name": "选项选择器",
+                      "width": "fill_container",
+                      "height": 37,
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        11
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bCsRZ",
+                          "name": "选项值",
+                          "fill": "$vray-ink",
+                          "content": "贵金属分析包",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OOTDd",
+                          "name": "下拉箭头",
+                          "fill": "$vray-gray",
+                          "content": "⌄",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "BJHI3",
+                  "name": "选项 · 保修服务",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "X6EXF",
+                      "name": "选项标签",
+                      "fill": "$vray-ink",
+                      "content": "颜色",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CKwBF",
+                      "name": "选项选择器",
+                      "width": "fill_container",
+                      "height": 37,
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        11
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "nL6k5",
+                          "name": "选项值",
+                          "fill": "$vray-ink",
+                          "content": "标准保修 12 个月",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "k97U4",
+                          "name": "下拉箭头",
+                          "fill": "$vray-gray",
+                          "content": "⌄",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "z43iW",
+                  "name": "购买操作",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PvIJD",
+                      "name": "数量选择",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "gap": 15,
+                      "padding": [
+                        11,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cwqu2",
+                          "name": "数量",
+                          "fill": "$vray-ink",
+                          "content": "−",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LRleL",
+                          "name": "数量",
+                          "fill": "$vray-ink",
+                          "content": "1",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "QCzcr",
+                          "name": "数量",
+                          "fill": "$vray-ink",
+                          "content": "+",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d1lsww",
+                      "name": "加入购物车",
+                      "fill": "#0062FF",
+                      "cornerRadius": 3,
+                      "padding": [
+                        12,
+                        22
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "zkEwl",
+                          "name": "购物车文案",
+                          "fill": "#FFFFFF",
+                          "content": "Add to cart",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 15,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "T5nAy",
+          "name": "运费与结算流程",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$vray-soft",
+          "gap": 36,
+          "padding": [
+            34,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "aCv3r",
+              "name": "配送计算",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "stroke": "#D7E2F2",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 11,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Gdj8m",
+                  "name": "配送标题",
+                  "fill": "$vray-ink",
+                  "content": "自动计算运费与交期",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "eazID",
+                  "name": "配送说明",
+                  "fill": "$vray-gray",
+                  "content": "标准产品在结账前根据收货地址、体积与数量自动显示运输方式、运费与预计送达日期。",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "y100s",
+                  "name": "地址输入",
+                  "width": "fill_container",
+                  "height": 39,
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ucxx8",
+                      "name": "地址占位",
+                      "fill": "$vray-gray",
+                      "content": "输入国家 / 邮编",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "i7DQaM",
+                      "name": "地址箭头",
+                      "fill": "#0062FF",
+                      "content": "→",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "fS565",
+                  "name": "配送提示",
+                  "fill": "#177044",
+                  "content": "✓ 报价中包含运输保险及出口文件",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GgAtD",
+              "name": "付款与内容管理",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "stroke": "#D7E2F2",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 11,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "q4l4HM",
+                  "name": "付款标题",
+                  "fill": "$vray-ink",
+                  "content": "标准电商结账，后台持续可扩展",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "t6dGb",
+                  "name": "付款说明",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "产品、规格、库存、订单、案例与文章都可在 WordPress 后台更新。首期通过 WooCommerce 接入信用卡付款和自动运费；后续可增加自动打单与订单管理。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "O5LNbc",
+                  "name": "支付方式",
+                  "gap": 9,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DUUjN",
+                      "name": "支付 · VISA",
+                      "fill": "$vray-soft",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        6,
+                        9
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JeqfZ",
+                          "name": "支付文字",
+                          "fill": "$vray-navy",
+                          "content": "VISA",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "f4QF7",
+                      "name": "支付 · PayPal",
+                      "fill": "$vray-soft",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        6,
+                        9
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "eIqV1",
+                          "name": "支付文字",
+                          "fill": "$vray-navy",
+                          "content": "PayPal",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "P4xYXa",
+                      "name": "支付 · Bank",
+                      "fill": "$vray-soft",
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        6,
+                        9
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "txj9E",
+                          "name": "支付文字",
+                          "fill": "$vray-navy",
+                          "content": "Bank",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "AqfXJ",
+      "x": 3044,
+      "y": 0,
+      "name": "VRAY 获取报价",
+      "clip": true,
+      "width": 1440,
+      "height": 1320,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "AqZ2W",
+          "name": "报价页导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "w7BFYJ",
+              "name": "VRAY 标识",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "CARMC",
+                  "name": "标志圆环",
+                  "innerRadius": 0.78,
+                  "width": 38,
+                  "height": 38,
+                  "stroke": "$vray-navy",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "text",
+                  "id": "yOSD5",
+                  "name": "品牌字标",
+                  "fill": "$vray-navy",
+                  "content": "VRAY",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 21,
+                  "fontWeight": "700",
+                  "letterSpacing": 3
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "HOMgH",
+              "name": "一级导航",
+              "gap": 30,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "e0kTti",
+                  "name": "导航 · Home",
+                  "fill": "#0062FF",
+                  "content": "首页",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "O1LkpS",
+                  "name": "导航 · Products ⌄",
+                  "fill": "#102033",
+                  "content": "商店 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "iawuA",
+                  "name": "导航 · Resources ⌄",
+                  "fill": "#102033",
+                  "content": "3D 打印服务 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "uZTib",
+                  "name": "导航 · News & Event ⌄",
+                  "fill": "#102033",
+                  "content": "材料库",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "f7YQu",
+                  "name": "导航 · About Us ⌄",
+                  "fill": "#102033",
+                  "content": "案例展示",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "yr2ay",
+                  "name": "导航 · Contact Us",
+                  "fill": "#102033",
+                  "content": "关于我们",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Nj5qa",
+                  "name": "导航 · Blog",
+                  "fill": "#102033",
+                  "content": "知识中心",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AnAd3",
+              "name": "获取报价",
+              "fill": "#0062FF",
+              "cornerRadius": 999,
+              "padding": [
+                12,
+                22
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "TMcp9",
+                  "name": "报价按钮文案",
+                  "fill": "#FFFFFF",
+                  "content": "上传模型询价  →",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Rag5i",
+          "name": "报价页标题",
+          "width": "fill_container",
+          "height": 215,
+          "fill": "$vray-navy",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            45,
+            118
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "jROWQ",
+              "name": "标题标签",
+              "fill": "#A8C5F2",
+              "content": "GET A QUOTE",
+              "fontFamily": "$font-vray-data",
+              "fontSize": 12,
+              "fontWeight": "700",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "text",
+              "id": "VpB0T",
+              "name": "报价页主标题",
+              "fill": "#FFFFFF",
+              "content": "上传模型，获得人工审核报价。",
+              "fontFamily": "$font-vray",
+              "fontSize": 38,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "dV4R2",
+              "name": "报价页说明",
+              "fill": "#D0DCF0",
+              "textGrowth": "fixed-width",
+              "width": 690,
+              "content": "先用参考计算器了解预算，再上传 STL、3MF 等文件。我们会审核可打印性、工艺与交期，并在 24 小时内将正式报价发送到你的邮箱。",
+              "lineHeight": 1.5,
+              "fontFamily": "$font-vray-body",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cGdGj",
+          "name": "报价表单内容",
+          "width": "fill_container",
+          "height": 800,
+          "fill": "$vray-soft",
+          "gap": 50,
+          "padding": [
+            38,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "qo37h",
+              "name": "询盘表单",
+              "width": 690,
+              "fill": "#FFFFFF",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 13,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ctQ7f",
+                  "name": "表单标题",
+                  "fill": "$vray-ink",
+                  "content": "提交打印询价",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 22,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "M0l0bp",
+                  "name": "姓名邮箱行",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "y1jyq7",
+                      "name": "字段 · 您的姓名",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "lHCwP",
+                          "name": "字段标签",
+                          "fill": "$vray-ink",
+                          "content": "您的姓名",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kFMdQ",
+                          "name": "字段输入",
+                          "width": "fill_container",
+                          "height": 38,
+                          "stroke": "$vray-line",
+                          "strokeWidth": 1,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KGZUY",
+                              "name": "字段提示",
+                              "fill": "#9A9A9A",
+                              "content": "Name",
+                              "fontFamily": "$font-vray-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "eMuVu",
+                      "name": "字段 · 工作邮箱",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "BetYO",
+                          "name": "字段标签",
+                          "fill": "$vray-ink",
+                          "content": "工作邮箱",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cW2ir",
+                          "name": "字段输入",
+                          "width": "fill_container",
+                          "height": 38,
+                          "stroke": "$vray-line",
+                          "strokeWidth": 1,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "y9Am5",
+                              "name": "字段提示",
+                              "fill": "#9A9A9A",
+                              "content": "Email",
+                              "fontFamily": "$font-vray-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GyS21",
+                  "name": "字段 · 感兴趣的产品",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lOYHb",
+                      "name": "字段标签",
+                      "fill": "$vray-ink",
+                      "content": "打印材料偏好",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "iazit",
+                      "name": "字段选择",
+                      "width": "fill_container",
+                      "height": 38,
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "TpcEa",
+                          "name": "字段内容",
+                          "fill": "#777777",
+                          "content": "选择产品类型  ▾",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "vH8I1",
+                  "name": "字段 · 使用场景",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nSYWJ",
+                      "name": "字段标签",
+                      "fill": "$vray-ink",
+                      "content": "用途 / 工艺要求",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jqR9F",
+                      "name": "字段选择",
+                      "width": "fill_container",
+                      "height": 38,
+                      "stroke": "$vray-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fV1Ad",
+                          "name": "字段内容",
+                          "fill": "#777777",
+                          "content": "贵金属检测 / 废金属回收 / 矿产勘查  ▾",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aVuxb",
+                  "name": "附件上传",
+                  "width": "fill_container",
+                  "height": 75,
+                  "fill": "$vray-soft",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 13,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d33ufe",
+                      "name": "上传标题",
+                      "fill": "$vray-navy",
+                      "content": "＋ 上传 3D 模型文件",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "a4uSO",
+                      "name": "上传说明",
+                      "fill": "$vray-gray",
+                      "content": "STL, 3MF, OBJ, STEP · 单个文件最大 50 MB",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WzOTp",
+                  "name": "提交询盘",
+                  "fill": "#0062FF",
+                  "cornerRadius": 3,
+                  "padding": [
+                    12,
+                    22
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VCAh1",
+                      "name": "提交询盘文案",
+                      "fill": "#FFFFFF",
+                      "content": "提交询价，发送到邮箱  →",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "q1tYw2",
+              "name": "报价协助信息",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 17,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "y5hIM",
+                  "name": "参考价格计算器",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "stroke": "#D7E2F2",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EJtRv",
+                      "name": "计算器标题",
+                      "fill": "#102033",
+                      "content": "打印预算参考",
+                      "fontFamily": "Funnel Sans",
+                      "fontSize": 20,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "hJo8T",
+                      "name": "计算器说明",
+                      "fill": "#627083",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "按材料、重量与预计打印时间生成参考区间；提交模型后以人工审核为准。",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "V6o7l",
+                      "name": "计算器字段",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "M7Oeop",
+                          "name": "计算字段 · 材料",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "VYjqR",
+                              "name": "字段标签 · 材料",
+                              "fill": "#102033",
+                              "content": "材料",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "VhNIx",
+                              "name": "字段输入 · 材料",
+                              "width": "fill_container",
+                              "height": 32,
+                              "stroke": "#D7E2F2",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IYjWB",
+                                  "name": "字段值 · 材料",
+                                  "fill": "#102033",
+                                  "content": "PETG · 黑色",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "DzkwQ",
+                                  "name": "字段箭头 · 材料",
+                                  "fill": "#0062FF",
+                                  "content": "⌄",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cVjYa",
+                          "name": "计算字段 · 模型重量",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "iEMqR",
+                              "name": "字段标签 · 模型重量",
+                              "fill": "#102033",
+                              "content": "模型重量",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dT1MI",
+                              "name": "字段输入 · 模型重量",
+                              "width": "fill_container",
+                              "height": 32,
+                              "stroke": "#D7E2F2",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "mFA5Q",
+                                  "name": "字段值 · 模型重量",
+                                  "fill": "#102033",
+                                  "content": "120 g",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "ZRBSG",
+                                  "name": "字段箭头 · 模型重量",
+                                  "fill": "#0062FF",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "E96dI",
+                          "name": "计算字段 · 打印时间",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "hihoL",
+                              "name": "字段标签 · 打印时间",
+                              "fill": "#102033",
+                              "content": "打印时间",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "N2gdJ",
+                              "name": "字段输入 · 打印时间",
+                              "width": "fill_container",
+                              "height": 32,
+                              "stroke": "#D7E2F2",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "HHZh2",
+                                  "name": "字段值 · 打印时间",
+                                  "fill": "#102033",
+                                  "content": "6.5 h",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "nOISM",
+                                  "name": "字段箭头 · 打印时间",
+                                  "fill": "#0062FF",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IfS5f",
+                      "name": "估价结果",
+                      "width": "fill_container",
+                      "stroke": "#D7E2F2",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "padding": [
+                        10,
+                        0
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Kd9MO",
+                          "name": "估价文案",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "uy82Z",
+                              "name": "估价标签",
+                              "fill": "#627083",
+                              "content": "参考价（未含运费）",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "rSkTp",
+                              "name": "估价提示",
+                              "fill": "#627083",
+                              "content": "材料 + 机器时间 + 基础工费",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "yKSTj",
+                          "name": "估价金额",
+                          "fill": "#0062FF",
+                          "content": "¥ 86–118",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 20,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B3NWbs",
+                  "name": "响应承诺",
+                  "width": "fill_container",
+                  "fill": "$vray-navy",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 23,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "J24bY",
+                      "name": "承诺标题",
+                      "fill": "#FFFFFF",
+                      "content": "这不是自动成交报价。",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 21,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "MFHu1",
+                      "name": "承诺说明",
+                      "fill": "#D0DCF0",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "参考价仅用于预算。我们会人工检查壁厚、支撑、材料与后处理要求，确认后再发正式报价与付款链接。",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GnPHA",
+                      "name": "承诺 · 24h",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "MVRWc",
+                          "name": "承诺数字",
+                          "fill": "#FFFFFF",
+                          "content": "24h",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "eBUMx",
+                          "name": "承诺说明",
+                          "fill": "#D0DCF0",
+                          "content": "工作日内首次回复",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "k9sQGX",
+                      "name": "承诺 · 1:1",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "C3fsGN",
+                          "name": "承诺数字",
+                          "fill": "#FFFFFF",
+                          "content": "1:1",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qHIjD",
+                          "name": "承诺说明",
+                          "fill": "#D0DCF0",
+                          "content": "技术顾问对接",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "eyxx8",
+                      "name": "承诺 · Global",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "uuUvg",
+                          "name": "承诺数字",
+                          "fill": "#FFFFFF",
+                          "content": "Global",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MQ6Hc",
+                          "name": "承诺说明",
+                          "fill": "#D0DCF0",
+                          "content": "提供发票与出口支持",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ONP1e",
+                  "name": "快捷联系",
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 9,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "K49QM",
+                      "name": "联系标题",
+                      "fill": "$vray-ink",
+                      "content": "需要立即协助？",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 17,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "l8LAV",
+                      "name": "联系说明",
+                      "fill": "$vray-gray",
+                      "content": "电话、WhatsApp 或邮件均可联系我们。",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "LeeRK",
+                      "name": "联系邮箱",
+                      "fill": "#0062FF",
+                      "content": "hello@yourprintstudio.com",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "YvFO6",
+          "name": "询盘常见问题",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "top": 1
+          },
+          "gap": 42,
+          "padding": [
+            22,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "LP7ad",
+              "name": "问题标题区",
+              "width": 300,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "H8pA41",
+                  "name": "问题标题",
+                  "fill": "$vray-ink",
+                  "content": "3D 打印服务常见问题",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 22,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "SXFzN",
+                  "name": "问题说明",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "先了解流程和文件要求，再把模型交给我们。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "stJjk",
+              "name": "问题列表",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Yc3qr",
+                  "name": "问题 · 是否可以寄送样品进行测试？",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    8,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rEPiq",
+                      "name": "问题文案",
+                      "fill": "$vray-ink",
+                      "content": "支持上传哪些模型格式？",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "aPJDv",
+                      "name": "问题箭头",
+                      "fill": "$vray-red",
+                      "content": "+",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "TfZEY",
+                  "name": "问题 · 报价是否包含培训与售后支持？",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    8,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rmO9g",
+                      "name": "问题文案",
+                      "fill": "$vray-ink",
+                      "content": "参考价和正式报价有什么区别？",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "cilDY",
+                      "name": "问题箭头",
+                      "fill": "$vray-red",
+                      "content": "+",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KtPRv",
+                  "name": "问题 · 海外订单如何处理付款和运输？",
+                  "width": "fill_container",
+                  "stroke": "$vray-line",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "padding": [
+                    8,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "A7fndq",
+                      "name": "问题文案",
+                      "fill": "$vray-ink",
+                      "content": "文件会被如何保存与处理？",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "doWId",
+                      "name": "问题箭头",
+                      "fill": "$vray-red",
+                      "content": "+",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "DP1ZU",
+      "x": 0,
+      "y": 1451,
+      "name": "VRAY 博客与新闻",
+      "clip": true,
+      "width": 1440,
+      "height": 1120,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "j2aWe",
+          "name": "博客页导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "i5gtLb",
+              "name": "VRAY 标识",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "NjI1r",
+                  "name": "标志圆环",
+                  "innerRadius": 0.78,
+                  "width": 38,
+                  "height": 38,
+                  "stroke": "$vray-navy",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "text",
+                  "id": "J6Rhy",
+                  "name": "品牌字标",
+                  "fill": "$vray-navy",
+                  "content": "VRAY",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 21,
+                  "fontWeight": "700",
+                  "letterSpacing": 3
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "P05Ny",
+              "name": "一级导航",
+              "gap": 30,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "BAChY",
+                  "name": "导航 · Home",
+                  "fill": "#0062FF",
+                  "content": "首页",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "LzXaT",
+                  "name": "导航 · Products ⌄",
+                  "fill": "#102033",
+                  "content": "商店 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "zXAxh",
+                  "name": "导航 · Resources ⌄",
+                  "fill": "#102033",
+                  "content": "3D 打印服务 ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "hf7FK",
+                  "name": "导航 · News & Event ⌄",
+                  "fill": "#102033",
+                  "content": "材料库",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "G8OSF",
+                  "name": "导航 · About Us ⌄",
+                  "fill": "#102033",
+                  "content": "案例展示",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "m0usOB",
+                  "name": "导航 · Contact Us",
+                  "fill": "#102033",
+                  "content": "关于我们",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "hCziD",
+                  "name": "导航 · Blog",
+                  "fill": "#102033",
+                  "content": "知识中心",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "v4TPfd",
+              "name": "获取报价",
+              "fill": "#0062FF",
+              "cornerRadius": 999,
+              "padding": [
+                12,
+                22
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kTN1p",
+                  "name": "报价按钮文案",
+                  "fill": "#FFFFFF",
+                  "content": "上传模型询价  →",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OhVdB",
+          "name": "博客页标题",
+          "width": "fill_container",
+          "height": 190,
+          "fill": "$vray-soft",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            42,
+            118
+          ],
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "uaD00",
+              "name": "博客标签",
+              "fill": "#0062FF",
+              "content": "KNOWLEDGE & CASE STUDIES",
+              "fontFamily": "$font-vray-data",
+              "fontSize": 12,
+              "fontWeight": "700",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "text",
+              "id": "FfFWR",
+              "name": "博客主标题",
+              "fill": "$vray-ink",
+              "content": "产品知识、案例与制作笔记",
+              "fontFamily": "$font-vray",
+              "fontSize": 39,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "Sj9KO",
+              "name": "博客说明",
+              "fill": "$vray-gray",
+              "content": "材料选择、连接件应用、设计技巧与客户案例。内容可在 WordPress 后台自行发布、更新和分类管理。",
+              "fontFamily": "$font-vray-body",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Dkmfn",
+          "name": "博客分类导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "gap": 12,
+          "padding": [
+            0,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "p5X6h",
+              "name": "分类 · All articles",
+              "fill": "$vray-ink",
+              "cornerRadius": 3,
+              "padding": [
+                9,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NUDBn",
+                  "name": "分类文案",
+                  "fill": "#FFFFFF",
+                  "content": "All articles",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "n9oV6",
+              "name": "分类 · Product guides",
+              "fill": "$vray-soft",
+              "cornerRadius": 3,
+              "padding": [
+                9,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Tg8Uq",
+                  "name": "分类文案",
+                  "fill": "$vray-gray",
+                  "content": "Product guides",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "k95WR",
+              "name": "分类 · Application notes",
+              "fill": "$vray-soft",
+              "cornerRadius": 3,
+              "padding": [
+                9,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "IMsk2",
+                  "name": "分类文案",
+                  "fill": "$vray-gray",
+                  "content": "Application notes",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BuNYO",
+              "name": "分类 · Company news",
+              "fill": "$vray-soft",
+              "cornerRadius": 3,
+              "padding": [
+                9,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Gsm6q",
+                  "name": "分类文案",
+                  "fill": "$vray-gray",
+                  "content": "Company news",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "a34UCG",
+              "name": "分类 · Events",
+              "fill": "$vray-soft",
+              "cornerRadius": 3,
+              "padding": [
+                9,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "e5XExD",
+                  "name": "分类文案",
+                  "fill": "$vray-gray",
+                  "content": "Events",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "iOenz",
+          "name": "博客文章区",
+          "width": "fill_container",
+          "height": 505,
+          "fill": "#FFFFFF",
+          "gap": 23,
+          "padding": [
+            22,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "aKj1r",
+              "name": "精选文章",
+              "width": 565,
+              "fill": "$vray-soft",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wRX77",
+                  "name": "精选文章图",
+                  "width": "fill_container",
+                  "height": 225,
+                  "fill": "$vray-navy",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "YLm17",
+                      "x": 225,
+                      "y": 52,
+                      "name": "分析元素环",
+                      "innerRadius": 0.73,
+                      "width": 118,
+                      "height": 118,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 2
+                    },
+                    {
+                      "type": "path",
+                      "id": "sVnEG",
+                      "x": 115,
+                      "y": 100,
+                      "name": "元素分析线",
+                      "geometry": "M0 39l52-8 37 12 37-33 47 25 47-30 70 23",
+                      "viewBox": [
+                        0,
+                        0,
+                        290,
+                        50
+                      ],
+                      "fill": "#00000000",
+                      "width": 290,
+                      "height": 50,
+                      "stroke": "$vray-red",
+                      "strokeWidth": 4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "HC3nX",
+                  "name": "精选文章内容",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 9,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "JBgjy",
+                      "name": "精选文章类别",
+                      "fill": "#0062FF",
+                      "content": "MATERIAL GUIDE · 6 MIN READ",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 11,
+                      "fontWeight": "700",
+                      "letterSpacing": 1.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "dOuNh",
+                      "name": "精选文章标题",
+                      "fill": "$vray-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "PLA、PETG、尼龙：为你的零件选对材料",
+                      "lineHeight": 1.12,
+                      "fontFamily": "$font-vray",
+                      "fontSize": 23,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "FBS4g",
+                      "name": "精选文章摘要",
+                      "fill": "$vray-gray",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "从强度、耐热、表面效果到成本，快速判断哪种材料更适合你的项目。",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Tgfsp",
+                      "name": "阅读更多",
+                      "fill": "#0062FF",
+                      "content": "阅读文章  →",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "YTMQw",
+              "name": "文章列表",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "o8LIpR",
+                  "name": "文章 · VRAY X7 Pro：从开机到首个检测结果",
+                  "width": "fill_container",
+                  "height": 145,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "gap": 17,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Zx5pv",
+                      "name": "文章缩略图",
+                      "width": 126,
+                      "height": "fill_container",
+                      "fill": "$vray-soft",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "id": "khJ0R",
+                          "x": 34,
+                          "y": 22,
+                          "name": "缩略色块",
+                          "fill": "$vray-navy",
+                          "width": 58,
+                          "height": 45
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lgUrQ",
+                      "name": "文章内容",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 7,
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "o6Ksj",
+                          "name": "文章标签",
+                          "fill": "$vray-red",
+                          "content": "PRODUCT GUIDE",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 10,
+                          "fontWeight": "700",
+                          "letterSpacing": 1.1
+                        },
+                        {
+                          "type": "text",
+                          "id": "D9B53s",
+                          "name": "文章标题",
+                          "fill": "$vray-ink",
+                          "content": "VRAY X7 Pro：从开机到首个检测结果",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OTC2n",
+                          "name": "发布日期",
+                          "fill": "$vray-gray",
+                          "content": "May 18, 2026",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "F4XkyK",
+                  "name": "文章 · VRAY 加入全球贵金属检测技术联盟",
+                  "width": "fill_container",
+                  "height": 145,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "gap": 17,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KbSub",
+                      "name": "文章缩略图",
+                      "width": 126,
+                      "height": "fill_container",
+                      "fill": "$vray-soft",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "id": "A8vxAx",
+                          "x": 34,
+                          "y": 22,
+                          "name": "缩略色块",
+                          "fill": "$vray-navy",
+                          "width": 58,
+                          "height": 45
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yzYAP",
+                      "name": "文章内容",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 7,
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tVFUD",
+                          "name": "文章标签",
+                          "fill": "$vray-red",
+                          "content": "COMPANY NEWS",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 10,
+                          "fontWeight": "700",
+                          "letterSpacing": 1.1
+                        },
+                        {
+                          "type": "text",
+                          "id": "rvfLc",
+                          "name": "文章标题",
+                          "fill": "$vray-ink",
+                          "content": "VRAY 加入全球贵金属检测技术联盟",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "jK8e6",
+                          "name": "发布日期",
+                          "fill": "$vray-gray",
+                          "content": "May 06, 2026",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kaHxX",
+                  "name": "文章 · 见面：2026 亚洲珠宝检测展",
+                  "width": "fill_container",
+                  "height": 145,
+                  "fill": "#FFFFFF",
+                  "stroke": "$vray-line",
+                  "strokeWidth": 1,
+                  "gap": 17,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uCxKD",
+                      "name": "文章缩略图",
+                      "width": 126,
+                      "height": "fill_container",
+                      "fill": "$vray-soft",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "id": "mNTkE",
+                          "x": 34,
+                          "y": 22,
+                          "name": "缩略色块",
+                          "fill": "$vray-navy",
+                          "width": 58,
+                          "height": 45
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SpQBs",
+                      "name": "文章内容",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 7,
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "a2jEW",
+                          "name": "文章标签",
+                          "fill": "$vray-red",
+                          "content": "EVENT",
+                          "fontFamily": "$font-vray-data",
+                          "fontSize": 10,
+                          "fontWeight": "700",
+                          "letterSpacing": 1.1
+                        },
+                        {
+                          "type": "text",
+                          "id": "mqZXm",
+                          "name": "文章标题",
+                          "fill": "$vray-ink",
+                          "content": "见面：2026 亚洲珠宝检测展",
+                          "fontFamily": "$font-vray",
+                          "fontSize": 17,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Tuq9q",
+                          "name": "发布日期",
+                          "fill": "$vray-gray",
+                          "content": "Apr 22, 2026",
+                          "fontFamily": "$font-vray-body",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "MfwLt",
+          "name": "订阅与页脚",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$vray-navy",
+          "gap": 80,
+          "padding": [
+            38,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "B4kZvH",
+              "name": "订阅文案",
+              "width": 550,
+              "layout": "vertical",
+              "gap": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XkZaM",
+                  "name": "订阅标题",
+                  "fill": "#FFFFFF",
+                  "content": "把检测知识送到你的收件箱。",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 27,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "JC0qt",
+                  "name": "订阅说明",
+                  "fill": "#C9D8EF",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "每月获取产品应用、行业案例与活动资讯。可随时退订。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Z6D6gC",
+              "name": "订阅表单",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 10,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "j13SL",
+                  "name": "邮箱输入框",
+                  "width": "fill_container",
+                  "height": 43,
+                  "fill": "#FFFFFF",
+                  "padding": [
+                    0,
+                    13
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VdHoX",
+                      "name": "邮箱占位",
+                      "fill": "#888888",
+                      "content": "Work email address",
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ro6FR",
+                  "name": "订阅按钮",
+                  "fill": "$vray-red",
+                  "cornerRadius": 3,
+                  "padding": [
+                    12,
+                    20
+                  ],
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Rl5bI",
+                      "name": "订阅文案",
+                      "fill": "#FFFFFF",
+                      "content": "Subscribe to updates",
+                      "fontFamily": "$font-vray",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "a9Unyg",
+                  "name": "页脚说明",
+                  "fill": "#A8C5F2",
+                  "content": "© 2026 VRAY XRF MACHINE · Privacy · Terms · Support",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "tuDcp",
+      "x": 0,
+      "y": 2752,
+      "name": "VRAY 案例与资源中心",
+      "clip": true,
+      "width": 1440,
+      "height": 1000,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "tym7d",
+          "name": "资源页导航",
+          "width": "fill_container",
+          "height": 70,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "uxQdI",
+              "name": "VRAY 标识",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "f0wNO7",
+                  "name": "标志圆环",
+                  "innerRadius": 0.78,
+                  "width": 38,
+                  "height": 38,
+                  "stroke": "$vray-navy",
+                  "strokeWidth": 3
+                },
+                {
+                  "type": "text",
+                  "id": "j97WUf",
+                  "name": "品牌字标",
+                  "fill": "$vray-navy",
+                  "content": "VRAY",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 21,
+                  "fontWeight": "700",
+                  "letterSpacing": 3
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Q3ieJ8",
+              "name": "一级导航",
+              "gap": 30,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PPbhy",
+                  "name": "导航 · Home",
+                  "fill": "$vray-red",
+                  "content": "Home",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "kquOW",
+                  "name": "导航 · Products ⌄",
+                  "fill": "#474747",
+                  "content": "Products ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "FXOyy",
+                  "name": "导航 · Resources ⌄",
+                  "fill": "#474747",
+                  "content": "Resources ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "H5Xn73",
+                  "name": "导航 · News & Event ⌄",
+                  "fill": "#474747",
+                  "content": "News & Event ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "CRi2y",
+                  "name": "导航 · About Us ⌄",
+                  "fill": "#474747",
+                  "content": "About Us ⌄",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "TBENF",
+                  "name": "导航 · Contact Us",
+                  "fill": "#474747",
+                  "content": "Contact Us",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "I09k1",
+                  "name": "导航 · Blog",
+                  "fill": "#474747",
+                  "content": "Blog",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "i1COFT",
+              "name": "获取报价",
+              "fill": "$vray-red",
+              "cornerRadius": 999,
+              "padding": [
+                12,
+                22
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "QlYbU",
+                  "name": "报价按钮文案",
+                  "fill": "#FFFFFF",
+                  "content": "Get A Quote  ›",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "xyQ7b",
+          "name": "资源页标题",
+          "width": "fill_container",
+          "height": 230,
+          "fill": "$vray-navy",
+          "padding": [
+            38,
+            118
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "A5hil",
+              "name": "资源标题文案",
+              "width": 680,
+              "layout": "vertical",
+              "gap": 11,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "IpCVc",
+                  "name": "资源标签",
+                  "fill": "#A8C5F2",
+                  "content": "RESOURCES & CASE STUDIES",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                  "letterSpacing": 1.5
+                },
+                {
+                  "type": "text",
+                  "id": "MNlog",
+                  "name": "资源主标题",
+                  "fill": "#FFFFFF",
+                  "content": "用实际现场结果证明检测价值。",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 37,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "LR4Ef",
+                  "name": "资源说明",
+                  "fill": "#D0DCF0",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "从贵金属回收到矿产勘查，查看客户如何以更快、更一致的数据提升工作流。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "olwom",
+              "name": "资源数据标记",
+              "width": 230,
+              "fill": "#FFFFFF",
+              "layout": "vertical",
+              "gap": 6,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "x3oq1C",
+                  "name": "案例数字",
+                  "fill": "$vray-red",
+                  "content": "42%",
+                  "fontFamily": "$font-vray-data",
+                  "fontSize": 29,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "em5wq",
+                  "name": "案例说明",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "某回收分拣线的平均检测时间降低",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TTFje",
+          "name": "资源分类导航",
+          "width": "fill_container",
+          "height": 65,
+          "fill": "#FFFFFF",
+          "stroke": "$vray-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "gap": 28,
+          "padding": [
+            0,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "h2enfQ",
+              "name": "资源分类 · Customer stories",
+              "fill": "$vray-red",
+              "content": "Customer stories",
+              "fontFamily": "$font-vray",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "NdjWc",
+              "name": "资源分类 · Application notes",
+              "fill": "$vray-gray",
+              "content": "Application notes",
+              "fontFamily": "$font-vray",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "OTPt0",
+              "name": "资源分类 · Downloads",
+              "fill": "$vray-gray",
+              "content": "Downloads",
+              "fontFamily": "$font-vray",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "C0nYNB",
+              "name": "资源分类 · Video library",
+              "fill": "$vray-gray",
+              "content": "Video library",
+              "fontFamily": "$font-vray",
+              "fontSize": 14,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gNaoh",
+          "name": "案例展示",
+          "width": "fill_container",
+          "height": 420,
+          "fill": "$vray-soft",
+          "gap": 22,
+          "padding": [
+            34,
+            118
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "plijZ",
+              "name": "案例 · 贵金属回收",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sfvoS",
+                  "name": "案例图示",
+                  "width": "fill_container",
+                  "height": 135,
+                  "fill": "$vray-navy",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "isFmb",
+                      "x": 98,
+                      "y": 29,
+                      "name": "案例图形",
+                      "innerRadius": 0.74,
+                      "width": 85,
+                      "height": 85,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 2
+                    },
+                    {
+                      "type": "path",
+                      "id": "FVbuH",
+                      "x": 52,
+                      "y": 73,
+                      "name": "案例曲线",
+                      "geometry": "M0 26l35-4 29 8 31-23 34 18 51-12",
+                      "viewBox": [
+                        0,
+                        0,
+                        180,
+                        35
+                      ],
+                      "fill": "#00000000",
+                      "width": 180,
+                      "height": 35,
+                      "stroke": "$vray-red",
+                      "strokeWidth": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "EHK73",
+                  "name": "案例内容",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 7,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "flCC8",
+                      "name": "案例标签",
+                      "fill": "$vray-red",
+                      "content": "CASE STUDY · 5 MIN",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "Hhbti",
+                      "name": "案例标题",
+                      "fill": "$vray-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "从“凭经验”到每件都有数据",
+                      "lineHeight": 1.15,
+                      "fontFamily": "$font-vray",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "DumY2",
+                      "name": "案例摘要",
+                      "fill": "$vray-gray",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "多点检测帮助当地珠宝回收商缩短收料判断时间。",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sz3Fd",
+              "name": "案例 · 废金属分拣",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "JeoYT",
+                  "name": "案例图示",
+                  "width": "fill_container",
+                  "height": 135,
+                  "fill": "$vray-navy",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "Yt4pH",
+                      "x": 98,
+                      "y": 29,
+                      "name": "案例图形",
+                      "innerRadius": 0.74,
+                      "width": 85,
+                      "height": 85,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 2
+                    },
+                    {
+                      "type": "path",
+                      "id": "UP9l4",
+                      "x": 52,
+                      "y": 73,
+                      "name": "案例曲线",
+                      "geometry": "M0 26l35-4 29 8 31-23 34 18 51-12",
+                      "viewBox": [
+                        0,
+                        0,
+                        180,
+                        35
+                      ],
+                      "fill": "#00000000",
+                      "width": 180,
+                      "height": 35,
+                      "stroke": "$vray-red",
+                      "strokeWidth": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "C31s55",
+                  "name": "案例内容",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 7,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "B7c1T",
+                      "name": "案例标签",
+                      "fill": "$vray-red",
+                      "content": "APPLICATION · 4 MIN",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "HqQSc",
+                      "name": "案例标题",
+                      "fill": "$vray-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "现场验证让分拣更有把握",
+                      "lineHeight": 1.15,
+                      "fontFamily": "$font-vray",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "mOoOT",
+                      "name": "案例摘要",
+                      "fill": "$vray-gray",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "稳定的合金牌号识别减少误判与二次转运。",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "vwgy4",
+              "name": "案例 · 矿产勘查",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "p44yM",
+                  "name": "案例图示",
+                  "width": "fill_container",
+                  "height": 135,
+                  "fill": "$vray-navy",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "prcCU",
+                      "x": 98,
+                      "y": 29,
+                      "name": "案例图形",
+                      "innerRadius": 0.74,
+                      "width": 85,
+                      "height": 85,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 2
+                    },
+                    {
+                      "type": "path",
+                      "id": "X40xSx",
+                      "x": 52,
+                      "y": 73,
+                      "name": "案例曲线",
+                      "geometry": "M0 26l35-4 29 8 31-23 34 18 51-12",
+                      "viewBox": [
+                        0,
+                        0,
+                        180,
+                        35
+                      ],
+                      "fill": "#00000000",
+                      "width": 180,
+                      "height": 35,
+                      "stroke": "$vray-red",
+                      "strokeWidth": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "z82MOX",
+                  "name": "案例内容",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 7,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "OEKIT",
+                      "name": "案例标签",
+                      "fill": "$vray-red",
+                      "content": "FIELD NOTE · 6 MIN",
+                      "fontFamily": "$font-vray-data",
+                      "fontSize": 10,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "hz0aJ",
+                      "name": "案例标题",
+                      "fill": "$vray-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "在野外完成第一轮元素筛查",
+                      "lineHeight": 1.15,
+                      "fontFamily": "$font-vray",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "N39mm",
+                      "name": "案例摘要",
+                      "fill": "$vray-gray",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "轻量化配置让团队更快决定下一处采样点。",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-vray-body",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bSEta",
+          "name": "下载资料与咨询",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "#FFFFFF",
+          "gap": 35,
+          "padding": [
+            27,
+            118
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "u5IL1",
+              "name": "资料下载文案",
+              "width": 500,
+              "layout": "vertical",
+              "gap": 7,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ixaYH",
+                  "name": "资料标题",
+                  "fill": "$vray-ink",
+                  "content": "需要更具体的技术资料？",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 23,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "t4M3Y",
+                  "name": "资料说明",
+                  "fill": "$vray-gray",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "下载产品规格书，或把你的应用场景告诉我们。",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "V204UT",
+              "name": "下载 · 产品规格书",
+              "width": 220,
+              "fill": "$vray-soft",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 5,
+              "padding": 15,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K1Nfut",
+                  "name": "下载名称",
+                  "fill": "$vray-ink",
+                  "content": "产品规格书",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 14,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "FDvQr",
+                  "name": "下载信息",
+                  "fill": "$vray-gray",
+                  "content": "PDF · 2.4 MB",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "QuydG",
+                  "name": "下载动作",
+                  "fill": "$vray-red",
+                  "content": "DOWNLOAD  ↓",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S6cvq",
+              "name": "下载 · 元素检测范围",
+              "width": 220,
+              "fill": "$vray-soft",
+              "stroke": "$vray-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 5,
+              "padding": 15,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "O394XD",
+                  "name": "下载名称",
+                  "fill": "$vray-ink",
+                  "content": "元素检测范围",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 14,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "bwoec",
+                  "name": "下载信息",
+                  "fill": "$vray-gray",
+                  "content": "PDF · 1.1 MB",
+                  "fontFamily": "$font-vray-body",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "o10dE",
+                  "name": "下载动作",
+                  "fill": "$vray-red",
+                  "content": "DOWNLOAD  ↓",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PYfj5",
+              "name": "资源页报价",
+              "fill": "$vray-red",
+              "cornerRadius": 3,
+              "padding": [
+                12,
+                18
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pd806",
+                  "name": "资源页报价文案",
+                  "fill": "#FFFFFF",
+                  "content": "Talk to an expert",
+                  "fontFamily": "$font-vray",
+                  "fontSize": 13,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "brand-blue": {
+      "type": "color",
+      "value": "#0062FF"
+    },
+    "ink": {
+      "type": "color",
+      "value": "#102033"
+    },
+    "mist": {
+      "type": "color",
+      "value": "#F4F8FF"
+    },
+    "sky": {
+      "type": "color",
+      "value": "#DDEBFF"
+    },
+    "line": {
+      "type": "color",
+      "value": "#D7E2F2"
+    },
+    "muted": {
+      "type": "color",
+      "value": "#627083"
+    },
+    "success": {
+      "type": "color",
+      "value": "#1F7A55"
+    },
+    "font-display": {
+      "type": "string",
+      "value": "Funnel Sans"
+    },
+    "font-body": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-data": {
+      "type": "string",
+      "value": "IBM Plex Mono"
+    },
+    "vray-navy": {
+      "type": "color",
+      "value": "#173B78"
+    },
+    "vray-red": {
+      "type": "color",
+      "value": "#F52F35"
+    },
+    "vray-ink": {
+      "type": "color",
+      "value": "#121212"
+    },
+    "vray-gray": {
+      "type": "color",
+      "value": "#5B5B5B"
+    },
+    "vray-line": {
+      "type": "color",
+      "value": "#E6E6E6"
+    },
+    "vray-soft": {
+      "type": "color",
+      "value": "#F7F8FA"
+    },
+    "font-vray": {
+      "type": "string",
+      "value": "Funnel Sans"
+    },
+    "font-vray-body": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-vray-data": {
+      "type": "string",
+      "value": "IBM Plex Mono"
+    }
+  },
+  "imports": {
+    "n": "pencil:nitro.lib.pen"
+  },
+  "fileToken": "13499cc9-1fac-4dd5-afcb-78e12e889adc"
+}
