@@ -18,8 +18,33 @@ function tokraft_setup() {
 add_action('after_setup_theme', 'tokraft_setup');
 
 function tokraft_assets() {
-    wp_enqueue_style('tokraft-style', get_stylesheet_uri(), array(), '1.2.1');
-    wp_enqueue_script('tokraft-theme', get_template_directory_uri() . '/assets/theme.js', array(), '1.2.0', true);
+    wp_enqueue_style(
+        'tokraft-style',
+        get_stylesheet_uri(),
+        array(),
+        (string) filemtime(get_stylesheet_directory() . '/style.css')
+    );
+    wp_enqueue_style(
+        'tokraft-shop-product',
+        get_template_directory_uri() . '/assets/shop-product.css',
+        array('tokraft-style'),
+        (string) filemtime(get_template_directory() . '/assets/shop-product.css')
+    );
+    if (function_exists('is_product') && is_product()) {
+        wp_enqueue_style(
+            'tokraft-product-detail',
+            get_template_directory_uri() . '/assets/product-detail.css',
+            array('tokraft-shop-product'),
+            (string) filemtime(get_template_directory() . '/assets/product-detail.css')
+        );
+    }
+    wp_enqueue_script(
+        'tokraft-theme',
+        get_template_directory_uri() . '/assets/theme.js',
+        array('jquery'),
+        (string) filemtime(get_template_directory() . '/assets/theme.js'),
+        true
+    );
 }
 add_action('wp_enqueue_scripts', 'tokraft_assets');
 
@@ -54,9 +79,15 @@ function tokraft_flush_quote_route() {
 add_action('after_switch_theme', 'tokraft_flush_quote_route');
 
 function tokraft_default_menu() {
+    $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/');
+    $blog_url = get_option('page_for_posts') ? get_permalink((int) get_option('page_for_posts')) : home_url('/blog/');
+    $case_url = get_post_type_archive_link('tokraft_case_study') ?: home_url('/case-studies/');
+
     echo '<a href="' . esc_url(home_url('/quote/')) . '">Print Service</a>';
-    echo '<a href="' . esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')) . '">Shop</a>';
+    echo '<a href="' . esc_url($shop_url) . '">Shop</a>';
     echo '<a href="' . esc_url(home_url('/materials/')) . '">Materials</a>';
+    echo '<a href="' . esc_url($case_url) . '">Case Studies</a>';
+    echo '<a href="' . esc_url($blog_url) . '">Blog</a>';
     echo '<a href="' . esc_url(home_url('/#equipment')) . '">Equipment</a>';
 }
 
@@ -123,13 +154,271 @@ function tokraft_woocommerce_product_layout() {
     if (!class_exists('WooCommerce')) {
         return;
     }
+
+    // Single product: custom template owns title/price/excerpt/cart markup.
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_title', 5);
-    add_action('woocommerce_single_product_summary', 'woocommerce_template_single_title', 5);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50);
+    remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
+
+    // Shop archive: filters bar owns count/sort chrome.
+    remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
+    remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
+    remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
 }
 add_action('wp', 'tokraft_woocommerce_product_layout');
 
+function tokraft_hide_shop_page_title($show) {
+    if (function_exists('is_shop') && (is_shop() || is_product_taxonomy())) {
+        return false;
+    }
+    return $show;
+}
+add_filter('woocommerce_show_page_title', 'tokraft_hide_shop_page_title');
+
+/**
+ * Display colour swatches on filament cards (visual; first-page Bambu-style).
+ */
+function tokraft_product_color_swatches($product) {
+    if (!$product) {
+        return array();
+    }
+
+    $saved = get_post_meta($product->get_id(), '_tokraft_color_swatches', true);
+    if (is_array($saved) && $saved) {
+        return $saved;
+    }
+
+    $name = strtolower($product->get_name());
+    $palettes = array(
+        'pla silk' => array(
+            array('label' => 'Gold', 'hex' => '#D4A017'),
+            array('label' => 'Silver', 'hex' => '#C0C0C0'),
+            array('label' => 'Red', 'hex' => '#C62828'),
+            array('label' => 'Blue', 'hex' => '#1565C0'),
+            array('label' => 'Green', 'hex' => '#2E7D32'),
+            array('label' => 'Purple', 'hex' => '#6A1B9A'),
+        ),
+        'pla translucent' => array(
+            array('label' => 'Clear', 'hex' => '#E8F4FF'),
+            array('label' => 'Blue', 'hex' => '#90CAF9'),
+            array('label' => 'Green', 'hex' => '#A5D6A7'),
+            array('label' => 'Orange', 'hex' => '#FFCC80'),
+            array('label' => 'Pink', 'hex' => '#F8BBD0'),
+        ),
+        'petg translucent' => array(
+            array('label' => 'Clear', 'hex' => '#F5F7FA'),
+            array('label' => 'Blue', 'hex' => '#64B5F6'),
+            array('label' => 'Green', 'hex' => '#81C784'),
+            array('label' => 'Orange', 'hex' => '#FFB74D'),
+        ),
+        'tpu' => array(
+            array('label' => 'Black', 'hex' => '#1A1A1A'),
+            array('label' => 'White', 'hex' => '#F5F5F5'),
+            array('label' => 'Red', 'hex' => '#E53935'),
+            array('label' => 'Blue', 'hex' => '#1E88E5'),
+            array('label' => 'Yellow', 'hex' => '#FDD835'),
+        ),
+        'default' => array(
+            array('label' => 'Black', 'hex' => '#1C1C1C'),
+            array('label' => 'White', 'hex' => '#F7F7F7'),
+            array('label' => 'Gray', 'hex' => '#9E9E9E'),
+            array('label' => 'Red', 'hex' => '#C62828'),
+            array('label' => 'Orange', 'hex' => '#EF6C00'),
+            array('label' => 'Yellow', 'hex' => '#F9A825'),
+            array('label' => 'Green', 'hex' => '#2E7D32'),
+            array('label' => 'Blue', 'hex' => '#1565C0'),
+        ),
+    );
+
+    foreach ($palettes as $key => $colors) {
+        if ($key !== 'default' && strpos($name, $key) !== false) {
+            return $colors;
+        }
+    }
+
+    // Engineering / CF grades: fewer industrial colours.
+    if (preg_match('/\b(cf|gf|pc|pa6|ppa|pps|abs|asa)\b/i', $name)) {
+        return array(
+            array('label' => 'Black', 'hex' => '#111111'),
+            array('label' => 'Natural', 'hex' => '#D7D2C8'),
+            array('label' => 'Gray', 'hex' => '#6B7280'),
+        );
+    }
+
+    return $palettes['default'];
+}
+
+/**
+ * Honour stock_status + price query args on shop/category archives.
+ */
+function tokraft_shop_query_filters($query) {
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+    if (!(is_shop() || is_product_taxonomy())) {
+        return;
+    }
+
+    $meta_query = (array) $query->get('meta_query');
+
+    if (!empty($_GET['stock_status'])) {
+        $status = wc_clean(wp_unslash($_GET['stock_status']));
+        if (in_array($status, array('instock', 'outofstock', 'onbackorder'), true)) {
+            $meta_query[] = array(
+                'key' => '_stock_status',
+                'value' => $status,
+            );
+        }
+    }
+
+    $min = isset($_GET['min_price']) ? floatval($_GET['min_price']) : null;
+    $max = isset($_GET['max_price']) ? floatval($_GET['max_price']) : null;
+    if ($min || $max) {
+        $price = array('key' => '_price', 'type' => 'NUMERIC');
+        if ($min && $max) {
+            $price['value'] = array($min, $max);
+            $price['compare'] = 'BETWEEN';
+        } elseif ($min) {
+            $price['value'] = $min;
+            $price['compare'] = '>=';
+        } else {
+            $price['value'] = $max;
+            $price['compare'] = '<=';
+        }
+        $meta_query[] = $price;
+    }
+
+    if ($meta_query) {
+        $query->set('meta_query', $meta_query);
+    }
+}
+add_action('pre_get_posts', 'tokraft_shop_query_filters');
+
+function tokraft_loop_columns() {
+    return 4;
+}
+add_filter('loop_shop_columns', 'tokraft_loop_columns');
+
+function tokraft_products_per_page() {
+    return 16;
+}
+add_filter('loop_shop_per_page', 'tokraft_products_per_page', 20);
+
+function tokraft_render_shop_filters($count = 0) {
+    if (!function_exists('wc_get_page_permalink')) {
+        return;
+    }
+
+    $shop_url = wc_get_page_permalink('shop');
+    $current_slug = '';
+    if (is_product_category()) {
+        $term = get_queried_object();
+        $current_slug = ($term && !is_wp_error($term)) ? $term->slug : '';
+    }
+
+    $filament = get_term_by('slug', 'filament', 'product_cat');
+    $chips = array(
+        array(
+            'slug' => '',
+            'label' => __('All filament', 'tokraft'),
+            'url' => $shop_url,
+        ),
+    );
+
+    if ($filament && !is_wp_error($filament)) {
+        $children = get_terms(array(
+            'taxonomy' => 'product_cat',
+            'hide_empty' => true,
+            'parent' => (int) $filament->term_id,
+            'orderby' => 'name',
+            'order' => 'ASC',
+        ));
+        if (!is_wp_error($children)) {
+            foreach ($children as $child) {
+                $chips[] = array(
+                    'slug' => $child->slug,
+                    'label' => $child->name,
+                    'url' => get_term_link($child),
+                );
+            }
+        }
+    }
+
+    $orderby = isset($_GET['orderby']) ? wc_clean(wp_unslash($_GET['orderby'])) : 'menu_order';
+    $order_options = apply_filters('woocommerce_catalog_orderby', array(
+        'menu_order' => __('Sort / Featured', 'tokraft'),
+        'popularity' => __('Sort / Popularity', 'tokraft'),
+        'date' => __('Sort / Newest', 'tokraft'),
+        'price' => __('Sort / Price: low to high', 'tokraft'),
+        'price-desc' => __('Sort / Price: high to low', 'tokraft'),
+    ));
+    ?>
+    <div class="tk-shop-filters">
+        <div class="tk-shop-filter-chips" role="navigation" aria-label="<?php esc_attr_e('Filter by category', 'tokraft'); ?>">
+            <?php foreach ($chips as $chip) :
+                $is_active = ($chip['slug'] === $current_slug) || ('' === $chip['slug'] && '' === $current_slug && is_shop());
+                $url = $chip['url'];
+                if ($orderby && 'menu_order' !== $orderby) {
+                    $url = add_query_arg('orderby', $orderby, $url);
+                }
+                ?>
+                <a class="tk-shop-chip<?php echo $is_active ? ' is-active' : ''; ?>" href="<?php echo esc_url($url); ?>">
+                    <?php echo esc_html($chip['label']); ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="tk-shop-filter-meta">
+            <div class="tk-shop-count">
+                <?php
+                printf(
+                    esc_html(_n('%d product ready to order', '%d products ready to order', $count, 'tokraft')),
+                    (int) $count
+                );
+                ?>
+            </div>
+            <form class="tk-shop-sort" method="get" action="">
+                <?php
+                // Preserve category context on sort.
+                if (is_product_category() && $current_slug) {
+                    // Term archive already targets category URL when form action is empty.
+                }
+                foreach ($_GET as $key => $value) {
+                    if ('orderby' === $key) {
+                        continue;
+                    }
+                    if (is_array($value)) {
+                        continue;
+                    }
+                    echo '<input type="hidden" name="' . esc_attr($key) . '" value="' . esc_attr(wc_clean(wp_unslash($value))) . '">';
+                }
+                ?>
+                <label class="screen-reader-text" for="tk-orderby"><?php esc_html_e('Sort products', 'tokraft'); ?></label>
+                <select name="orderby" id="tk-orderby" class="orderby" onchange="this.form.submit()">
+                    <?php foreach ($order_options as $id => $label) : ?>
+                        <option value="<?php echo esc_attr($id); ?>" <?php selected($orderby, $id); ?>><?php echo esc_html($label); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+        </div>
+    </div>
+    <?php
+}
+
 function tokraft_cart_note() {
-    echo '<p class="tokraft-cart-note">Every item is made to order. Material color and surface texture can vary slightly from screen images.</p>';
+    global $product;
+    if ($product instanceof WC_Product) {
+        $slugs = wp_get_post_terms($product->get_id(), 'product_cat', array('fields' => 'slugs'));
+        if (!is_wp_error($slugs) && in_array('accessories', $slugs, true)) {
+            echo '<p class="tokraft-cart-note">Accessory item. Confirm compatibility with your filament system before ordering.</p>';
+            return;
+        }
+    }
+    echo '<p class="tokraft-cart-note">Colour and packaging can vary slightly by batch. Confirm material fit for your application before production use.</p>';
 }
 add_action('woocommerce_after_add_to_cart_form', 'tokraft_cart_note');
 
@@ -494,6 +783,107 @@ function tokraft_admin_manage_link($url, $label) {
     return '<a class="button button-secondary tokraft-admin-manage-link" href="' . esc_url($url) . '">' . esc_html($label) . ' <span aria-hidden="true">&rarr;</span></a>';
 }
 
+function tokraft_admin_content_counts() {
+    $product_count = 0;
+    if (post_type_exists('product')) {
+        $counts = wp_count_posts('product');
+        $product_count = isset($counts->publish) ? (int) $counts->publish : 0;
+    }
+
+    $case_counts = wp_count_posts('tokraft_case_study');
+    $equipment_counts = wp_count_posts('tokraft_equipment');
+    $post_counts = wp_count_posts('post');
+    $materials = get_terms(array(
+        'taxonomy' => 'tokraft_material',
+        'hide_empty' => false,
+        'fields' => 'count',
+    ));
+
+    $order_total = 0;
+    if (post_type_exists('shop_order')) {
+        $orders = wp_count_posts('shop_order');
+        foreach (array('processing', 'completed', 'on-hold', 'pending') as $status) {
+            if (isset($orders->$status)) {
+                $order_total += (int) $orders->$status;
+            }
+        }
+    }
+
+    return array(
+        'products' => $product_count,
+        'cases' => isset($case_counts->publish) ? (int) $case_counts->publish : 0,
+        'equipment' => isset($equipment_counts->publish) ? (int) $equipment_counts->publish : 0,
+        'materials' => is_wp_error($materials) ? 0 : (int) $materials,
+        'posts' => isset($post_counts->publish) ? (int) $post_counts->publish : 0,
+        'orders' => $order_total,
+    );
+}
+
+function tokraft_render_admin_overview() {
+    $counts = tokraft_admin_content_counts();
+    $cards = array(
+        array(
+            'label' => __('Products / 商品', 'tokraft'),
+            'count' => $counts['products'],
+            'help' => __('WooCommerce ready-to-order parts', 'tokraft'),
+            'url' => admin_url('edit.php?post_type=product'),
+            'cta' => __('Manage products', 'tokraft'),
+        ),
+        array(
+            'label' => __('Case studies / 应用案例', 'tokraft'),
+            'count' => $counts['cases'],
+            'help' => __('Featured applications on the homepage', 'tokraft'),
+            'url' => admin_url('edit.php?post_type=tokraft_case_study'),
+            'cta' => __('Manage cases', 'tokraft'),
+        ),
+        array(
+            'label' => __('Materials / 材料库', 'tokraft'),
+            'count' => $counts['materials'],
+            'help' => __('Used by quote form and material library', 'tokraft'),
+            'url' => admin_url('edit-tags.php?taxonomy=tokraft_material&post_type=product'),
+            'cta' => __('Manage materials', 'tokraft'),
+        ),
+        array(
+            'label' => __('Equipment / 设备', 'tokraft'),
+            'count' => $counts['equipment'],
+            'help' => __('Printer profiles shown on homepage', 'tokraft'),
+            'url' => admin_url('edit.php?post_type=tokraft_equipment'),
+            'cta' => __('Manage equipment', 'tokraft'),
+        ),
+        array(
+            'label' => __('Blog / 博客', 'tokraft'),
+            'count' => $counts['posts'],
+            'help' => __('Articles linked from the primary nav', 'tokraft'),
+            'url' => admin_url('edit.php'),
+            'cta' => __('Manage posts', 'tokraft'),
+        ),
+        array(
+            'label' => __('Orders / 订单', 'tokraft'),
+            'count' => $counts['orders'],
+            'help' => __('Shop checkout orders in WooCommerce', 'tokraft'),
+            'url' => admin_url('edit.php?post_type=shop_order'),
+            'cta' => __('View orders', 'tokraft'),
+        ),
+    );
+
+    echo '<section class="tokraft-admin-overview" aria-label="' . esc_attr__('Content management map', 'tokraft') . '">';
+    echo '<div class="tokraft-admin-overview__heading"><div><span>' . esc_html__('CONTENT MAP / 内容入口', 'tokraft') . '</span><h2>' . esc_html__('Where to manage the storefront', 'tokraft') . '</h2><p>' . esc_html__('Two businesses live here: custom print quotes and ready-to-order shop products. Use the cards below when you need to change content outside the homepage blocks.', 'tokraft') . '</p></div>';
+    echo '<div class="tokraft-admin-overview__actions">';
+    echo '<a class="button button-primary" href="' . esc_url(home_url('/')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('View homepage', 'tokraft') . '</a>';
+    echo '<a class="button" href="' . esc_url(home_url('/quote/')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Open quote page', 'tokraft') . '</a>';
+    echo '<a class="button" href="' . esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Open shop', 'tokraft') . '</a>';
+    echo '</div></div>';
+    echo '<div class="tokraft-admin-overview__grid">';
+    foreach ($cards as $card) {
+        echo '<article class="tokraft-admin-overview__card">';
+        echo '<div class="tokraft-admin-overview__card-top"><span>' . esc_html($card['label']) . '</span><strong>' . esc_html((string) $card['count']) . '</strong></div>';
+        echo '<p>' . esc_html($card['help']) . '</p>';
+        echo '<a href="' . esc_url($card['url']) . '">' . esc_html($card['cta']) . ' <span aria-hidden="true">&rarr;</span></a>';
+        echo '</article>';
+    }
+    echo '</div></section>';
+}
+
 function tokraft_render_home_settings_page() {
     if (!current_user_can('edit_others_posts')) {
         return;
@@ -507,6 +897,7 @@ function tokraft_render_home_settings_page() {
     if (isset($_GET['settings-updated'])) {
         echo '<div class="notice notice-success is-dismissible"><p>首页配置已保存。</p></div>';
     }
+    tokraft_render_admin_overview();
     echo '<form method="post" action="options.php">';
     settings_fields('tokraft_home_settings_group');
     tokraft_admin_section_open('tokraft-hero', '首页第 1 屏', '首屏：先让客户知道要做什么', '左侧是标题和两个行动按钮，右侧是设备或打印过程图片。建议保持短句、明确业务。');
@@ -598,11 +989,20 @@ function tokraft_render_home_settings_page() {
     echo '</form></div>';
 }
 
+function tokraft_material_image_spec_text() {
+    return 'Recommended image: 1200 × 900 px (4:3 landscape), JPG or WebP, under 1.5 MB. The front page crops to a fixed 4:3 frame — avoid tall portrait photos. Same image is reused on the homepage material cards.';
+}
+
 function tokraft_material_add_fields() {
-    echo '<div class="form-field"><label for="tokraft_material_color">Brand color</label><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="#d9d9d9" class="regular-text"><p>Use a hex color as the fallback when no material image is uploaded.</p></div>';
-    echo '<div class="form-field"><label for="tokraft_material_short_description">Short description</label><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="3"></textarea></div>';
+    echo '<div class="form-field"><label for="tokraft_material_color">Brand color</label><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="#d9d9d9" class="regular-text"><p>Fallback color when no material image is uploaded.</p></div>';
+    echo '<div class="form-field"><label for="tokraft_material_short_description">One-line summary</label><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2"></textarea><p>Used on the homepage cards and quote dropdown. Keep it to one clear sentence.</p></div>';
+    echo '<div class="form-field"><label for="tokraft_material_best_for">Best for</label><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3"></textarea><p>Typical jobs this material is recommended for.</p></div>';
+    echo '<div class="form-field"><label for="tokraft_material_avoid">Not ideal for</label><textarea id="tokraft_material_avoid" name="tokraft_material_avoid" rows="3"></textarea><p>Situations where another material is usually better.</p></div>';
+    echo '<div class="form-field"><label for="tokraft_material_notes">What we confirm at quote</label><textarea id="tokraft_material_notes" name="tokraft_material_notes" rows="3"></textarea><p>Process or review notes the team should discuss with the customer.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_quote_rate">Quote starting estimate (CAD)</label><input type="number" min="1" step="0.01" id="tokraft_material_quote_rate" name="tokraft_material_quote_rate" value="24"><p>Used only for the quotation-page estimate. Final pricing still requires file review.</p></div>';
-    echo '<div class="form-field"><label>Material image</label><input type="hidden" id="tokraft_material_image_id" name="tokraft_material_image_id" value=""><button type="button" class="button tokraft-media-select" data-target="tokraft_material_image_id">Select image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_material_image_id">Clear</button><p><img id="tokraft_material_image_id-preview" src="" alt="" style="display:none;max-width:260px;"></p></div>';
+    echo '<div class="form-field"><label>Material image</label><input type="hidden" id="tokraft_material_image_id" name="tokraft_material_image_id" value=""><button type="button" class="button tokraft-media-select" data-target="tokraft_material_image_id">Select image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_material_image_id">Clear</button>';
+    echo '<p class="description"><strong>Image size:</strong> ' . esc_html(tokraft_material_image_spec_text()) . '</p>';
+    echo '<p><img id="tokraft_material_image_id-preview" src="" alt="" style="display:none;max-width:260px;max-height:180px;object-fit:cover;"></p></div>';
     echo '<div class="form-field"><label><input type="checkbox" name="tokraft_material_featured" value="1" checked> Show on homepage</label></div>';
 }
 add_action('tokraft_material_add_form_fields', 'tokraft_material_add_fields');
@@ -610,14 +1010,22 @@ add_action('tokraft_material_add_form_fields', 'tokraft_material_add_fields');
 function tokraft_material_edit_fields($term) {
     $color = get_term_meta($term->term_id, '_tokraft_material_color', true) ?: '#d9d9d9';
     $short_description = get_term_meta($term->term_id, '_tokraft_material_short_description', true);
+    $best_for = get_term_meta($term->term_id, '_tokraft_material_best_for', true);
+    $avoid = get_term_meta($term->term_id, '_tokraft_material_avoid', true);
+    $notes = get_term_meta($term->term_id, '_tokraft_material_notes', true);
     $quote_rate = tokraft_material_quote_rate($term);
     $image_id = absint(get_term_meta($term->term_id, '_tokraft_material_image_id', true));
     $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium') : '';
     $featured = get_term_meta($term->term_id, '_tokraft_material_featured', true);
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_color">Brand color</label></th><td><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="' . esc_attr($color) . '" class="regular-text"><p class="description">Fallback color when no image is uploaded.</p></td></tr>';
-    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_short_description">Short description</label></th><td><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="3" class="large-text">' . esc_textarea($short_description) . '</textarea></td></tr>';
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_short_description">One-line summary</label></th><td><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2" class="large-text">' . esc_textarea($short_description) . '</textarea><p class="description">Homepage cards and quote dropdown. One clear sentence.</p></td></tr>';
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_best_for">Best for</label></th><td><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3" class="large-text">' . esc_textarea($best_for) . '</textarea></td></tr>';
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_avoid">Not ideal for</label></th><td><textarea id="tokraft_material_avoid" name="tokraft_material_avoid" rows="3" class="large-text">' . esc_textarea($avoid) . '</textarea></td></tr>';
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_notes">What we confirm at quote</label></th><td><textarea id="tokraft_material_notes" name="tokraft_material_notes" rows="3" class="large-text">' . esc_textarea($notes) . '</textarea></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_quote_rate">Quote starting estimate (CAD)</label></th><td><input type="number" min="1" step="0.01" id="tokraft_material_quote_rate" name="tokraft_material_quote_rate" value="' . esc_attr($quote_rate) . '"><p class="description">Used only for the quotation-page estimate. Final pricing still requires file review.</p></td></tr>';
-    echo '<tr class="form-field"><th scope="row">Material image</th><td><input type="hidden" id="tokraft_material_image_id" name="tokraft_material_image_id" value="' . esc_attr($image_id) . '"><button type="button" class="button tokraft-media-select" data-target="tokraft_material_image_id">Select image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_material_image_id">Clear</button><p><img id="tokraft_material_image_id-preview" src="' . esc_url($image_url) . '" alt="" style="max-width:260px;' . ($image_url ? '' : 'display:none;') . '"></p></td></tr>';
+    echo '<tr class="form-field"><th scope="row">Material image</th><td><input type="hidden" id="tokraft_material_image_id" name="tokraft_material_image_id" value="' . esc_attr($image_id) . '"><button type="button" class="button tokraft-media-select" data-target="tokraft_material_image_id">Select image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_material_image_id">Clear</button>';
+    echo '<p class="description"><strong>Image size:</strong> ' . esc_html(tokraft_material_image_spec_text()) . '</p>';
+    echo '<p><img id="tokraft_material_image_id-preview" src="' . esc_url($image_url) . '" alt="" style="max-width:260px;max-height:180px;object-fit:cover;' . ($image_url ? '' : 'display:none;') . '"></p></td></tr>';
     echo '<tr class="form-field"><th scope="row">Homepage</th><td><label><input type="checkbox" name="tokraft_material_featured" value="1" ' . checked($featured, '1', false) . '> Show on homepage</label></td></tr>';
 }
 add_action('tokraft_material_edit_form_fields', 'tokraft_material_edit_fields');
@@ -628,6 +1036,15 @@ function tokraft_save_material_fields($term_id) {
     }
     if (isset($_POST['tokraft_material_short_description'])) {
         update_term_meta($term_id, '_tokraft_material_short_description', sanitize_textarea_field(wp_unslash($_POST['tokraft_material_short_description'])));
+    }
+    if (isset($_POST['tokraft_material_best_for'])) {
+        update_term_meta($term_id, '_tokraft_material_best_for', sanitize_textarea_field(wp_unslash($_POST['tokraft_material_best_for'])));
+    }
+    if (isset($_POST['tokraft_material_avoid'])) {
+        update_term_meta($term_id, '_tokraft_material_avoid', sanitize_textarea_field(wp_unslash($_POST['tokraft_material_avoid'])));
+    }
+    if (isset($_POST['tokraft_material_notes'])) {
+        update_term_meta($term_id, '_tokraft_material_notes', sanitize_textarea_field(wp_unslash($_POST['tokraft_material_notes'])));
     }
     if (isset($_POST['tokraft_material_quote_rate'])) {
         update_term_meta($term_id, '_tokraft_material_quote_rate', max(1, (float) wp_unslash($_POST['tokraft_material_quote_rate'])));
@@ -877,10 +1294,10 @@ function tokraft_admin_assets($hook) {
         'tokraft-admin',
         get_template_directory_uri() . '/assets/admin.css',
         array(),
-        '2.5.4'
+        '2.5.5'
     );
     wp_enqueue_media();
-    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery'), '2.5.4', true);
+    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery'), '2.5.5', true);
     wp_localize_script('tokraft-admin', 'tokraftAdminI18n', tokraft_admin_ui_strings());
 }
 add_action('admin_enqueue_scripts', 'tokraft_admin_assets');
