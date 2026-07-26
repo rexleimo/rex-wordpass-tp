@@ -66,26 +66,45 @@ if ($is_variable && $product->get_default_attributes()) {
 }
 $specifications = get_post_meta(get_the_ID(), '_tokraft_specifications', true);
 $shipping_returns = get_post_meta(get_the_ID(), '_tokraft_shipping_returns', true);
+$product_video_id = absint(get_post_meta(get_the_ID(), '_tokraft_product_video_id', true));
+$product_video_url = $product_video_id ? wp_get_attachment_url($product_video_id) : '';
+$product_video_poster_id = absint(get_post_meta(get_the_ID(), '_tokraft_product_video_poster_id', true));
+$product_video_poster = $product_video_poster_id ? wp_get_attachment_image_url($product_video_poster_id, 'full') : '';
+$product_highlights = array();
+if (is_array($specifications)) {
+    foreach ($specifications as $label => $value) {
+        if ('' === trim((string) $value)) {
+            continue;
+        }
+        $product_highlights[] = array('label' => (string) $label, 'value' => (string) $value);
+        if (count($product_highlights) === 4) {
+            break;
+        }
+    }
+}
 $discover_product_ids = array_values(array_filter(array_map('absint', (array) get_post_meta(get_the_ID(), '_tokraft_discover_product_ids', true))));
 $discover_product_notes = get_post_meta(get_the_ID(), '_tokraft_discover_product_notes', true);
 if (!is_array($discover_product_notes)) {
     $discover_product_notes = array();
 }
 $discover_products = array();
-foreach ($discover_product_ids as $discover_product_id) {
-    if ($discover_product_id === $product->get_id()) {
-        continue;
-    }
+$discover_enabled = function_exists('tokraft_home_enabled') ? tokraft_home_enabled('discover_enabled') : false;
+if ($discover_enabled) {
+    foreach ($discover_product_ids as $discover_product_id) {
+        if ($discover_product_id === $product->get_id()) {
+            continue;
+        }
 
-    $discover_product = wc_get_product($discover_product_id);
-    // Keep the purchase area honest: only show products that can be added here.
-    if (!$discover_product || !$discover_product->is_type('simple') || !$discover_product->is_purchasable() || !$discover_product->is_in_stock()) {
-        continue;
-    }
+        $discover_product = wc_get_product($discover_product_id);
+        // Keep the purchase area honest: only show products that can be added here.
+        if (!$discover_product || !$discover_product->is_type('simple') || !$discover_product->is_purchasable() || !$discover_product->is_in_stock()) {
+            continue;
+        }
 
-    $discover_products[] = $discover_product;
-    if (count($discover_products) === 3) {
-        break;
+        $discover_products[] = $discover_product;
+        if (count($discover_products) === 3) {
+            break;
+        }
     }
 }
 ?>
@@ -107,7 +126,7 @@ foreach ($discover_product_ids as $discover_product_id) {
         <div class="tk-product-main">
             <div class="tk-product-gallery">
                 <div class="tk-product-gallery-frame">
-                    <span class="tk-product-gallery-label">PRODUCT PHOTO / <?php echo esc_html(strtoupper($material_label)); ?></span>
+                    <span class="tk-product-gallery-label">PRODUCT PHOTO / <?php echo esc_html(tokraft_uppercase($material_label)); ?></span>
                     <?php do_action('woocommerce_before_single_product_summary'); ?>
                     <div class="tk-product-tech-rail" aria-label="<?php esc_attr_e('Product overview', 'tokraft'); ?>">
                         <div><span><?php esc_html_e('Material', 'tokraft'); ?></span><strong><?php echo esc_html($material_label); ?></strong></div>
@@ -115,10 +134,18 @@ foreach ($discover_product_ids as $discover_product_id) {
                         <div><span><?php esc_html_e('Fulfilment', 'tokraft'); ?></span><strong><?php echo esc_html($fulfilment_label); ?></strong></div>
                     </div>
                 </div>
+                <?php if ($product_video_url) : ?>
+                    <figure class="tk-product-video">
+                        <video controls preload="metadata"<?php echo $product_video_poster ? ' poster="' . esc_url($product_video_poster) . '"' : ''; ?>>
+                            <source src="<?php echo esc_url($product_video_url); ?>" type="<?php echo esc_attr(get_post_mime_type($product_video_id) ?: 'video/mp4'); ?>">
+                        </video>
+                        <figcaption><?php esc_html_e('Product walkthrough', 'tokraft'); ?></figcaption>
+                    </figure>
+                <?php endif; ?>
             </div>
 
             <div class="summary entry-summary tk-product-summary">
-                <p class="tk-product-badge"><?php echo esc_html(strtoupper($fulfilment_label . ' / ' . $shop_label)); ?></p>
+                <p class="tk-product-badge"><?php echo esc_html(tokraft_uppercase($fulfilment_label . ' / ' . $shop_label)); ?></p>
 
                 <h1 class="product_title entry-title"><?php the_title(); ?></h1>
 
@@ -131,6 +158,17 @@ foreach ($discover_product_ids as $discover_product_id) {
                         <small class="tk-price-note" aria-live="polite">1 kg / selected configuration / in stock</small>
                     <?php endif; ?>
                 </div>
+
+                <?php if ($product_highlights) : ?>
+                    <div class="tk-product-highlights" aria-label="<?php esc_attr_e('Key specifications', 'tokraft'); ?>">
+                        <?php foreach ($product_highlights as $highlight) : ?>
+                            <div>
+                                <strong><?php echo esc_html($highlight['value']); ?></strong>
+                                <span><?php echo esc_html($highlight['label']); ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
 
                 <div class="woocommerce-product-details__short-description">
                     <?php echo wp_kses_post(wpautop($product->get_short_description())); ?>

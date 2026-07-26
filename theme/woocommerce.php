@@ -13,6 +13,13 @@ if (!(function_exists('is_shop') && (is_shop() || is_product_taxonomy()))) {
     return;
 }
 
+// Showcase mode is the cover-led layout for a short line-up. Category archives
+// always keep the catalogue form so filtering still works once the range grows.
+if (is_shop() && function_exists('tokraft_shop_layout') && 'showcase' === tokraft_shop_layout()) {
+    require get_theme_file_path('woocommerce-showcase.php');
+    return;
+}
+
 global $wp_query;
 $count = isset($wp_query->found_posts) ? (int) $wp_query->found_posts : 0;
 $current_slug = '';

@@ -44,9 +44,11 @@ $sliders = array(
     'walls' => array('id' => 'walls', 'name' => 'walls', 'suffix' => ' walls', 'decimals' => 0),
     'layer' => array('id' => 'layer-height', 'name' => 'layer_height', 'suffix' => ' mm', 'decimals' => 2),
 );
+
+$show_summary = tokraft_quote_enabled('summary');
 ?>
 <section class="page-hero"><div class="page-hero-inner"><div class="eyebrow">Print service / Request a quote</div><h1>Tell us what your part needs.</h1><p>Share your file and production preferences in one place. We will review manufacturability and confirm the final price and schedule before anything is made.</p></div></section>
-<div class="quote-layout">
+<div class="quote-layout<?php echo $show_summary ? '' : ' is-single-column'; ?>">
     <form class="quote-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="tokraft_quote">
         <?php wp_nonce_field('tokraft_quote', 'tokraft_quote_nonce'); ?>
@@ -160,6 +162,7 @@ $sliders = array(
             <button class="btn btn-primary" type="submit">Submit quote request <span aria-hidden="true">→</span></button>
         </section>
     </form>
+    <?php if ($show_summary) : ?>
     <aside class="quote-summary" aria-live="polite">
         <div class="eyebrow" style="color:var(--gold-light)">Live estimate</div>
         <h2>Your print summary</h2>
@@ -174,6 +177,7 @@ $sliders = array(
         <div class="estimate"><span>Estimated range</span><strong id="estimate-price">$24–$34</strong></div>
         <p class="summary-disclaimer">This is an initial estimate, not a final offer. Model volume, orientation, geometry and post-processing are confirmed by our team after file review.</p>
     </aside>
+    <?php endif; ?>
 </div>
 <dialog class="modal" id="help-modal"><button class="modal-close" type="button" aria-label="Close">×</button><h3 id="help-title">Print setting</h3><p id="help-copy"></p><button class="btn btn-primary btn-small" type="button">Got it</button></dialog>
 <?php get_footer(); ?>

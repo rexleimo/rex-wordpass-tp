@@ -13,9 +13,35 @@ function tokraft_setup() {
     add_theme_support('post-thumbnails');
     add_theme_support('woocommerce');
     add_theme_support('custom-logo');
+    // Product and case-study bodies are authored with blocks, so wide/full
+    // alignments and responsive embeds have to be declared or they overflow.
+    add_theme_support('align-wide');
+    add_theme_support('responsive-embeds');
     register_nav_menus(array('primary' => __('Primary navigation', 'tokraft')));
 }
 add_action('after_setup_theme', 'tokraft_setup');
+
+/**
+ * WooCommerce force-disables the block editor for products via
+ * WC_Post_Types::gutenberg_can_edit_post_type() at priority 10. Nothing else
+ * competes for these filters, so overriding at a later priority gives products
+ * the same editor posts and case studies already use.
+ */
+function tokraft_enable_product_block_editor($use_block_editor, $post_type) {
+    return 'product' === $post_type ? true : $use_block_editor;
+}
+add_filter('use_block_editor_for_post_type', 'tokraft_enable_product_block_editor', 20, 2);
+add_filter('gutenberg_can_edit_post_type', 'tokraft_enable_product_block_editor', 20, 2);
+
+/**
+ * strtoupper() works a byte at a time, so it shreds the UTF-8 sequences in
+ * editor-supplied labels (industry names, attribute values) and the page shows
+ * mojibake. Use the multibyte version whenever the ext is available.
+ */
+function tokraft_uppercase($text) {
+    $text = (string) $text;
+    return function_exists('mb_strtoupper') ? mb_strtoupper($text, 'UTF-8') : strtoupper($text);
+}
 
 function tokraft_assets() {
     $theme_script_dependencies = array('jquery');
@@ -39,6 +65,31 @@ function tokraft_assets() {
             get_template_directory_uri() . '/assets/product-detail.css',
             array('tokraft-shop-product'),
             (string) filemtime(get_template_directory() . '/assets/product-detail.css')
+        );
+    }
+    if (function_exists('is_shop') && is_shop() && 'showcase' === tokraft_shop_layout()) {
+        wp_enqueue_style(
+            'tokraft-shop-showcase',
+            get_template_directory_uri() . '/assets/shop-showcase.css',
+            array('tokraft-shop-product'),
+            (string) filemtime(get_template_directory() . '/assets/shop-showcase.css')
+        );
+    }
+    if (is_singular('tokraft_case_study')) {
+        wp_enqueue_style(
+            'tokraft-case-study',
+            get_template_directory_uri() . '/assets/case-study.css',
+            array('tokraft-style'),
+            (string) filemtime(get_template_directory() . '/assets/case-study.css')
+        );
+    }
+    // Both bodies render block editor output, so they share one stylesheet.
+    if ((function_exists('is_product') && is_product()) || is_singular('tokraft_case_study')) {
+        wp_enqueue_style(
+            'tokraft-block-content',
+            get_template_directory_uri() . '/assets/block-content.css',
+            array('tokraft-style'),
+            (string) filemtime(get_template_directory() . '/assets/block-content.css')
         );
     }
     if ($is_material_library) {
@@ -772,6 +823,16 @@ function tokraft_home_settings_defaults() {
         'metric_two_label' => 'Happy Customers',
         'metric_three_value' => '98%',
         'metric_three_label' => 'On-time Delivery',
+
+        // Shop presentation. The catalogue template stays in the theme for when
+        // the range grows; showcase is the two-printer cover-led layout.
+        'shop_layout' => 'showcase',
+        'shop_showcase_eyebrow' => 'THE MACHINES',
+        'shop_showcase_title' => 'Two printers. Everything we make.',
+        'shop_showcase_text' => 'We run a deliberately short line-up so every machine is one we know inside out — installed, calibrated and supported from Alberta.',
+        'shop_showcase_button_label' => 'Request a custom print',
+        'shop_showcase_button_url' => '/quote/',
+        'discover_enabled' => '0',
     );
 }
 
@@ -797,6 +858,19 @@ function tokraft_home_blocks_config() {
 function tokraft_home_value($key) {
     $settings = tokraft_home_settings();
     return isset($settings[$key]) ? $settings[$key] : '';
+}
+
+function tokraft_home_enabled($key) {
+    return '1' === (string) tokraft_home_value($key);
+}
+
+/**
+ * Which shop archive template to use. 'showcase' is the cover-led two-product
+ * layout; 'catalog' is the original filtered grid in woocommerce.php.
+ */
+function tokraft_shop_layout() {
+    $layout = (string) tokraft_home_value('shop_layout');
+    return 'catalog' === $layout ? 'catalog' : 'showcase';
 }
 
 function tokraft_home_url($key) {
@@ -981,16 +1055,21 @@ function tokraft_material_colors_control($term = null) {
 function tokraft_sanitize_home_settings($values) {
     $defaults = tokraft_home_settings_defaults();
     $sanitized = array();
-    $textarea_fields = array('hero_description', 'hero_proof', 'service_text', 'service_points', 'shop_text', 'shop_points', 'materials_text', 'metrics_text');
+    $textarea_fields = array('hero_description', 'hero_proof', 'service_text', 'service_points', 'shop_text', 'shop_points', 'materials_text', 'metrics_text', 'shop_showcase_text');
     $image_fields = array('hero_image', 'service_image', 'shop_image');
     $image_list_fields = array('hero_slides');
     $number_fields = array('equipment_count', 'materials_count', 'cases_count');
-    $url_fields = array('hero_quote_url', 'hero_shop_url', 'materials_button_url');
+    $url_fields = array('hero_quote_url', 'hero_shop_url', 'materials_button_url', 'shop_showcase_button_url');
+    $toggle_fields = array('discover_enabled');
 
     foreach ($defaults as $key => $default) {
         $value = isset($values[$key]) ? $values[$key] : $default;
         if (in_array($key, $textarea_fields, true)) {
             $sanitized[$key] = sanitize_textarea_field($value);
+        } elseif (in_array($key, $toggle_fields, true)) {
+            $sanitized[$key] = '1' === (string) $value ? '1' : '0';
+        } elseif ('shop_layout' === $key) {
+            $sanitized[$key] = in_array($value, array('showcase', 'catalog'), true) ? $value : 'showcase';
         } elseif (in_array($key, $image_fields, true)) {
             $sanitized[$key] = absint($value);
         } elseif (in_array($key, $image_list_fields, true)) {
@@ -1021,6 +1100,10 @@ add_action('admin_init', 'tokraft_register_home_settings');
  */
 function tokraft_quote_settings_defaults() {
     return array(
+        // Off by default: the live estimate panel is hidden until the pricing
+        // model is settled, but stays one checkbox away from coming back.
+        'summary_enabled' => '0',
+
         'infill_enabled' => '1',
         'infill_label' => 'Infill density',
         'infill_help' => 'Infill is the pattern inside a printed part. More infill increases strength and material use, which also increases cost and printing time.',
@@ -1144,7 +1227,7 @@ function tokraft_sanitize_quote_settings($values) {
     $values = (array) $values;
     $sanitized = array();
 
-    $toggles = array('infill_enabled', 'walls_enabled', 'layer_enabled', 'support_enabled', 'adhesion_enabled');
+    $toggles = array('summary_enabled', 'infill_enabled', 'walls_enabled', 'layer_enabled', 'support_enabled', 'adhesion_enabled');
     $textareas = array(
         'infill_help', 'infill_impact_low', 'infill_impact_mid', 'infill_impact_high',
         'walls_help', 'walls_impact_low', 'walls_impact_mid', 'walls_impact_high',
@@ -1590,6 +1673,31 @@ function tokraft_render_home_settings_page() {
     echo '</div>';
     tokraft_admin_section_close();
 
+    tokraft_admin_section_open('tokraft-shop-layout', '商城', '商城页面布局', '控制 /shop/ 使用哪一套模板。商品变多以后切回“目录模式”即可恢复带筛选侧栏的网格页，两套模板同时保留在主题里。', tokraft_admin_manage_link(admin_url('edit.php?post_type=product'), '管理商品'));
+    tokraft_admin_select_field('shop_layout', array(
+        'label' => '商城页模板',
+        'description' => '展示模式：以封面大图为主的两款机器展示页。目录模式：原有的带筛选、排序和搜索的商品网格。商品分类归档页始终使用目录模式。',
+        'options' => array(
+            'showcase' => '展示模式（封面大图，适合少量产品）',
+            'catalog' => '目录模式（筛选网格，适合商品较多）',
+        ),
+    ));
+    echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-two">';
+    tokraft_admin_text_field('shop_showcase_eyebrow', array('label' => '展示页小标题', 'description' => '显示在展示页大标题上方。'));
+    tokraft_admin_text_field('shop_showcase_title', array('label' => '展示页主标题', 'description' => '例如：Two printers. Everything we make.'));
+    echo '</div>';
+    tokraft_admin_text_field('shop_showcase_text', array('label' => '展示页说明', 'description' => '一到两句话，说明为什么只上这几款机器。', 'type' => 'textarea'));
+    echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-two">';
+    tokraft_admin_text_field('shop_showcase_button_label', array('label' => '展示页按钮文字', 'description' => '例如：Request a custom print。'));
+    tokraft_admin_text_field('shop_showcase_button_url', array('label' => '展示页按钮链接', 'description' => '默认：/quote/', 'placeholder' => '/quote/'));
+    echo '</div>';
+    tokraft_admin_checkbox_field('discover_enabled', array(
+        'label' => '商品详情页配件推荐',
+        'checkbox_label' => '在商品详情页显示“Discover More Here!”配件推荐区',
+        'description' => '关闭后详情页不再输出该区块，已在商品里配置好的推荐商品会保留，随时可以打开。',
+    ));
+    tokraft_admin_section_close();
+
     echo '</form></div>';
 }
 
@@ -1631,6 +1739,19 @@ function tokraft_render_quote_settings_page() {
     echo '<p class="description">' . esc_html(sprintf(__('这些设置直接驱动 %s 上的打印参数与实时估价，保存后前台立即生效。', 'tokraft'), home_url('/quote/'))) . '</p>';
     echo '<form method="post" action="options.php">';
     settings_fields('tokraft_quote_settings_group');
+
+    tokraft_admin_section_open(
+        'tokraft-quote-summary',
+        '00',
+        __('实时估价面板', 'tokraft'),
+        __('报价表单右侧的「Your print summary」估价卡片。关闭后表单单列居中显示，估价逻辑仍在后台运行。', 'tokraft')
+    );
+    tokraft_admin_checkbox_field('summary_enabled', array(
+        'option' => 'tokraft_quote_settings',
+        'label' => __('显示状态', 'tokraft'),
+        'checkbox_label' => __('在报价表单右侧显示实时估价面板', 'tokraft'),
+    ));
+    tokraft_admin_section_close();
 
     foreach ($slider_groups as $group => $meta) {
         tokraft_admin_section_open('tokraft-quote-' . $group, $meta['step'], $meta['title'], $meta['description']);
@@ -1836,8 +1957,37 @@ add_action('add_meta_boxes_product', 'tokraft_add_product_details_meta_box');
 function tokraft_render_product_details_meta_box($post) {
     wp_nonce_field('tokraft_product_details', 'tokraft_product_details_nonce');
     $dimensions_note = get_post_meta($post->ID, '_tokraft_display_dimensions', true);
+    $showcase_cover_id = absint(get_post_meta($post->ID, '_tokraft_showcase_cover_id', true));
+    $video_id = absint(get_post_meta($post->ID, '_tokraft_product_video_id', true));
+    $video_poster_id = absint(get_post_meta($post->ID, '_tokraft_product_video_poster_id', true));
+    $showcase_cover_url = $showcase_cover_id ? wp_get_attachment_image_url($showcase_cover_id, 'medium') : '';
+    $video_poster_url = $video_poster_id ? wp_get_attachment_image_url($video_poster_id, 'medium') : '';
+    $video_url = $video_id ? wp_get_attachment_url($video_id) : '';
+
     echo '<p><label for="tokraft_display_dimensions"><strong>Front-end size description</strong></label><textarea class="widefat" rows="4" id="tokraft_display_dimensions" name="tokraft_display_dimensions" placeholder="For example: Single: 58 x 34 x 22 mm&#10;Double: confirm dimensions before ordering.">' . esc_textarea($dimensions_note) . '</textarea></p>';
     echo '<p class="description">This is shown next to the purchase options. For shipping calculations, also enter the actual length, width and height in <strong>Product data &rarr; Shipping</strong>.</p>';
+
+    echo '<hr><p><strong>Showcase cover</strong></p>';
+    echo '<p class="description">Optional full-bleed cover for the /shop/ showcase layout. Falls back to the product image when empty.</p>';
+    echo '<input type="hidden" id="tokraft_showcase_cover_id" name="tokraft_showcase_cover_id" value="' . esc_attr($showcase_cover_id) . '">';
+    echo '<p class="tokraft-admin-media-actions"><button type="button" class="button tokraft-media-select" data-target="tokraft_showcase_cover_id">Select cover image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_showcase_cover_id">Clear</button></p>';
+    echo '<img class="tokraft-admin-media-preview" id="tokraft_showcase_cover_id-preview" src="' . esc_url($showcase_cover_url) . '" alt="" style="max-width:100%;' . ($showcase_cover_url ? '' : 'display:none;') . '">';
+
+    echo '<hr><p><strong>Product video</strong></p>';
+    echo '<p class="description">Upload a local MP4 from the media library. Do not paste a YouTube URL — the player only accepts media library attachments.</p>';
+    echo '<input type="hidden" id="tokraft_product_video_id" name="tokraft_product_video_id" value="' . esc_attr($video_id) . '">';
+    echo '<p class="tokraft-admin-media-actions"><button type="button" class="button tokraft-media-select" data-target="tokraft_product_video_id" data-media-type="video">Select video</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_product_video_id">Clear</button></p>';
+    if ($video_url) {
+        echo '<p class="description" id="tokraft_product_video_id-preview"><a href="' . esc_url($video_url) . '" target="_blank" rel="noopener">' . esc_html(basename($video_url)) . '</a></p>';
+    } else {
+        echo '<p class="description" id="tokraft_product_video_id-preview" style="display:none"></p>';
+    }
+
+    echo '<p><strong>Video poster</strong></p>';
+    echo '<input type="hidden" id="tokraft_product_video_poster_id" name="tokraft_product_video_poster_id" value="' . esc_attr($video_poster_id) . '">';
+    echo '<p class="tokraft-admin-media-actions"><button type="button" class="button tokraft-media-select" data-target="tokraft_product_video_poster_id">Select poster image</button> <button type="button" class="button tokraft-media-clear" data-target="tokraft_product_video_poster_id">Clear</button></p>';
+    echo '<img class="tokraft-admin-media-preview" id="tokraft_product_video_poster_id-preview" src="' . esc_url($video_poster_url) . '" alt="" style="max-width:100%;' . ($video_poster_url ? '' : 'display:none;') . '">';
+
     echo '<hr><p><strong>Product image specification</strong></p><ul class="ul-disc" style="margin-left:18px"><li>Main image: 1600 x 1600 px, square, JPG or WebP, under 2 MB.</li><li>Gallery: 1600 x 1200 px minimum, consistent lighting and background.</li><li>Keep the product within 70-85% of the frame; use sharp, well-lit images.</li><li>Add the main image in the Product image panel and extra views in Product gallery.</li></ul>';
 }
 
@@ -1846,6 +1996,9 @@ function tokraft_save_product_details_meta_box($post_id) {
         return;
     }
     update_post_meta($post_id, '_tokraft_display_dimensions', sanitize_textarea_field(wp_unslash($_POST['tokraft_display_dimensions'] ?? '')));
+    update_post_meta($post_id, '_tokraft_showcase_cover_id', absint($_POST['tokraft_showcase_cover_id'] ?? 0));
+    update_post_meta($post_id, '_tokraft_product_video_id', absint($_POST['tokraft_product_video_id'] ?? 0));
+    update_post_meta($post_id, '_tokraft_product_video_poster_id', absint($_POST['tokraft_product_video_poster_id'] ?? 0));
 }
 add_action('save_post_product', 'tokraft_save_product_details_meta_box');
 
@@ -2037,20 +2190,21 @@ function tokraft_admin_assets($hook) {
     $screen = get_current_screen();
     $tokraft_pages = array('toplevel_page_tokraft-home', 'tokraft_page_tokraft-quote-settings');
     $is_material_taxonomy = $screen && 'tokraft_material' === $screen->taxonomy;
-    if (!in_array($hook, $tokraft_pages, true) && !$is_material_taxonomy) {
+    $is_product_edit = $screen && 'product' === $screen->post_type && in_array($hook, array('post.php', 'post-new.php'), true);
+    if (!in_array($hook, $tokraft_pages, true) && !$is_material_taxonomy && !$is_product_edit) {
         return;
     }
     wp_enqueue_style(
         'tokraft-admin',
         get_template_directory_uri() . '/assets/admin.css',
         array(),
-        '2.6.0'
+        '2.7.0'
     );
     wp_enqueue_media();
     if ($is_material_taxonomy) {
         wp_enqueue_style('wp-color-picker');
     }
-    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery', 'wp-color-picker'), '2.6.0', true);
+    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery', 'wp-color-picker'), '2.7.0', true);
     wp_localize_script('tokraft-admin', 'tokraftAdminI18n', tokraft_admin_ui_strings());
 }
 add_action('admin_enqueue_scripts', 'tokraft_admin_assets');

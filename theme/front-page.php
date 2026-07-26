@@ -35,10 +35,10 @@ $proof_points = tokraft_lines(tokraft_home_value('hero_proof'));
 $materials_url = tokraft_home_url('materials_button_url');
 $cases_url = get_post_type_archive_link('tokraft_case_study');
 $shop_products = function_exists('wc_get_products') ? wc_get_products(array(
-    'limit' => 3,
+    'limit' => 4,
     'status' => 'publish',
-    'orderby' => 'date',
-    'order' => 'DESC',
+    'orderby' => 'menu_order',
+    'order' => 'ASC',
 )) : array();
 
 if (!$shop_image && $shop_products) {

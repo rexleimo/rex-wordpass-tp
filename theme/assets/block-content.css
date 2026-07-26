@@ -1,0 +1,204 @@
+/*
+ * Front-end rendering for block editor output.
+ *
+ * Products and case studies are authored with the native block editor, so the
+ * two body containers need typography, media and layout rules or the blocks
+ * render as unstyled flow content. Scoped to the two containers so nothing
+ * here can leak into the hand-built sections around them.
+ */
+
+.tk-case-story-content > *:first-child,
+.tk-product-longform > *:first-child { margin-top: 0; }
+
+.tk-case-story-content > *:last-child,
+.tk-product-longform > *:last-child { margin-bottom: 0; }
+
+.tk-case-story-content p,
+.tk-product-longform p { margin: 0 0 1.15em; }
+
+.tk-case-story-content h2,
+.tk-product-longform h2 {
+  margin: 1.9em 0 .5em;
+  font-size: clamp(28px, 2.6vw, 40px);
+}
+
+.tk-case-story-content h3,
+.tk-product-longform h3 {
+  margin: 1.7em 0 .45em;
+  font-size: clamp(21px, 1.7vw, 26px);
+}
+
+.tk-case-story-content h4,
+.tk-product-longform h4 {
+  margin: 1.5em 0 .4em;
+  font-size: 18px;
+  letter-spacing: -.02em;
+}
+
+.tk-case-story-content a,
+.tk-product-longform a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tk-case-story-content ul,
+.tk-case-story-content ol,
+.tk-product-longform ul,
+.tk-product-longform ol { margin: 0 0 1.15em; padding-left: 1.3em; }
+
+.tk-case-story-content li,
+.tk-product-longform li { margin-bottom: .4em; }
+
+.tk-case-story-content strong,
+.tk-product-longform strong { color: var(--ink); font-weight: 750; }
+
+.tk-case-story-content blockquote,
+.tk-product-longform blockquote {
+  margin: 1.6em 0;
+  padding: 4px 0 4px 22px;
+  border-left: 3px solid var(--gold);
+  color: var(--ink);
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+
+.tk-case-story-content blockquote cite,
+.tk-product-longform blockquote cite {
+  display: block;
+  margin-top: 10px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-style: normal;
+  font-family: var(--mono);
+}
+
+/* Media ------------------------------------------------------------------ */
+
+.tk-case-story-content figure,
+.tk-product-longform figure { margin: 1.8em 0; }
+
+.tk-case-story-content img,
+.tk-product-longform img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.tk-case-story-content figcaption,
+.tk-product-longform figcaption {
+  margin-top: 9px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+
+.tk-case-story-content video,
+.tk-case-story-content iframe,
+.tk-product-longform video,
+.tk-product-longform iframe {
+  display: block;
+  max-width: 100%;
+  border: 0;
+}
+
+.tk-case-story-content .wp-block-video video,
+.tk-product-longform .wp-block-video video { width: 100%; background: #000; }
+
+/* Layout blocks ---------------------------------------------------------- */
+
+.tk-case-story-content .wp-block-columns,
+.tk-product-longform .wp-block-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin: 1.8em 0;
+}
+
+.tk-case-story-content .wp-block-column,
+.tk-product-longform .wp-block-column { flex: 1 1 260px; min-width: 0; }
+
+.tk-case-story-content .wp-block-group,
+.tk-product-longform .wp-block-group { margin: 1.6em 0; }
+
+.tk-case-story-content .wp-block-separator,
+.tk-product-longform .wp-block-separator {
+  margin: 2.2em 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.tk-case-story-content .wp-block-table table,
+.tk-product-longform .wp-block-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.tk-case-story-content .wp-block-table td,
+.tk-case-story-content .wp-block-table th,
+.tk-product-longform .wp-block-table td,
+.tk-product-longform .wp-block-table th {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.tk-case-story-content .wp-block-buttons,
+.tk-product-longform .wp-block-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 1.6em 0;
+}
+
+.tk-case-story-content .wp-block-button__link,
+.tk-product-longform .wp-block-button__link {
+  display: inline-flex;
+  padding: 12px 20px;
+  border-radius: 2px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+/* Alignment -------------------------------------------------------------- */
+
+.tk-case-story-content .alignleft,
+.tk-product-longform .alignleft { float: left; margin: .3em 1.6em 1.2em 0; max-width: 50%; }
+
+.tk-case-story-content .alignright,
+.tk-product-longform .alignright { float: right; margin: .3em 0 1.2em 1.6em; max-width: 50%; }
+
+.tk-case-story-content .aligncenter,
+.tk-product-longform .aligncenter { margin-left: auto; margin-right: auto; text-align: center; }
+
+/* The containers are already constrained, so wide/full pull back out rather
+   than trying to escape the page shell — clamped so they never overflow. */
+.tk-case-story-content .alignwide,
+.tk-product-longform .alignwide {
+  width: min(100% + 120px, 100vw - 36px);
+  max-width: none;
+  margin-left: max(-60px, (100vw - 36px - 100%) / -2);
+}
+
+.tk-case-story-content .alignfull,
+.tk-product-longform .alignfull {
+  width: min(100% + 180px, 100vw - 36px);
+  max-width: none;
+  margin-left: max(-90px, (100vw - 36px - 100%) / -2);
+}
+
+@media (max-width: 780px) {
+  .tk-case-story-content .alignleft,
+  .tk-case-story-content .alignright,
+  .tk-product-longform .alignleft,
+  .tk-product-longform .alignright { float: none; margin: 1.4em 0; max-width: 100%; }
+
+  .tk-case-story-content .alignwide,
+  .tk-case-story-content .alignfull,
+  .tk-product-longform .alignwide,
+  .tk-product-longform .alignfull { width: 100%; margin-left: 0; }
+}

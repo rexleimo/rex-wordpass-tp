@@ -34,6 +34,7 @@ services:
       - wordpress_data:/var/www/html
       - ./theme:/var/www/html/wp-content/themes/tokraft
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./wordpress/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
 
 volumes:
   db_data:

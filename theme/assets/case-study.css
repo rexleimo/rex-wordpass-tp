@@ -1,0 +1,305 @@
+/*
+ * Case study detail.
+ *
+ * single-tokraft_case_study.php was written against the Pencil hYU38 reference
+ * but the matching stylesheet never shipped, so the page rendered as bare
+ * document flow. These rules implement every tk-case-* hook that template uses
+ * and style the block editor output inside the story body.
+ */
+
+.tk-case-detail {
+  background: var(--canvas);
+  padding-bottom: 96px;
+}
+
+.tk-case-detail-shell {
+  max-width: 1240px;
+  margin: auto;
+  padding: 34px 32px 0;
+}
+
+/* Breadcrumb ------------------------------------------------------------- */
+
+.tk-case-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.tk-case-breadcrumb a:hover { color: var(--blue); }
+.tk-case-breadcrumb span:last-child { color: var(--ink); font-weight: 600; }
+
+/* Two-column head -------------------------------------------------------- */
+
+.tk-case-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 56px;
+  align-items: start;
+  padding: 32px 0 76px;
+}
+
+.tk-case-media {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.tk-case-media-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  padding: 6px 10px;
+  background: rgba(20, 27, 52, .82);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+
+.tk-case-media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.tk-case-media-fallback {
+  aspect-ratio: 4 / 3;
+  background:
+    repeating-linear-gradient(135deg, #e9edf5 0 12px, #eff2f8 12px 24px);
+}
+
+.tk-case-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.tk-case-facts > div {
+  padding: 16px 18px;
+  border-right: 1px solid var(--line);
+}
+
+.tk-case-facts > div:last-child { border-right: 0; }
+
+.tk-case-facts dt {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.tk-case-facts dd {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* Summary column --------------------------------------------------------- */
+
+.tk-case-kicker,
+.tk-case-reading-meta {
+  margin: 0;
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+}
+
+.tk-case-reading-meta { color: var(--ink-soft); }
+
+.tk-case-summary h1 {
+  margin: 14px 0 12px;
+  font-size: clamp(40px, 4.2vw, 64px);
+}
+
+.tk-case-intro {
+  max-width: 56ch;
+  margin: 20px 0 30px;
+  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1.62;
+}
+
+.tk-case-label-group { margin-bottom: 20px; }
+
+.tk-case-label-group > p {
+  margin: 0 0 8px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.tk-case-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tk-case-pills span {
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.tk-case-pills span.is-active {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.tk-case-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 18px;
+  margin: 28px 0 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.tk-case-action-row p {
+  flex: 1 1 260px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.tk-case-share {
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tk-case-share:hover { color: var(--blue-deep); }
+
+.tk-case-primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 20px;
+  border: 1px solid var(--blue);
+  border-radius: 2px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 750;
+  transition: background .18s ease, transform .18s ease;
+}
+
+.tk-case-primary-action:hover {
+  background: var(--blue-deep);
+  transform: translateY(-2px);
+}
+
+.tk-case-quote-note {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+/* Decision path band ----------------------------------------------------- */
+
+.tk-case-decision-path {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: end;
+  max-width: 1240px;
+  margin: auto;
+  padding: 56px 32px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.tk-case-decision-path > div > p {
+  margin: 0 0 12px;
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+}
+
+.tk-case-decision-path h2 {
+  margin: 0;
+  font-size: clamp(32px, 3.4vw, 52px);
+}
+
+.tk-case-decision-path > p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.66;
+}
+
+/* Story body ------------------------------------------------------------- */
+
+.tk-case-story {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1240px;
+  margin: auto;
+  padding: 62px 32px 0;
+}
+
+.tk-case-story-meta {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+}
+
+.tk-case-story-meta p {
+  margin: 0 0 6px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+
+.tk-case-story-meta strong {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: -.03em;
+}
+
+.tk-case-story-content {
+  max-width: 74ch;
+  color: #2b3350;
+  font-size: 17px;
+  line-height: 1.72;
+}
+
+@media (max-width: 1040px) {
+  .tk-case-detail-grid { grid-template-columns: 1fr; gap: 36px; }
+  .tk-case-decision-path { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+  .tk-case-story { grid-template-columns: 1fr; gap: 26px; }
+  .tk-case-story-meta { position: static; }
+}
+
+@media (max-width: 620px) {
+  .tk-case-detail-shell { padding: 24px 18px 0; }
+  .tk-case-detail-grid { padding: 22px 0 48px; }
+  .tk-case-decision-path { padding: 40px 18px; }
+  .tk-case-story { padding: 44px 18px 0; }
+  .tk-case-facts { grid-template-columns: 1fr; }
+  .tk-case-facts > div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .tk-case-facts > div:last-child { border-bottom: 0; }
+  .tk-case-primary-action { width: 100%; justify-content: center; }
+}

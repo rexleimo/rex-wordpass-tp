@@ -74,7 +74,7 @@ $payment_method = $order->get_payment_method_title();
                         <div class="tk-order-item">
                             <div><?php echo $thumb ? $thumb : ''; ?></div>
                             <div>
-                                <div class="meta"><?php echo esc_html(strtoupper($product ? implode(' / ', wp_get_post_terms($product->get_id(), 'product_cat', array('fields' => 'names'))) : 'PRODUCT')); ?></div>
+                                <div class="meta"><?php echo esc_html(tokraft_uppercase($product ? implode(' / ', wp_get_post_terms($product->get_id(), 'product_cat', array('fields' => 'names'))) : 'PRODUCT')); ?></div>
                                 <h3><?php echo esc_html($item->get_name()); ?></h3>
                                 <div class="meta">
                                     <?php

@@ -1,0 +1,389 @@
+/* Shop showcase — cover-led archive for a short product line-up.
+   Loaded only when 商城页面布局 = 展示模式; the catalogue grid keeps its own
+   styles in shop-product.css. Tokens come from style.css, no new fonts. */
+
+.tk-showcase {
+  padding: 0 0 96px;
+  background: var(--canvas);
+}
+
+/* Hero */
+
+.tk-showcase-hero {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 56px 32px 64px;
+  text-align: left;
+}
+
+.tk-showcase-hero .tk-shop-breadcrumb {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 28px;
+}
+
+.tk-showcase-hero .tk-shop-breadcrumb a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.tk-showcase-hero .tk-shop-breadcrumb a:hover {
+  color: var(--blue);
+}
+
+.tk-showcase-hero .tk-shop-breadcrumb span {
+  margin: 0 6px;
+}
+
+.tk-showcase-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 18px;
+}
+
+.tk-showcase-hero h1 {
+  font-family: var(--display);
+  font-size: clamp(38px, 5.4vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin: 0;
+  max-width: 16ch;
+}
+
+.tk-showcase-lede {
+  margin: 22px 0 32px;
+  max-width: 58ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+/* Product cards */
+
+.tk-showcase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.tk-showcase-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+.tk-showcase-card.is-flipped .tk-showcase-cover {
+  order: 2;
+}
+
+.tk-showcase-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 44, 151, .28);
+  box-shadow: 0 26px 60px rgba(20, 27, 52, .14);
+}
+
+.tk-showcase-cover {
+  position: relative;
+  min-height: 460px;
+  background: linear-gradient(140deg, #101636 0%, #222c97 100%);
+  overflow: hidden;
+}
+
+.tk-showcase-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .8s cubic-bezier(.16, .84, .44, 1);
+}
+
+.tk-showcase-card:hover .tk-showcase-cover img {
+  transform: scale(1.045);
+}
+
+.tk-showcase-cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .2em;
+  color: rgba(255, 255, 255, .78);
+}
+
+.tk-showcase-index {
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .18em;
+  color: #fff;
+  background: rgba(20, 27, 52, .55);
+  backdrop-filter: blur(6px);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.tk-showcase-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(28px, 3.4vw, 52px);
+}
+
+.tk-showcase-kicker {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.tk-showcase-copy h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+
+.tk-showcase-copy h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tk-showcase-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.tk-showcase-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1px;
+  margin: 4px 0 0;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tk-showcase-specs > div {
+  background: var(--surface);
+  padding: 14px 16px;
+}
+
+.tk-showcase-specs dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 6px;
+}
+
+.tk-showcase-specs dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.tk-showcase-foot {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tk-showcase-price {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.tk-showcase-price del {
+  color: var(--ink-soft);
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.tk-showcase-link {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  transition: transform .3s ease;
+}
+
+.tk-showcase-card:hover .tk-showcase-link {
+  transform: translateX(4px);
+}
+
+/* Full-card click target sits under the copy so real links stay clickable. */
+.tk-showcase-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.tk-showcase-copy h2 a {
+  position: relative;
+  z-index: 2;
+}
+
+/* Comparison bar */
+
+.tk-showcase-compare {
+  max-width: 1320px;
+  margin: 72px auto 0;
+  padding: 0 32px;
+}
+
+.tk-showcase-compare h2 {
+  font-family: var(--display);
+  font-size: clamp(24px, 2.6vw, 34px);
+  color: var(--ink);
+  margin: 0 0 22px;
+}
+
+.tk-showcase-compare-table {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.tk-showcase-compare-head,
+.tk-showcase-compare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 22px;
+  align-items: baseline;
+}
+
+.tk-showcase-compare-head {
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.tk-showcase-compare-row + .tk-showcase-compare-row {
+  border-top: 1px solid var(--line);
+}
+
+.tk-showcase-compare-row span:first-child {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.tk-showcase-compare-row span + span {
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Empty state */
+
+.tk-showcase-empty {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 32px 24px;
+  text-align: center;
+}
+
+.tk-showcase-empty h2 {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.tk-showcase-empty p {
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+@media (max-width: 1040px) {
+  .tk-showcase-card,
+  .tk-showcase-card.is-flipped {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Cover always leads on narrow screens; alternating reads as random there. */
+  .tk-showcase-card.is-flipped .tk-showcase-cover {
+    order: 0;
+  }
+
+  .tk-showcase-cover {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 760px) {
+  .tk-showcase-hero {
+    padding: 36px 20px 44px;
+  }
+
+  .tk-showcase-list,
+  .tk-showcase-compare {
+    padding: 0 20px;
+  }
+
+  .tk-showcase-cover {
+    min-height: 240px;
+  }
+
+  .tk-showcase-compare-head,
+  .tk-showcase-compare-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    row-gap: 6px;
+    padding: 14px 18px;
+  }
+
+  .tk-showcase-compare-head span:first-child,
+  .tk-showcase-compare-row span:first-child {
+    grid-column: 1 / -1;
+  }
+}

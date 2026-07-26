@@ -45,9 +45,9 @@ while (have_posts()) :
                 </div>
 
                 <div class="tk-case-summary">
-                    <p class="tk-case-kicker"><?php echo esc_html(sprintf(__('CASE STUDY / %s', 'tokraft'), strtoupper($application_label))); ?></p>
+                    <p class="tk-case-kicker"><?php echo esc_html(sprintf(__('CASE STUDY / %s', 'tokraft'), tokraft_uppercase($application_label))); ?></p>
                     <h1><?php the_title(); ?></h1>
-                    <p class="tk-case-reading-meta"><?php echo esc_html(sprintf(__('UPDATED %s', 'tokraft'), strtoupper(get_the_modified_date('F Y')))); ?></p>
+                    <p class="tk-case-reading-meta"><?php echo esc_html(sprintf(__('UPDATED %s', 'tokraft'), tokraft_uppercase(get_the_modified_date('F Y')))); ?></p>
                     <p class="tk-case-intro"><?php echo esc_html($summary); ?></p>
 
                     <div class="tk-case-label-group">

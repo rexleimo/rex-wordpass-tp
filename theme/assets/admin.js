@@ -6,19 +6,36 @@
     i18n[key] || key,
   );
 
-  const setPreview = (target, attachment) => {
+  const setPreview = (target, attachment, mediaType = 'image') => {
     const input = document.getElementById(target);
     const preview = document.getElementById(`${target}-preview`);
     if (!input || !preview) return;
     input.value = attachment ? attachment.id : '';
-    preview.src = attachment ? attachment.url : '';
-    preview.style.display = attachment ? 'block' : 'none';
+    if (preview.tagName === 'IMG') {
+      preview.src = attachment ? (attachment.sizes?.medium?.url || attachment.url) : '';
+      preview.style.display = attachment ? 'block' : 'none';
+    } else if (mediaType === 'video') {
+      if (attachment) {
+        const label = attachment.filename || attachment.url.split('/').pop() || 'Video selected';
+        preview.innerHTML = `<a href="${attachment.url}" target="_blank" rel="noopener">${label}</a>`;
+        preview.style.display = 'block';
+      } else {
+        preview.innerHTML = '';
+        preview.style.display = 'none';
+      }
+    }
     preview.dispatchEvent(new CustomEvent('tokraftimagechange', { bubbles: true }));
   };
 
-  const openImagePicker = (target) => {
-    const frame = wp.media({ title: t('select_image'), button: { text: t('use_this_image') }, multiple: false });
-    frame.on('select', () => setPreview(target, frame.state().get('selection').first().toJSON()));
+  const openImagePicker = (target, mediaType = 'image') => {
+    const isVideo = mediaType === 'video';
+    const frame = wp.media({
+      title: isVideo ? (t('select_video') || 'Select video') : t('select_image'),
+      button: { text: isVideo ? (t('use_this_video') || 'Use this video') : t('use_this_image') },
+      library: { type: isVideo ? 'video' : 'image' },
+      multiple: false,
+    });
+    frame.on('select', () => setPreview(target, frame.state().get('selection').first().toJSON(), mediaType));
     frame.open();
   };
 
@@ -86,12 +103,14 @@
 
   $(document).on('click', '.tokraft-media-select', (event) => {
     event.preventDefault();
-    openImagePicker(event.currentTarget.dataset.target);
+    openImagePicker(event.currentTarget.dataset.target, event.currentTarget.dataset.mediaType || 'image');
   });
 
   $(document).on('click', '.tokraft-media-clear', (event) => {
     event.preventDefault();
-    setPreview(event.currentTarget.dataset.target, null);
+    const target = event.currentTarget.dataset.target;
+    const selectButton = document.querySelector(`.tokraft-media-select[data-target="${target}"]`);
+    setPreview(target, null, selectButton?.dataset.mediaType || 'image');
   });
 
   $(document).on('click', '.tokraft-media-gallery-select', (event) => {
