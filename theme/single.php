@@ -1,7 +1,12 @@
 <?php get_header(); ?>
 <?php while (have_posts()) : the_post(); ?>
 <article class="blog-single">
-    <header class="blog-single-hero">
+    <header class="blog-single-hero<?php echo has_post_thumbnail() ? ' has-cover' : ' no-cover'; ?>">
+        <?php if (has_post_thumbnail()) : ?>
+            <figure class="blog-single-cover">
+                <?php the_post_thumbnail('full', array('loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '(min-width: 1440px) 1344px, calc(100vw - 36px)')); ?>
+            </figure>
+        <?php endif; ?>
         <div class="blog-single-hero-copy">
             <div class="eyebrow"><?php esc_html_e('toKraft journal', 'tokraft'); ?></div>
             <h1><?php the_title(); ?></h1>
@@ -14,11 +19,6 @@
                 <p class="blog-single-dek"><?php echo esc_html(get_the_excerpt()); ?></p>
             <?php endif; ?>
         </div>
-        <?php if (has_post_thumbnail()) : ?>
-            <figure class="blog-single-cover">
-                <?php the_post_thumbnail('large', array('loading' => 'eager')); ?>
-            </figure>
-        <?php endif; ?>
     </header>
 
     <div class="blog-single-body">

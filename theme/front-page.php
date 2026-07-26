@@ -28,9 +28,9 @@ if (!$hero_uses_carousel && $hero_slides) {
 
 $service_image = tokraft_home_image_url('service_image', 'large');
 $shop_image = tokraft_home_image_url('shop_image', 'large');
-$materials = tokraft_featured_materials((int) tokraft_home_value('materials_count'));
+$materials = tokraft_featured_materials(6);
 $cases = tokraft_home_cases((int) tokraft_home_value('cases_count'));
-$equipment = tokraft_home_equipment((int) tokraft_home_value('equipment_count'));
+$equipment = tokraft_home_equipment(2);
 $proof_points = tokraft_lines(tokraft_home_value('hero_proof'));
 $materials_url = tokraft_home_url('materials_button_url');
 $cases_url = get_post_type_archive_link('tokraft_case_study');
@@ -94,11 +94,15 @@ ob_start();
 </section>
 
 <?php if ($proof_points) : ?>
-    <section class="home-proof-strip" aria-label="<?php esc_attr_e('Production capabilities', 'tokraft'); ?>">
-        <?php foreach ($proof_points as $index => $proof_point) :
-            $parts = array_map('trim', explode('|', $proof_point, 2)); ?>
-            <div class="home-proof-item"><span>0<?php echo esc_html($index + 1); ?></span><strong><?php echo esc_html($parts[0]); ?></strong><small><?php echo esc_html($parts[1] ?? ''); ?></small></div>
-        <?php endforeach; ?>
+    <section class="home-proof-strip" data-home-proof aria-label="<?php esc_attr_e('Production capabilities', 'tokraft'); ?>">
+        <button class="home-proof-control home-proof-control-previous" type="button" data-home-proof-previous aria-label="<?php esc_attr_e('Show previous step', 'tokraft'); ?>"><span aria-hidden="true">&larr;</span></button>
+        <div class="home-proof-rail" data-home-proof-rail tabindex="0">
+            <?php foreach ($proof_points as $index => $proof_point) :
+                $parts = array_map('trim', explode('|', $proof_point, 2)); ?>
+                <div class="home-proof-item"><span>0<?php echo esc_html($index + 1); ?></span><strong><?php echo esc_html($parts[0]); ?></strong><small><?php echo esc_html($parts[1] ?? ''); ?></small></div>
+            <?php endforeach; ?>
+        </div>
+        <button class="home-proof-control home-proof-control-next" type="button" data-home-proof-next aria-label="<?php esc_attr_e('Show next step', 'tokraft'); ?>"><span aria-hidden="true">&rarr;</span></button>
     </section>
 <?php endif; ?>
 <?php $home_sections['hero'] = ob_get_clean(); ob_start(); ?>
@@ -148,13 +152,16 @@ ob_start();
             </div>
             <p><?php echo esc_html(tokraft_home_value('equipment_text')); ?></p>
         </div>
-        <div class="home-fleet-ledger">
+        <div class="home-config-grid">
             <?php foreach ($equipment as $index => $item) : ?>
-                <a class="home-fleet-item" href="<?php echo esc_url(get_permalink($item)); ?>">
-                    <span class="home-fleet-number">0<?php echo esc_html($index + 1); ?></span>
-                    <div class="home-fleet-image<?php echo has_post_thumbnail($item) ? ' has-image' : ''; ?>"><?php if (has_post_thumbnail($item)) { echo get_the_post_thumbnail($item, 'medium', array('loading' => 'lazy')); } ?></div>
-                    <div><h3><?php echo esc_html(get_the_title($item)); ?></h3><p><?php echo esc_html(wp_trim_words(wp_strip_all_tags($item->post_content), 18)); ?></p></div>
-                    <span class="home-fleet-arrow" aria-hidden="true">&nearr;</span>
+                <a class="home-config-card" href="<?php echo esc_url(get_permalink($item)); ?>">
+                    <div class="home-config-image<?php echo has_post_thumbnail($item) ? ' has-image' : ''; ?>"><?php if (has_post_thumbnail($item)) { echo get_the_post_thumbnail($item, 'large', array('loading' => 'lazy')); } ?></div>
+                    <div class="home-config-copy">
+                        <span class="home-config-index">CONFIG / 0<?php echo esc_html($index + 1); ?></span>
+                        <h3><?php echo esc_html(get_the_title($item)); ?></h3>
+                        <p><?php echo esc_html(wp_trim_words(wp_strip_all_tags($item->post_content), 26)); ?></p>
+                        <span class="home-config-link"><?php esc_html_e('View equipment profile', 'tokraft'); ?><b aria-hidden="true">&nearr;</b></span>
+                    </div>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -165,22 +172,36 @@ ob_start();
 <section class="home-materials" id="materials" aria-labelledby="materials-heading">
     <div class="home-materials-intro">
         <div class="home-section-tag"><span>04</span><?php echo esc_html(tokraft_home_value('materials_eyebrow')); ?></div>
-        <h2 id="materials-heading"><?php echo esc_html(tokraft_home_value('materials_title')); ?></h2>
-        <p><?php echo esc_html(tokraft_home_value('materials_text')); ?></p>
-        <a class="home-text-link" href="<?php echo esc_url($materials_url); ?>"><?php echo esc_html(tokraft_home_value('materials_button_label')); ?><span aria-hidden="true">&rarr;</span></a>
+        <div class="home-materials-intro-content">
+            <h2 id="materials-heading"><?php echo esc_html(tokraft_home_value('materials_title')); ?></h2>
+            <div class="home-materials-intro-support">
+                <p><?php echo esc_html(tokraft_home_value('materials_text')); ?></p>
+                <a class="home-text-link" href="<?php echo esc_url($materials_url); ?>"><?php echo esc_html(tokraft_home_value('materials_button_label')); ?><span aria-hidden="true">&rarr;</span></a>
+            </div>
+        </div>
     </div>
-    <div class="home-material-grid">
-        <?php foreach ($materials as $material) :
-            $image_id = absint(get_term_meta($material->term_id, '_tokraft_material_image_id', true));
-            $color = sanitize_hex_color(get_term_meta($material->term_id, '_tokraft_material_color', true)) ?: '#d9d9d9';
-            $description = get_term_meta($material->term_id, '_tokraft_material_short_description', true);
-            $quote_url = add_query_arg('material', $material->slug, home_url('/quote/')); ?>
-            <a class="home-material-card<?php echo $image_id ? ' has-image' : ''; ?>" href="<?php echo esc_url($quote_url); ?>" style="--material-color: <?php echo esc_attr($color); ?>">
-                <div class="home-material-image"><?php if ($image_id) { echo wp_get_attachment_image($image_id, 'medium_large', false, array('loading' => 'lazy')); } ?></div>
-                <span><?php echo esc_html($material->name); ?></span>
-                <small><?php echo esc_html($description); ?></small>
-            </a>
+    <div class="home-material-tabs" role="tablist" aria-label="<?php esc_attr_e('Choose a material card', 'tokraft'); ?>">
+        <?php foreach ($materials as $index => $material) : ?>
+            <button type="button" role="tab" data-home-material-target="material-<?php echo esc_attr($material->slug); ?>" aria-controls="material-<?php echo esc_attr($material->slug); ?>" aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>"><?php echo esc_html($material->name); ?></button>
         <?php endforeach; ?>
+    </div>
+    <div class="home-material-swiper swiper" data-home-material-swiper>
+        <div class="home-material-rail swiper-wrapper" role="list">
+            <?php foreach ($materials as $index => $material) :
+                $image_id = absint(get_term_meta($material->term_id, '_tokraft_material_image_id', true));
+                $color = sanitize_hex_color(get_term_meta($material->term_id, '_tokraft_material_color', true)) ?: '#d9d9d9';
+                $description = get_term_meta($material->term_id, '_tokraft_material_short_description', true);
+                $quote_url = add_query_arg('material', $material->slug, home_url('/quote/')); ?>
+                <a id="material-<?php echo esc_attr($material->slug); ?>" class="home-material-card swiper-slide<?php echo $image_id ? ' has-image' : ''; ?>" href="<?php echo esc_url($quote_url); ?>" style="--material-color: <?php echo esc_attr($color); ?>" role="listitem">
+                    <div class="home-material-image"><?php if ($image_id) { echo wp_get_attachment_image($image_id, 'medium_large', false, array('loading' => 'lazy')); } ?></div>
+                    <span class="home-material-card-number" aria-hidden="true">0<?php echo esc_html($index + 1); ?></span>
+                    <span class="home-material-card-title"><?php echo esc_html($material->name); ?></span>
+                    <small><?php echo esc_html($description); ?></small>
+                    <span class="home-material-card-action"><?php esc_html_e('Start a quote', 'tokraft'); ?><b aria-hidden="true">&rarr;</b></span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        <div class="home-material-scrollbar swiper-scrollbar" data-home-material-scrollbar aria-hidden="true"></div>
     </div>
 </section>
 

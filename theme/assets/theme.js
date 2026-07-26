@@ -62,6 +62,147 @@
 
   initHeroCarousel();
 
+  const initHomeProofRail = () => {
+    const section = document.querySelector('[data-home-proof]');
+    const rail = section?.querySelector('[data-home-proof-rail]');
+    const previous = section?.querySelector('[data-home-proof-previous]');
+    const next = section?.querySelector('[data-home-proof-next]');
+    if (!section || !rail || !previous || !next) return;
+
+    const updateControls = () => {
+      const overflow = rail.scrollWidth - rail.clientWidth > 2;
+      previous.disabled = !overflow || rail.scrollLeft <= 4;
+      next.disabled = !overflow || rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 4;
+    };
+    const move = (direction) => rail.scrollBy({ left: direction * Math.max(rail.clientWidth * .8, 240), behavior: 'smooth' });
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    rail.addEventListener('scroll', updateControls, { passive: true });
+    window.addEventListener('resize', updateControls, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(updateControls).observe(rail);
+    updateControls();
+  };
+
+  const initMaterialSwiper = () => {
+    const slider = document.querySelector('[data-home-material-swiper]');
+    const tabs = Array.from(document.querySelectorAll('[data-home-material-target]'));
+    const scrollbar = slider?.querySelector('[data-home-material-scrollbar]');
+    if (!slider || !scrollbar || !tabs.length || typeof window.Swiper !== 'function') return;
+
+    const selectTab = (tab) => {
+      tabs.forEach((item) => item.setAttribute('aria-selected', String(item === tab)));
+    };
+    const slideOffset = () => {
+      if (slider.clientWidth <= 620) return 18;
+      if (slider.clientWidth <= 820) return 40;
+      return Math.max(32, Math.floor((slider.clientWidth - 1376) / 2));
+    };
+    const swiper = new window.Swiper(slider, {
+      slidesPerView: 'auto',
+      spaceBetween: 18,
+      slidesOffsetBefore: slideOffset(),
+      slidesOffsetAfter: slideOffset(),
+      grabCursor: true,
+      speed: 500,
+      threshold: 6,
+      watchOverflow: true,
+      breakpoints: {
+        0: { spaceBetween: 14 },
+        621: { spaceBetween: 18 },
+      },
+      scrollbar: {
+        el: scrollbar,
+        draggable: true,
+        dragSize: 'auto',
+        snapOnRelease: true,
+      },
+    });
+    const updateOffsets = () => {
+      const offset = slideOffset();
+      swiper.params.slidesOffsetBefore = offset;
+      swiper.params.slidesOffsetAfter = offset;
+      swiper.update();
+    };
+    const moveToTab = (tab, index) => {
+      selectTab(tab);
+      swiper.slideTo(index);
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => moveToTab(tab, index));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        tabs[nextIndex].focus();
+        moveToTab(tabs[nextIndex], nextIndex);
+      });
+    });
+    swiper.on('slideChange', () => selectTab(tabs[swiper.activeIndex]));
+    window.addEventListener('resize', updateOffsets, { passive: true });
+    selectTab(tabs[swiper.activeIndex]);
+  };
+
+  const initMaterialLibrary = () => {
+    const slider = document.querySelector('[data-material-library-swiper]');
+    const previous = document.querySelector('[data-material-library-previous]');
+    const next = document.querySelector('[data-material-library-next]');
+    const scrollbar = document.querySelector('[data-material-library-scrollbar]');
+    const filters = Array.from(document.querySelectorAll('[data-material-filter]'));
+    const wrapper = slider?.querySelector('.swiper-wrapper');
+    if (!slider || !wrapper || !previous || !next || !scrollbar || !filters.length || typeof window.Swiper !== 'function') return;
+
+    const slides = Array.from(wrapper.children);
+    let activeType = 'all';
+    let swiper;
+
+    const buildSlider = () => {
+      if (swiper) swiper.destroy(true, false);
+      wrapper.replaceChildren(...slides.filter((slide) => activeType === 'all' || slide.dataset.materialType === activeType));
+      swiper = new window.Swiper(slider, {
+        slidesPerView: 3,
+        slidesPerGroup: 1,
+        spaceBetween: 18,
+        grabCursor: true,
+        speed: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 560,
+        keyboard: { enabled: true, onlyInViewport: true },
+        watchOverflow: true,
+        navigation: { prevEl: previous, nextEl: next },
+        scrollbar: { el: scrollbar, draggable: true, dragSize: 'auto', snapOnRelease: true },
+        breakpoints: {
+          0: { slidesPerView: 1, spaceBetween: 0 },
+          701: { slidesPerView: 2, spaceBetween: 16 },
+          1101: { slidesPerView: 3, spaceBetween: 18 },
+        },
+      });
+    };
+
+    const selectFilter = (filter) => {
+      activeType = filter.dataset.materialFilter;
+      filters.forEach((item) => {
+        const selected = item === filter;
+        item.classList.toggle('is-active', selected);
+        item.setAttribute('aria-selected', String(selected));
+      });
+      buildSlider();
+    };
+
+    filters.forEach((filter, index) => {
+      filter.addEventListener('click', () => selectFilter(filter));
+      filter.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? filters.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + filters.length) % filters.length;
+        filters[nextIndex].focus();
+        selectFilter(filters[nextIndex]);
+      });
+    });
+    buildSlider();
+  };
+
+  initHomeProofRail();
+  initMaterialSwiper();
+  initMaterialLibrary();
+
   if (window.jQuery) {
     window.jQuery('.variations_form')
       .on('found_variation', function (event, variation) {

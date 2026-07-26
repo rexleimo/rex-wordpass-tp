@@ -128,6 +128,19 @@ do_action('woocommerce_before_cart'); ?>
 <?php do_action('woocommerce_before_cart_collaterals'); ?>
 
 <div class="cart-collaterals tk-cart-collaterals">
+    <aside class="tk-cart-assurance" aria-labelledby="tk-cart-assurance-title">
+        <p class="tk-cart-assurance__eyebrow"><?php esc_html_e('Before you check out', 'tokraft'); ?></p>
+        <h2 id="tk-cart-assurance-title"><?php esc_html_e('A clear review, then a confident order.', 'tokraft'); ?></h2>
+        <p><?php esc_html_e('Shipping options and delivery estimates are confirmed after your address is added at checkout.', 'tokraft'); ?></p>
+        <ul>
+            <li><?php esc_html_e('Quantities stay editable until payment.', 'tokraft'); ?></li>
+            <li><?php esc_html_e('Need another material? Keep browsing without losing your cart.', 'tokraft'); ?></li>
+        </ul>
+        <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>">
+            <?php esc_html_e('Continue shopping', 'tokraft'); ?>
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </aside>
     <?php
     /**
      * Cart collaterals hook.

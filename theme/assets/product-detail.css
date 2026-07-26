@@ -234,8 +234,7 @@
   left: 28px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  min-height: 88px;
-  overflow: hidden;
+  min-height: 100px;
   border: 1px solid var(--tk-pdp-line);
   border-radius: 8px;
   background: rgba(255, 255, 255, .96);
@@ -262,11 +261,10 @@
 
 .tk-product-tech-rail strong {
   display: block;
-  overflow: hidden;
   color: var(--ink);
-  font: 700 17px/1.1 var(--body);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font: 700 16px/1.2 var(--body);
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .tk-product-summary {
@@ -284,7 +282,7 @@
 .tk-product-summary .product_title {
   margin: 0 0 10px !important;
   color: var(--ink);
-  font-size: clamp(38px, 3.2vw, 46px) !important;
+  font-size: clamp(42px, 3.7vw, 64px) !important;
   line-height: 1.04 !important;
   letter-spacing: -.035em;
 }
@@ -515,6 +513,16 @@
   margin: 0 !important;
 }
 
+.tk-product-buy form.cart:not(.variations_form) .quantity {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.tk-product-buy form.cart:not(.variations_form) .single_add_to_cart_button {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .tk-product-buy .quantity .qty {
   width: 100%;
   min-height: 48px;
@@ -567,7 +575,7 @@
 .tk-discover-more-header h2 {
   margin: 0;
   color: var(--ink);
-  font: 700 22px/1.1 var(--body);
+  font: 700 clamp(25px, 1.65vw, 32px)/1.1 var(--body);
   letter-spacing: -.025em;
 }
 
@@ -794,12 +802,12 @@
 }
 
 .tk-product-custom-callout a {
-  min-height: 38px;
+  min-height: 44px;
   padding: 0 14px;
   border: 1px solid var(--blue);
   border-radius: 7px;
   color: var(--blue);
-  font: 600 11px/38px var(--mono);
+  font: 600 11px/42px var(--mono);
   letter-spacing: .02em;
   text-decoration: none;
   white-space: nowrap;
@@ -1307,14 +1315,14 @@
   }
 
   .tk-product-tech-rail {
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
-    min-height: 68px;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    min-height: 74px;
   }
 
   .tk-product-tech-rail > div {
-    padding: 11px 10px;
+    padding: 11px 8px;
   }
 
   .tk-product-tech-rail span {
@@ -1323,7 +1331,9 @@
   }
 
   .tk-product-tech-rail strong {
-    font-size: 11px;
+    font-size: 10px;
+    letter-spacing: -.01em;
+    overflow-wrap: normal;
   }
 
   .tk-product-summary .product_title {

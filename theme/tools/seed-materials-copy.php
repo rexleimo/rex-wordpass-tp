@@ -11,6 +11,7 @@ require '/var/www/html/wp-load.php';
 
 $materials = array(
     'PLA' => array(
+        'type' => 'general-purpose',
         'summary' => 'Clean-detail indoor plastic for models, fixtures and low-heat everyday parts.',
         'best_for' => 'Concept models, display parts, desk fixtures, and indoor prototypes where appearance and cost matter more than heat or outdoor durability.',
         'avoid' => 'Hot environments, long-term outdoor use, sun-facing fixtures, and parts that must absorb impact or flex repeatedly.',
@@ -20,6 +21,7 @@ $materials = array(
         'featured' => '1',
     ),
     'PETG' => array(
+        'type' => 'general-purpose',
         'summary' => 'Everyday functional plastic for brackets, jigs and housings that need more toughness than PLA.',
         'best_for' => 'Workshop brackets, cable management, assembly jigs, protective housings, and frequently handled indoor parts.',
         'avoid' => 'Parts that need rubber-like flex, or fixtures that sit in strong UV and weather for long periods.',
@@ -29,6 +31,7 @@ $materials = array(
         'featured' => '1',
     ),
     'ASA' => array(
+        'type' => 'outdoor',
         'summary' => 'Outdoor-ready material for sun-exposed fixtures and weather-facing parts.',
         'best_for' => 'Outdoor cable guides, exterior clips, garden or site fixtures, and other parts that stay in sunlight or weather.',
         'avoid' => 'High-flex seals, soft protective feet, or purely indoor display models where PLA is enough.',
@@ -38,6 +41,7 @@ $materials = array(
         'featured' => '1',
     ),
     'TPU' => array(
+        'type' => 'flexible',
         'summary' => 'Flexible material for feet, bumpers, gaskets and impact-absorbing covers.',
         'best_for' => 'Protective feet, vibration pads, soft covers, bumper features and compliant interfaces.',
         'avoid' => 'Rigid brackets, precision alignment jigs, or thin structural shells that must stay stiff.',
@@ -47,6 +51,7 @@ $materials = array(
         'featured' => '1',
     ),
     'ABS' => array(
+        'type' => 'engineering',
         'summary' => 'Impact-resistant engineering plastic for enclosures and warmer indoor environments.',
         'best_for' => 'Enclosures, covers, and functional housings that need more heat tolerance and toughness than PLA.',
         'avoid' => 'Long outdoor UV exposure without protection, soft flexible parts, and fine display models where PLA is cleaner and cheaper.',
@@ -56,6 +61,7 @@ $materials = array(
         'featured' => '1',
     ),
     'Nylon (PA)' => array(
+        'type' => 'engineering',
         'summary' => 'Strong, wear-resistant option for mechanical interfaces, clips and moving contact points.',
         'best_for' => 'Hinges, clips, latches, wear interfaces and mechanical parts that need strength plus some resilience.',
         'avoid' => 'Simple indoor display models, soft gaskets, or jobs where moisture-sensitive process control is not practical.',
@@ -78,6 +84,7 @@ foreach ($materials as $name => $data) {
     }
     $term_id = (int) (is_array($term) ? $term['term_id'] : $term);
     update_term_meta($term_id, '_tokraft_material_short_description', $data['summary']);
+    update_term_meta($term_id, '_tokraft_material_type', $data['type']);
     update_term_meta($term_id, '_tokraft_material_best_for', $data['best_for']);
     update_term_meta($term_id, '_tokraft_material_avoid', $data['avoid']);
     update_term_meta($term_id, '_tokraft_material_notes', $data['notes']);

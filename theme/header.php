@@ -16,7 +16,7 @@
             </nav>
             <div class="header-actions">
                 <a class="btn btn-ghost btn-small" href="<?php echo esc_url(function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/cart/')); ?>">Cart</a>
-                <a class="btn btn-primary btn-small" href="<?php echo esc_url(home_url('/quote/')); ?>">Get a quote</a>
+                <a class="btn btn-primary btn-small" href="<?php echo esc_url(home_url('/materials/')); ?>">Get a quote</a>
             </div>
         </div>
     </header>

@@ -7,7 +7,7 @@
 }
 .tk-cart-hero h1 {
   margin: 8px 0 8px;
-  font-size: clamp(32px, 4vw, 44px);
+  font-size: clamp(40px, 4.2vw, 64px);
 }
 .tk-cart-hero p {
   margin: 0;

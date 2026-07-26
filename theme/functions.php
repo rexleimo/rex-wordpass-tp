@@ -18,6 +18,9 @@ function tokraft_setup() {
 add_action('after_setup_theme', 'tokraft_setup');
 
 function tokraft_assets() {
+    $theme_script_dependencies = array('jquery');
+    $is_material_library = (bool) get_query_var('tokraft_material_library');
+    $uses_swiper = is_front_page() || $is_material_library;
     wp_enqueue_style(
         'tokraft-style',
         get_stylesheet_uri(),
@@ -38,10 +41,34 @@ function tokraft_assets() {
             (string) filemtime(get_template_directory() . '/assets/product-detail.css')
         );
     }
+    if ($is_material_library) {
+        wp_enqueue_style(
+            'tokraft-material-library',
+            get_template_directory_uri() . '/assets/material-library.css',
+            array('tokraft-style'),
+            (string) filemtime(get_template_directory() . '/assets/material-library.css')
+        );
+    }
+    if ($uses_swiper) {
+        wp_enqueue_style(
+            'tokraft-swiper',
+            get_template_directory_uri() . '/assets/vendor/swiper/swiper-bundle.min.css',
+            array('tokraft-style'),
+            (string) filemtime(get_template_directory() . '/assets/vendor/swiper/swiper-bundle.min.css')
+        );
+        wp_enqueue_script(
+            'tokraft-swiper',
+            get_template_directory_uri() . '/assets/vendor/swiper/swiper-bundle.min.js',
+            array(),
+            (string) filemtime(get_template_directory() . '/assets/vendor/swiper/swiper-bundle.min.js'),
+            true
+        );
+        $theme_script_dependencies[] = 'tokraft-swiper';
+    }
     wp_enqueue_script(
         'tokraft-theme',
         get_template_directory_uri() . '/assets/theme.js',
-        array('jquery'),
+        $theme_script_dependencies,
         (string) filemtime(get_template_directory() . '/assets/theme.js'),
         true
     );
@@ -120,6 +147,8 @@ function tokraft_quote_submission() {
     );
 
     $uploaded_file = '';
+    $uploaded_file_path = '';
+    $uploaded_file_type = '';
     if (!empty($_FILES['model_file']['name'])) {
         $extension = strtolower(pathinfo(sanitize_file_name(wp_unslash($_FILES['model_file']['name'])), PATHINFO_EXTENSION));
         $allowed_extensions = array('stl', '3mf', 'step', 'stp', 'obj');
@@ -134,15 +163,60 @@ function tokraft_quote_submission() {
             exit;
         }
         $uploaded_file = $upload['url'];
+        $uploaded_file_path = $upload['file'];
+        $uploaded_file_type = $upload['type'];
+    }
+
+    // Store every enquiry as an admin-managed record as well as notifying by email.
+    $quote_id = wp_insert_post(array(
+        'post_type' => 'tokraft_quote',
+        'post_status' => 'publish',
+        'post_title' => sprintf(__('New quote - %s', 'tokraft'), $quote['name']),
+    ), true);
+    if (is_wp_error($quote_id)) {
+        wp_safe_redirect(add_query_arg('quote_error', 'storage', wp_get_referer() ?: home_url('/quote/')));
+        exit;
+    }
+
+    $quote_number = 'TKQ-' . str_pad((string) $quote_id, 6, '0', STR_PAD_LEFT);
+    wp_update_post(array(
+        'ID' => $quote_id,
+        'post_title' => $quote_number . ' - ' . $quote['name'],
+    ));
+    foreach ($quote as $key => $value) {
+        update_post_meta($quote_id, '_tokraft_quote_' . $key, $value);
+    }
+    update_post_meta($quote_id, '_tokraft_quote_number', $quote_number);
+    update_post_meta($quote_id, '_tokraft_quote_status', 'new');
+
+    if ($uploaded_file) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        $attachment_id = wp_insert_attachment(array(
+            'post_mime_type' => $uploaded_file_type,
+            'post_title' => sanitize_file_name(basename($uploaded_file_path)),
+            'post_status' => 'inherit',
+            'post_parent' => $quote_id,
+        ), $uploaded_file_path, $quote_id);
+        if (!is_wp_error($attachment_id)) {
+            $metadata = wp_generate_attachment_metadata($attachment_id, $uploaded_file_path);
+            if (!empty($metadata)) {
+                wp_update_attachment_metadata($attachment_id, $metadata);
+            }
+            update_post_meta($quote_id, '_tokraft_quote_file_attachment', $attachment_id);
+        }
+        update_post_meta($quote_id, '_tokraft_quote_file_url', esc_url_raw($uploaded_file));
     }
 
     $message = "New toKraft print quote\n\n";
+    $message .= 'Quote reference: ' . $quote_number . "\n";
     foreach ($quote as $key => $value) {
         $message .= ucwords(str_replace('_', ' ', $key)) . ': ' . $value . "\n";
     }
     if ($uploaded_file) {
         $message .= 'File: ' . esc_url_raw($uploaded_file) . "\n";
     }
+    $message .= 'Admin record: ' . admin_url('post.php?post=' . $quote_id . '&action=edit') . "\n";
     wp_mail(get_option('admin_email'), 'New 3D printing quote request', $message, array('Reply-To: ' . $quote['email']));
     wp_safe_redirect(add_query_arg('quote_sent', '1', home_url('/quote/')));
     exit;
@@ -454,6 +528,24 @@ function tokraft_register_content_types() {
         'supports' => array('title', 'editor', 'thumbnail', 'page-attributes'),
     ));
 
+    register_post_type('tokraft_quote', array(
+        'labels' => array(
+            'name' => __('报价记录', 'tokraft'),
+            'singular_name' => __('报价记录', 'tokraft'),
+            'menu_name' => __('报价记录', 'tokraft'),
+            'edit_item' => __('查看报价记录', 'tokraft'),
+            'not_found' => __('暂无报价记录', 'tokraft'),
+        ),
+        'public' => false,
+        'show_ui' => true,
+        'show_in_menu' => 'tokraft-home',
+        'show_in_admin_bar' => false,
+        'exclude_from_search' => true,
+        'capability_type' => 'post',
+        'map_meta_cap' => true,
+        'supports' => array('title'),
+    ));
+
     register_taxonomy('tokraft_material', array('product', 'tokraft_case_study'), array(
         'labels' => array(
             'name' => __('材料库', 'tokraft'),
@@ -470,6 +562,141 @@ function tokraft_register_content_types() {
     ));
 }
 add_action('init', 'tokraft_register_content_types', 20);
+
+function tokraft_quote_status_labels() {
+    return array(
+        'new' => __('待处理', 'tokraft'),
+        'quoted' => __('已报价', 'tokraft'),
+        'won' => __('已成交', 'tokraft'),
+        'lost' => __('未成交', 'tokraft'),
+    );
+}
+
+function tokraft_quote_columns($columns) {
+    return array(
+        'cb' => $columns['cb'],
+        'title' => __('报价编号', 'tokraft'),
+        'tokraft_quote_contact' => __('客户', 'tokraft'),
+        'tokraft_quote_material' => __('材料与数量', 'tokraft'),
+        'tokraft_quote_status' => __('状态', 'tokraft'),
+        'tokraft_quote_owner' => __('负责人', 'tokraft'),
+        'tokraft_quote_file' => __('模型文件', 'tokraft'),
+        'date' => $columns['date'],
+    );
+}
+add_filter('manage_tokraft_quote_posts_columns', 'tokraft_quote_columns');
+
+function tokraft_quote_column_content($column, $post_id) {
+    if ('tokraft_quote_contact' === $column) {
+        $name = get_post_meta($post_id, '_tokraft_quote_name', true);
+        $email = get_post_meta($post_id, '_tokraft_quote_email', true);
+        echo esc_html($name ?: '—');
+        if ($email) {
+            echo '<br><a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a>';
+        }
+        return;
+    }
+    if ('tokraft_quote_material' === $column) {
+        $material = get_post_meta($post_id, '_tokraft_quote_material', true);
+        $quantity = get_post_meta($post_id, '_tokraft_quote_quantity', true);
+        echo esc_html($material ?: '—');
+        if ($quantity) {
+            echo '<br>' . esc_html(sprintf(__('数量：%s', 'tokraft'), $quantity));
+        }
+        return;
+    }
+    if ('tokraft_quote_status' === $column) {
+        $statuses = tokraft_quote_status_labels();
+        $status = get_post_meta($post_id, '_tokraft_quote_status', true) ?: 'new';
+        echo esc_html($statuses[$status] ?? $status);
+        return;
+    }
+    if ('tokraft_quote_owner' === $column) {
+        $owner_id = absint(get_post_meta($post_id, '_tokraft_quote_owner', true));
+        $owner = $owner_id ? get_userdata($owner_id) : false;
+        echo esc_html($owner ? $owner->display_name : '—');
+        return;
+    }
+    if ('tokraft_quote_file' === $column) {
+        $attachment_id = absint(get_post_meta($post_id, '_tokraft_quote_file_attachment', true));
+        $file_url = get_post_meta($post_id, '_tokraft_quote_file_url', true);
+        if ($attachment_id) {
+            echo '<a href="' . esc_url(get_edit_post_link($attachment_id)) . '">' . esc_html__('查看附件', 'tokraft') . '</a>';
+        } elseif ($file_url) {
+            echo '<a href="' . esc_url($file_url) . '" target="_blank" rel="noopener">' . esc_html__('查看文件', 'tokraft') . '</a>';
+        } else {
+            echo '—';
+        }
+    }
+}
+add_action('manage_tokraft_quote_posts_custom_column', 'tokraft_quote_column_content', 10, 2);
+
+function tokraft_add_quote_meta_box() {
+    add_meta_box('tokraft_quote_details', __('报价详情与跟进', 'tokraft'), 'tokraft_render_quote_meta_box', 'tokraft_quote', 'normal', 'high');
+}
+add_action('add_meta_boxes_tokraft_quote', 'tokraft_add_quote_meta_box');
+
+function tokraft_render_quote_meta_box($post) {
+    $get = static function ($key) use ($post) {
+        return get_post_meta($post->ID, '_tokraft_quote_' . $key, true);
+    };
+    $statuses = tokraft_quote_status_labels();
+    $status = $get('status') ?: 'new';
+    $owner_id = absint($get('owner'));
+    $file_url = $get('file_url');
+    $attachment_id = absint($get('file_attachment'));
+    $fields = array(
+        __('联系人', 'tokraft') => $get('name'),
+        __('邮箱', 'tokraft') => $get('email'),
+        __('公司', 'tokraft') => $get('company'),
+        __('材料 / 颜色', 'tokraft') => trim($get('material') . ' / ' . $get('color'), ' / '),
+        __('数量', 'tokraft') => $get('quantity'),
+        __('工艺参数', 'tokraft') => sprintf(__('填充 %1$s%%；壁厚 %2$s；层高 %3$s；支撑 %4$s；附着 %5$s', 'tokraft'), $get('infill'), $get('walls'), $get('layer_height'), $get('support'), $get('adhesion')),
+        __('客户备注', 'tokraft') => $get('notes'),
+    );
+    wp_nonce_field('tokraft_quote_follow_up', 'tokraft_quote_follow_up_nonce');
+    echo '<table class="form-table" role="presentation">';
+    foreach ($fields as $label => $value) {
+        echo '<tr><th scope="row">' . esc_html($label) . '</th><td>' . ($value ? nl2br(esc_html($value)) : '—') . '</td></tr>';
+    }
+    echo '<tr><th scope="row">' . esc_html__('模型文件', 'tokraft') . '</th><td>';
+    if ($attachment_id) {
+        echo '<a href="' . esc_url(get_edit_post_link($attachment_id)) . '">' . esc_html__('在媒体库查看附件', 'tokraft') . '</a>';
+    } elseif ($file_url) {
+        echo '<a href="' . esc_url($file_url) . '" target="_blank" rel="noopener">' . esc_html__('打开上传文件', 'tokraft') . '</a>';
+    } else {
+        echo '—';
+    }
+    echo '</td></tr>';
+    echo '<tr><th scope="row"><label for="tokraft_quote_status">' . esc_html__('跟进状态', 'tokraft') . '</label></th><td><select id="tokraft_quote_status" name="tokraft_quote_status">';
+    foreach ($statuses as $key => $label) {
+        echo '<option value="' . esc_attr($key) . '" ' . selected($status, $key, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select></td></tr>';
+    echo '<tr><th scope="row"><label for="tokraft_quote_owner">' . esc_html__('负责人', 'tokraft') . '</label></th><td><select id="tokraft_quote_owner" name="tokraft_quote_owner"><option value="0">' . esc_html__('未分配', 'tokraft') . '</option>';
+    foreach (get_users(array('fields' => array('ID', 'display_name'), 'orderby' => 'display_name')) as $user) {
+        echo '<option value="' . esc_attr($user->ID) . '" ' . selected($owner_id, $user->ID, false) . '>' . esc_html($user->display_name) . '</option>';
+    }
+    echo '</select></td></tr>';
+    echo '<tr><th scope="row"><label for="tokraft_quote_price">' . esc_html__('正式报价（CAD）', 'tokraft') . '</label></th><td><input class="regular-text" type="number" min="0" step="0.01" id="tokraft_quote_price" name="tokraft_quote_price" value="' . esc_attr($get('price')) . '"></td></tr>';
+    echo '<tr><th scope="row"><label for="tokraft_quote_follow_up_note">' . esc_html__('内部跟进备注', 'tokraft') . '</label></th><td><textarea class="large-text" rows="5" id="tokraft_quote_follow_up_note" name="tokraft_quote_follow_up_note">' . esc_textarea($get('follow_up_note')) . '</textarea></td></tr>';
+    echo '</table>';
+}
+
+function tokraft_save_quote_meta_box($post_id) {
+    if (!isset($_POST['tokraft_quote_follow_up_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['tokraft_quote_follow_up_nonce'])), 'tokraft_quote_follow_up') || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    $statuses = tokraft_quote_status_labels();
+    $status = sanitize_key(wp_unslash($_POST['tokraft_quote_status'] ?? 'new'));
+    update_post_meta($post_id, '_tokraft_quote_status', isset($statuses[$status]) ? $status : 'new');
+    update_post_meta($post_id, '_tokraft_quote_owner', absint($_POST['tokraft_quote_owner'] ?? 0));
+    $price = wp_unslash($_POST['tokraft_quote_price'] ?? '');
+    $price = function_exists('wc_format_decimal') ? wc_format_decimal($price, 2) : (string) max(0, (float) $price);
+    update_post_meta($post_id, '_tokraft_quote_price', $price);
+    update_post_meta($post_id, '_tokraft_quote_follow_up_note', sanitize_textarea_field(wp_unslash($_POST['tokraft_quote_follow_up_note'] ?? '')));
+}
+add_action('save_post_tokraft_quote', 'tokraft_save_quote_meta_box');
 
 function tokraft_home_settings_defaults() {
     return array(
@@ -528,7 +755,7 @@ function tokraft_home_settings() {
 function tokraft_home_blocks_config() {
     // Keep the public page in the same sequence as the Block Manager.
     return array(
-        'order' => array('hero', 'routes', 'equipment', 'materials', 'showcase', 'trust'),
+        'order' => array('hero', 'equipment', 'routes', 'materials', 'showcase', 'trust'),
         'visible' => array(
             'hero' => true,
             'routes' => true,
@@ -625,6 +852,34 @@ function tokraft_material_quote_rate($term) {
     $name = is_object($term) ? strtoupper($term->name) : '';
     $defaults = array('PETG' => 29, 'ASA' => 32, 'TPU' => 37);
     return isset($defaults[$name]) ? $defaults[$name] : 24;
+}
+
+function tokraft_material_type_choices() {
+    return array(
+        'general-purpose' => __('General purpose', 'tokraft'),
+        'engineering' => __('Engineering', 'tokraft'),
+        'flexible' => __('Flexible', 'tokraft'),
+        'outdoor' => __('Outdoor', 'tokraft'),
+    );
+}
+
+function tokraft_material_type($term) {
+    $term_id = is_object($term) ? $term->term_id : absint($term);
+    $types = tokraft_material_type_choices();
+    $type = sanitize_key(get_term_meta($term_id, '_tokraft_material_type', true));
+    if (isset($types[$type])) {
+        return $type;
+    }
+
+    // Keep seeded materials filterable until an editor explicitly selects a type.
+    $name = is_object($term) ? strtoupper($term->name) : '';
+    $fallbacks = array(
+        'ABS' => 'engineering',
+        'ASA' => 'outdoor',
+        'NYLON (PA)' => 'engineering',
+        'TPU' => 'flexible',
+    );
+    return $fallbacks[$name] ?? 'general-purpose';
 }
 
 function tokraft_sanitize_home_settings($values) {
@@ -994,6 +1249,12 @@ function tokraft_material_image_spec_text() {
 }
 
 function tokraft_material_add_fields() {
+    $types = tokraft_material_type_choices();
+    echo '<div class="form-field"><label for="tokraft_material_type">Material type</label><select id="tokraft_material_type" name="tokraft_material_type">';
+    foreach ($types as $value => $label) {
+        echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+    }
+    echo '</select><p>Used by the filter on the material library page.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_color">Brand color</label><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="#d9d9d9" class="regular-text"><p>Fallback color when no material image is uploaded.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_short_description">One-line summary</label><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2"></textarea><p>Used on the homepage cards and quote dropdown. Keep it to one clear sentence.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_best_for">Best for</label><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3"></textarea><p>Typical jobs this material is recommended for.</p></div>';
@@ -1008,6 +1269,8 @@ function tokraft_material_add_fields() {
 add_action('tokraft_material_add_form_fields', 'tokraft_material_add_fields');
 
 function tokraft_material_edit_fields($term) {
+    $types = tokraft_material_type_choices();
+    $type = tokraft_material_type($term);
     $color = get_term_meta($term->term_id, '_tokraft_material_color', true) ?: '#d9d9d9';
     $short_description = get_term_meta($term->term_id, '_tokraft_material_short_description', true);
     $best_for = get_term_meta($term->term_id, '_tokraft_material_best_for', true);
@@ -1017,6 +1280,11 @@ function tokraft_material_edit_fields($term) {
     $image_id = absint(get_term_meta($term->term_id, '_tokraft_material_image_id', true));
     $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium') : '';
     $featured = get_term_meta($term->term_id, '_tokraft_material_featured', true);
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_type">Material type</label></th><td><select id="tokraft_material_type" name="tokraft_material_type">';
+    foreach ($types as $value => $label) {
+        echo '<option value="' . esc_attr($value) . '" ' . selected($type, $value, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select><p class="description">Used by the filter on the material library page.</p></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_color">Brand color</label></th><td><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="' . esc_attr($color) . '" class="regular-text"><p class="description">Fallback color when no image is uploaded.</p></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_short_description">One-line summary</label></th><td><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2" class="large-text">' . esc_textarea($short_description) . '</textarea><p class="description">Homepage cards and quote dropdown. One clear sentence.</p></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_best_for">Best for</label></th><td><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3" class="large-text">' . esc_textarea($best_for) . '</textarea></td></tr>';
@@ -1031,6 +1299,10 @@ function tokraft_material_edit_fields($term) {
 add_action('tokraft_material_edit_form_fields', 'tokraft_material_edit_fields');
 
 function tokraft_save_material_fields($term_id) {
+    if (isset($_POST['tokraft_material_type'])) {
+        $type = sanitize_key(wp_unslash($_POST['tokraft_material_type']));
+        update_term_meta($term_id, '_tokraft_material_type', array_key_exists($type, tokraft_material_type_choices()) ? $type : 'general-purpose');
+    }
     if (isset($_POST['tokraft_material_color'])) {
         update_term_meta($term_id, '_tokraft_material_color', sanitize_hex_color(wp_unslash($_POST['tokraft_material_color'])) ?: '#d9d9d9');
     }

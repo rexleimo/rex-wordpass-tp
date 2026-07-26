@@ -11,7 +11,7 @@ services:
       - db_data:/var/lib/mysql
 
   wordpress:
-    image: wordpress:php8.3-apache
+    image: wordpress:6.7-php8.3-apache
     restart: unless-stopped
     depends_on:
       - db
@@ -22,9 +22,18 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        // Keep local URLs in the database while allowing temporary Cloudflare previews.
+        $$tokraft_tunnel_host = $$_SERVER['HTTP_HOST'] ?? '';
+        if (!defined('WP_HOME') && preg_match('/^[a-z0-9-]+\.trycloudflare\.com$$/i', $$tokraft_tunnel_host)) {
+          $$_SERVER['HTTPS'] = 'on';
+          define('WP_HOME', 'https://' . $$tokraft_tunnel_host);
+          define('WP_SITEURL', 'https://' . $$tokraft_tunnel_host);
+        }
     volumes:
       - wordpress_data:/var/www/html
       - ./theme:/var/www/html/wp-content/themes/tokraft
+      - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
 
 volumes:
   db_data:
