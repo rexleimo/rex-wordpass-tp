@@ -72,6 +72,9 @@ function tokraft_assets() {
         (string) filemtime(get_template_directory() . '/assets/theme.js'),
         true
     );
+    if (is_page_template('page-quote.php')) {
+        wp_localize_script('tokraft-theme', 'tokraftQuoteConfig', tokraft_quote_js_config());
+    }
 }
 add_action('wp_enqueue_scripts', 'tokraft_assets');
 
@@ -123,7 +126,7 @@ function tokraft_quote_submission() {
         wp_die(__('Unable to verify this quote request. Please try again.', 'tokraft'));
     }
 
-    $required = array('contact_name', 'contact_email', 'material', 'quantity');
+    $required = array('contact_first_name', 'contact_last_name', 'contact_email', 'material', 'quantity');
     foreach ($required as $field) {
         if (empty($_POST[$field])) {
             wp_safe_redirect(add_query_arg('quote_error', 'required', wp_get_referer() ?: home_url('/quote/')));
@@ -131,18 +134,38 @@ function tokraft_quote_submission() {
         }
     }
 
+    // Colours are a multi-select tied to the chosen material; at least one is required.
+    $colors = array();
+    foreach ((array) wp_unslash($_POST['color'] ?? array()) as $color) {
+        $color = sanitize_text_field((string) $color);
+        if ('' !== $color && !in_array($color, $colors, true)) {
+            $colors[] = $color;
+        }
+    }
+    if (!$colors) {
+        wp_safe_redirect(add_query_arg('quote_error', 'required', wp_get_referer() ?: home_url('/quote/')));
+        exit;
+    }
+
+    $first_name = sanitize_text_field(wp_unslash($_POST['contact_first_name']));
+    $last_name = sanitize_text_field(wp_unslash($_POST['contact_last_name']));
+    $layer_height = tokraft_quote_clamp('layer', $_POST['layer_height'] ?? null);
+
     $quote = array(
-        'name' => sanitize_text_field(wp_unslash($_POST['contact_name'])),
+        // Keep the joined name so quote titles, list columns and emails need no legacy fallback.
+        'name' => trim($first_name . ' ' . $last_name),
+        'first_name' => $first_name,
+        'last_name' => $last_name,
         'email' => sanitize_email(wp_unslash($_POST['contact_email'])),
         'company' => sanitize_text_field(wp_unslash($_POST['company'] ?? '')),
         'material' => sanitize_text_field(wp_unslash($_POST['material'])),
-        'color' => sanitize_text_field(wp_unslash($_POST['color'] ?? 'Natural')),
+        'color' => implode(', ', $colors),
         'quantity' => absint($_POST['quantity']),
-        'infill' => absint($_POST['infill'] ?? 20),
-        'walls' => absint($_POST['walls'] ?? 3),
-        'layer_height' => sanitize_text_field(wp_unslash($_POST['layer_height'] ?? '0.20 mm')),
-        'support' => sanitize_text_field(wp_unslash($_POST['support'] ?? 'No')),
-        'adhesion' => sanitize_text_field(wp_unslash($_POST['adhesion'] ?? 'None')),
+        'infill' => tokraft_quote_clamp('infill', $_POST['infill'] ?? null),
+        'walls' => tokraft_quote_clamp('walls', $_POST['walls'] ?? null),
+        'layer_height' => number_format($layer_height, 2) . ' mm',
+        'support' => tokraft_quote_choice_value('support', $_POST['support'] ?? null),
+        'adhesion' => tokraft_quote_choice_value('adhesion', $_POST['adhesion'] ?? null),
         'notes' => sanitize_textarea_field(wp_unslash($_POST['notes'] ?? '')),
     );
 
@@ -186,6 +209,7 @@ function tokraft_quote_submission() {
     foreach ($quote as $key => $value) {
         update_post_meta($quote_id, '_tokraft_quote_' . $key, $value);
     }
+    update_post_meta($quote_id, '_tokraft_quote_colors', $colors);
     update_post_meta($quote_id, '_tokraft_quote_number', $quote_number);
     update_post_meta($quote_id, '_tokraft_quote_status', 'new');
 
@@ -647,6 +671,9 @@ function tokraft_render_quote_meta_box($post) {
     $attachment_id = absint($get('file_attachment'));
     $fields = array(
         __('联系人', 'tokraft') => $get('name'),
+        // Split names only exist on quotes submitted after the form split the field.
+        __('名 (First name)', 'tokraft') => $get('first_name'),
+        __('姓 (Last name)', 'tokraft') => $get('last_name'),
         __('邮箱', 'tokraft') => $get('email'),
         __('公司', 'tokraft') => $get('company'),
         __('材料 / 颜色', 'tokraft') => trim($get('material') . ' / ' . $get('color'), ' / '),
@@ -705,7 +732,7 @@ function tokraft_home_settings_defaults() {
         'hero_accent' => 'Alberta, Canada.',
         'hero_description' => "Functional prototypes, replacement parts, and end-use components.\nMulti-material. High accuracy. Fast turnaround.",
         'hero_quote_label' => 'Get a Print Quote',
-        'hero_quote_url' => '/quote/',
+        'hero_quote_url' => '/materials/',
         'hero_shop_label' => 'Browse Shop',
         'hero_shop_url' => '/shop/',
         'hero_visual_mode' => 'single',
@@ -882,6 +909,75 @@ function tokraft_material_type($term) {
     return $fallbacks[$name] ?? 'general-purpose';
 }
 
+/**
+ * Fallback palette used until an editor configures colours on the material term.
+ */
+function tokraft_material_default_colors() {
+    return array(
+        array('label' => __('Natural', 'tokraft'), 'hex' => '#e8e7df'),
+        array('label' => __('Black', 'tokraft'), 'hex' => '#18202b'),
+        array('label' => __('White', 'tokraft'), 'hex' => '#ffffff'),
+        array('label' => __('Blue', 'tokraft'), 'hex' => '#1a5796'),
+    );
+}
+
+/**
+ * Printable colours configured for a material term. Falls back to the default
+ * palette so material cards and the quote form are never empty.
+ */
+function tokraft_material_colors($term) {
+    $term_id = is_object($term) ? $term->term_id : absint($term);
+    $stored = get_term_meta($term_id, '_tokraft_material_colors', true);
+    $colors = array();
+    if (is_array($stored)) {
+        foreach ($stored as $color) {
+            $label = isset($color['label']) ? trim((string) $color['label']) : '';
+            $hex = isset($color['hex']) ? sanitize_hex_color((string) $color['hex']) : '';
+            if ('' === $label || !$hex) {
+                continue;
+            }
+            $colors[] = array('label' => $label, 'hex' => $hex);
+        }
+    }
+
+    return $colors ?: tokraft_material_default_colors();
+}
+
+function tokraft_material_color_row_markup($index, $label = '', $hex = '#cccccc') {
+    ob_start();
+    echo '<div class="tokraft-color-row" data-color-row>';
+    echo '<input type="text" class="tokraft-color-label" name="tokraft_material_colors[' . esc_attr($index) . '][label]" value="' . esc_attr($label) . '" placeholder="' . esc_attr__('Colour name', 'tokraft') . '">';
+    echo '<input type="text" class="tokraft-color-field" name="tokraft_material_colors[' . esc_attr($index) . '][hex]" value="' . esc_attr($hex) . '" data-default-color="' . esc_attr($hex) . '">';
+    echo '<button type="button" class="button tokraft-color-remove" data-color-remove aria-label="' . esc_attr__('Remove colour', 'tokraft') . '">&times;</button>';
+    echo '</div>';
+
+    return ob_get_clean();
+}
+
+/**
+ * Repeatable colour rows shared by the add-term and edit-term forms.
+ */
+function tokraft_material_colors_control($term = null) {
+    $stored = $term ? get_term_meta(is_object($term) ? $term->term_id : absint($term), '_tokraft_material_colors', true) : array();
+    $rows = is_array($stored) ? $stored : array();
+
+    echo '<div class="tokraft-color-repeater" data-color-repeater>';
+    echo '<div class="tokraft-color-rows" data-color-rows>';
+    if ($rows) {
+        foreach ($rows as $index => $color) {
+            echo tokraft_material_color_row_markup($index, $color['label'] ?? '', $color['hex'] ?? '#cccccc'); // phpcs:ignore WordPress.Security.EscapeOutput
+        }
+    } else {
+        foreach (tokraft_material_default_colors() as $index => $color) {
+            echo tokraft_material_color_row_markup($index, $color['label'], $color['hex']); // phpcs:ignore WordPress.Security.EscapeOutput
+        }
+    }
+    echo '</div>';
+    echo '<p><button type="button" class="button tokraft-color-add" data-color-add>' . esc_html__('Add colour', 'tokraft') . '</button></p>';
+    echo '<script type="text/html" data-color-template>' . tokraft_material_color_row_markup('__index__') . '</script>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '</div>';
+}
+
 function tokraft_sanitize_home_settings($values) {
     $defaults = tokraft_home_settings_defaults();
     $sanitized = array();
@@ -919,11 +1015,226 @@ function tokraft_register_home_settings() {
 }
 add_action('admin_init', 'tokraft_register_home_settings');
 
+/**
+ * Quote form configuration. Defaults reproduce the values that used to be
+ * hard-coded in page-quote.php and assets/theme.js.
+ */
+function tokraft_quote_settings_defaults() {
+    return array(
+        'infill_enabled' => '1',
+        'infill_label' => 'Infill density',
+        'infill_help' => 'Infill is the pattern inside a printed part. More infill increases strength and material use, which also increases cost and printing time.',
+        'infill_min' => '10',
+        'infill_max' => '100',
+        'infill_step' => '5',
+        'infill_default' => '20',
+        'infill_impact_low' => 'Balanced strength, efficient material use and standard lead time.',
+        'infill_impact_mid' => 'Stronger internal structure with more material and print time.',
+        'infill_impact_high' => 'High-density part: maximum strength, material use and production time.',
+
+        'walls_enabled' => '1',
+        'walls_label' => 'Wall perimeters',
+        'walls_help' => 'Walls are the outer shells of a part. Extra walls improve strength and surface durability, especially around holes and load-bearing features.',
+        'walls_min' => '2',
+        'walls_max' => '6',
+        'walls_step' => '1',
+        'walls_default' => '3',
+        'walls_impact_low' => 'A dependable balance for functional prototypes.',
+        'walls_impact_mid' => 'Extra shell strength around holes and load-bearing features.',
+        'walls_impact_high' => 'Maximum surface durability; noticeably longer print time.',
+
+        'layer_enabled' => '1',
+        'layer_label' => 'Layer height / detail',
+        'layer_help' => 'Thinner layers capture smoother curves and finer features. They also make the print take longer; larger layers are faster and more economical.',
+        'layer_min' => '0.12',
+        'layer_max' => '0.32',
+        'layer_step' => '0.04',
+        'layer_default' => '0.20',
+        'layer_impact_low' => 'Fine detail and smoother curves with a longer production time.',
+        'layer_impact_mid' => 'Standard detail with a balanced production time.',
+        'layer_impact_high' => 'Faster and more economical with visible layer lines.',
+
+        'support_enabled' => '1',
+        'support_label' => 'Support material',
+        'support_help' => 'Supports are temporary structures used under overhangs. They allow complex geometry but can leave small marks where they are removed.',
+        'support_options' => "No support|No\nUse support|Yes",
+        'support_default' => 'No',
+
+        'adhesion_enabled' => '1',
+        'adhesion_label' => 'Brim or raft',
+        'adhesion_help' => 'A brim or raft improves bed adhesion for tall, narrow or warp-prone parts. It is removed after the print is complete.',
+        'adhesion_options' => "None|None\nBrim / raft|Brim / Raft",
+        'adhesion_default' => 'None',
+
+        'estimate_infill_coefficient' => '0.006',
+        'estimate_wall_coefficient' => '0.1',
+        'estimate_layer_coefficient' => '1.1',
+        'estimate_layer_baseline' => '0.2',
+        'estimate_high_multiplier' => '1.4',
+        'estimate_minimum' => '10',
+    );
+}
+
+function tokraft_quote_settings() {
+    return wp_parse_args((array) get_option('tokraft_quote_settings', array()), tokraft_quote_settings_defaults());
+}
+
+function tokraft_quote_value($key) {
+    $settings = tokraft_quote_settings();
+
+    return $settings[$key] ?? '';
+}
+
+function tokraft_quote_enabled($group) {
+    return '1' === (string) tokraft_quote_value($group . '_enabled');
+}
+
+/**
+ * Parse a "Visible label|submitted value" list into option pairs.
+ */
+function tokraft_quote_choice_options($key) {
+    $options = array();
+    foreach (tokraft_lines(tokraft_quote_value($key)) as $line) {
+        $parts = array_map('trim', explode('|', $line, 2));
+        $label = $parts[0];
+        if ('' === $label) {
+            continue;
+        }
+        $options[] = array('label' => $label, 'value' => isset($parts[1]) && '' !== $parts[1] ? $parts[1] : $label);
+    }
+
+    return $options;
+}
+
+/**
+ * Snap a submitted slider value back into the configured range so a tampered
+ * or stale form cannot push the estimate outside what the shop offers.
+ */
+function tokraft_quote_clamp($group, $value) {
+    $settings = tokraft_quote_settings();
+    $min = (float) $settings[$group . '_min'];
+    $max = (float) $settings[$group . '_max'];
+    if (null === $value || '' === $value || !is_numeric($value)) {
+        return (float) $settings[$group . '_default'];
+    }
+
+    return min($max, max($min, (float) $value));
+}
+
+/**
+ * Accept a submitted radio value only when it is one of the configured options.
+ */
+function tokraft_quote_choice_value($group, $value) {
+    $options = tokraft_quote_choice_options($group . '_options');
+    if (!$options) {
+        return '';
+    }
+    $value = null === $value ? '' : sanitize_text_field((string) wp_unslash($value));
+    $allowed = wp_list_pluck($options, 'value');
+    if (in_array($value, $allowed, true)) {
+        return $value;
+    }
+    $default = (string) tokraft_quote_value($group . '_default');
+
+    return in_array($default, $allowed, true) ? $default : $allowed[0];
+}
+
+function tokraft_sanitize_quote_settings($values) {
+    $defaults = tokraft_quote_settings_defaults();
+    $values = (array) $values;
+    $sanitized = array();
+
+    $toggles = array('infill_enabled', 'walls_enabled', 'layer_enabled', 'support_enabled', 'adhesion_enabled');
+    $textareas = array(
+        'infill_help', 'infill_impact_low', 'infill_impact_mid', 'infill_impact_high',
+        'walls_help', 'walls_impact_low', 'walls_impact_mid', 'walls_impact_high',
+        'layer_help', 'layer_impact_low', 'layer_impact_mid', 'layer_impact_high',
+        'support_help', 'support_options', 'adhesion_help', 'adhesion_options',
+    );
+    $numbers = array(
+        'infill_min', 'infill_max', 'infill_step', 'infill_default',
+        'walls_min', 'walls_max', 'walls_step', 'walls_default',
+        'layer_min', 'layer_max', 'layer_step', 'layer_default',
+        'estimate_infill_coefficient', 'estimate_wall_coefficient', 'estimate_layer_coefficient',
+        'estimate_layer_baseline', 'estimate_high_multiplier', 'estimate_minimum',
+    );
+
+    foreach ($defaults as $key => $default) {
+        $value = $values[$key] ?? $default;
+        if (in_array($key, $toggles, true)) {
+            $sanitized[$key] = '1' === (string) $value ? '1' : '0';
+        } elseif (in_array($key, $textareas, true)) {
+            $sanitized[$key] = sanitize_textarea_field(wp_unslash($value));
+        } elseif (in_array($key, $numbers, true)) {
+            $number = (float) $value;
+            $sanitized[$key] = $number > 0 ? (string) $number : $default;
+        } else {
+            $sanitized[$key] = sanitize_text_field(wp_unslash($value));
+        }
+    }
+
+    // A slider needs max > min and a default inside the range, otherwise the front end breaks.
+    foreach (array('infill', 'walls', 'layer') as $group) {
+        $min = (float) $sanitized[$group . '_min'];
+        $max = (float) $sanitized[$group . '_max'];
+        if ($max <= $min) {
+            $sanitized[$group . '_min'] = $defaults[$group . '_min'];
+            $sanitized[$group . '_max'] = $defaults[$group . '_max'];
+            $min = (float) $defaults[$group . '_min'];
+            $max = (float) $defaults[$group . '_max'];
+        }
+        $sanitized[$group . '_default'] = (string) min($max, max($min, (float) $sanitized[$group . '_default']));
+    }
+
+    return $sanitized;
+}
+
+function tokraft_register_quote_settings() {
+    register_setting('tokraft_quote_settings_group', 'tokraft_quote_settings', 'tokraft_sanitize_quote_settings');
+}
+add_action('admin_init', 'tokraft_register_quote_settings');
+
+/**
+ * Values handed to assets/theme.js so the live estimate matches the admin config.
+ */
+function tokraft_quote_js_config() {
+    $settings = tokraft_quote_settings();
+
+    return array(
+        'infill' => array(
+            'enabled' => tokraft_quote_enabled('infill'),
+            'impact' => array($settings['infill_impact_low'], $settings['infill_impact_mid'], $settings['infill_impact_high']),
+        ),
+        'walls' => array(
+            'enabled' => tokraft_quote_enabled('walls'),
+            'impact' => array($settings['walls_impact_low'], $settings['walls_impact_mid'], $settings['walls_impact_high']),
+        ),
+        'layer' => array(
+            'enabled' => tokraft_quote_enabled('layer'),
+            'impact' => array($settings['layer_impact_low'], $settings['layer_impact_mid'], $settings['layer_impact_high']),
+        ),
+        'estimate' => array(
+            'infillCoefficient' => (float) $settings['estimate_infill_coefficient'],
+            'wallCoefficient' => (float) $settings['estimate_wall_coefficient'],
+            'layerCoefficient' => (float) $settings['estimate_layer_coefficient'],
+            'layerBaseline' => (float) $settings['estimate_layer_baseline'],
+            'highMultiplier' => (float) $settings['estimate_high_multiplier'],
+            'minimum' => (float) $settings['estimate_minimum'],
+            'infillBaseline' => (float) $settings['infill_default'],
+            'wallBaseline' => (float) $settings['walls_default'],
+        ),
+        'labels' => array(
+            'noColor' => __('Select a colour', 'tokraft'),
+        ),
+    );
+}
+
 function tokraft_register_admin_menu() {
     add_menu_page(__('toKraft 内容管理', 'tokraft'), __('toKraft', 'tokraft'), 'edit_others_posts', 'tokraft-home', 'tokraft_render_home_settings_page', 'dashicons-admin-customizer', 25);
     // Keep the custom landing page as the first submenu. Otherwise WordPress opens the first post type below it.
     add_submenu_page('tokraft-home', __('首页内容区块', 'tokraft'), __('首页内容区块', 'tokraft'), 'edit_others_posts', 'tokraft-home', 'tokraft_render_home_settings_page');
     add_submenu_page('tokraft-home', __('材料库', 'tokraft'), __('材料库', 'tokraft'), 'manage_categories', 'edit-tags.php?taxonomy=tokraft_material&post_type=product');
+    add_submenu_page('tokraft-home', __('报价表单', 'tokraft'), __('报价表单', 'tokraft'), 'edit_others_posts', 'tokraft-quote-settings', 'tokraft_render_quote_settings_page');
 }
 add_action('admin_menu', 'tokraft_register_admin_menu');
 
@@ -981,25 +1292,56 @@ function tokraft_admin_media_gallery_field($key, $args = array()) {
     echo '</div></div>';
 }
 
+function tokraft_admin_option_value($option, $key) {
+    if ('tokraft_quote_settings' === $option) {
+        return tokraft_quote_value($key);
+    }
+
+    return tokraft_home_value($key);
+}
+
 function tokraft_admin_select_field($key, $args = array()) {
     $args = wp_parse_args($args, array(
         'label' => '',
         'description' => '',
         'options' => array(),
         'class' => '',
+        'option' => 'tokraft_home_settings',
     ));
-    $field_id = 'tokraft_home_settings_' . $key;
-    $value = tokraft_home_value($key);
+    $field_id = $args['option'] . '_' . $key;
+    $value = tokraft_admin_option_value($args['option'], $key);
     echo '<div class="tokraft-admin-field ' . esc_attr($args['class']) . '">';
     echo '<label for="' . esc_attr($field_id) . '"><span class="tokraft-admin-field-label">' . esc_html($args['label']) . '</span>';
     if ($args['description']) {
         echo '<span class="tokraft-admin-field-description">' . esc_html($args['description']) . '</span>';
     }
-    echo '</label><select id="' . esc_attr($field_id) . '" name="tokraft_home_settings[' . esc_attr($key) . ']" data-tokraft-hero-visual-mode>';
+    echo '</label><select id="' . esc_attr($field_id) . '" name="' . esc_attr($args['option']) . '[' . esc_attr($key) . ']"' . ('hero_visual_mode' === $key ? ' data-tokraft-hero-visual-mode' : '') . '>';
     foreach ($args['options'] as $option_value => $option_label) {
         echo '<option value="' . esc_attr($option_value) . '" ' . selected($value, $option_value, false) . '>' . esc_html($option_label) . '</option>';
     }
     echo '</select></div>';
+}
+
+function tokraft_admin_checkbox_field($key, $args = array()) {
+    $args = wp_parse_args($args, array(
+        'label' => '',
+        'description' => '',
+        'checkbox_label' => '',
+        'class' => '',
+        'option' => 'tokraft_home_settings',
+    ));
+    $field_id = $args['option'] . '_' . $key;
+    $value = tokraft_admin_option_value($args['option'], $key);
+    echo '<div class="tokraft-admin-field ' . esc_attr($args['class']) . '">';
+    echo '<span class="tokraft-admin-field-label">' . esc_html($args['label']) . '</span>';
+    if ($args['description']) {
+        echo '<span class="tokraft-admin-field-description">' . esc_html($args['description']) . '</span>';
+    }
+    echo '<label class="tokraft-admin-checkbox" for="' . esc_attr($field_id) . '">';
+    echo '<input type="hidden" name="' . esc_attr($args['option']) . '[' . esc_attr($key) . ']" value="0">';
+    echo '<input type="checkbox" id="' . esc_attr($field_id) . '" name="' . esc_attr($args['option']) . '[' . esc_attr($key) . ']" value="1" ' . checked($value, '1', false) . '>';
+    echo '<span>' . esc_html($args['checkbox_label']) . '</span></label>';
+    echo '</div>';
 }
 
 function tokraft_admin_text_field($key, $args = array()) {
@@ -1009,9 +1351,16 @@ function tokraft_admin_text_field($key, $args = array()) {
         'type' => 'text',
         'placeholder' => '',
         'class' => '',
+        'option' => 'tokraft_home_settings',
+        'input_attributes' => array(),
     ));
-    $value = tokraft_home_value($key);
-    $field_id = 'tokraft_home_settings_' . $key;
+    $value = tokraft_admin_option_value($args['option'], $key);
+    $field_id = $args['option'] . '_' . $key;
+    $name = $args['option'] . '[' . $key . ']';
+    $extra = '';
+    foreach ($args['input_attributes'] as $attribute => $attribute_value) {
+        $extra .= ' ' . esc_attr($attribute) . '="' . esc_attr($attribute_value) . '"';
+    }
     echo '<div class="tokraft-admin-field ' . esc_attr($args['class']) . '">';
     echo '<label for="' . esc_attr($field_id) . '"><span class="tokraft-admin-field-label">' . esc_html($args['label']) . '</span>';
     if ($args['description']) {
@@ -1019,9 +1368,9 @@ function tokraft_admin_text_field($key, $args = array()) {
     }
     echo '</label>';
     if ('textarea' === $args['type']) {
-        echo '<textarea class="large-text" rows="4" id="' . esc_attr($field_id) . '" name="tokraft_home_settings[' . esc_attr($key) . ']" placeholder="' . esc_attr($args['placeholder']) . '">' . esc_textarea($value) . '</textarea>';
+        echo '<textarea class="large-text" rows="4" id="' . esc_attr($field_id) . '" name="' . esc_attr($name) . '" placeholder="' . esc_attr($args['placeholder']) . '">' . esc_textarea($value) . '</textarea>';
     } else {
-        echo '<input class="regular-text" type="' . esc_attr($args['type']) . '" id="' . esc_attr($field_id) . '" name="tokraft_home_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" placeholder="' . esc_attr($args['placeholder']) . '">';
+        echo '<input class="regular-text" type="' . esc_attr($args['type']) . '" id="' . esc_attr($field_id) . '" name="' . esc_attr($name) . '" value="' . esc_attr($value) . '" placeholder="' . esc_attr($args['placeholder']) . '"' . $extra . '>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
     echo '</div>';
 }
@@ -1162,10 +1511,10 @@ function tokraft_render_home_settings_page() {
     tokraft_admin_text_field('hero_accent', array('label' => '主标题重点部分', 'description' => '显示为金色强调文字，例如：real-world use。'));
     echo '</div>';
     tokraft_admin_text_field('hero_description', array('label' => '首屏说明', 'description' => '用 1-2 句解释客户可以“上传模型询价”或“直接购买产品”。换行会保留在前台。', 'type' => 'textarea'));
-    echo '<div class="tokraft-admin-callout"><strong>两个按钮怎么填？</strong><span>第一个按钮应通向询价页，第二个按钮应通向商店页。链接可保留默认的 <code>/quote/</code> 和 <code>/shop/</code>。</span></div>';
+    echo '<div class="tokraft-admin-callout"><strong>两个按钮怎么填？</strong><span>第一个按钮通向材料库（客户先选材料，再进入定制询价），第二个按钮通向商店页。链接可保留默认的 <code>/materials/</code> 和 <code>/shop/</code>。</span></div>';
     echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-four">';
     tokraft_admin_text_field('hero_quote_label', array('label' => '询价按钮文字', 'description' => '例如：申请打印报价'));
-    tokraft_admin_text_field('hero_quote_url', array('label' => '询价按钮链接', 'description' => '默认：/quote/', 'placeholder' => '/quote/'));
+    tokraft_admin_text_field('hero_quote_url', array('label' => '询价按钮链接', 'description' => '默认：/materials/（先进材料库选材料，再进入 /quote/ 定制）', 'placeholder' => '/materials/'));
     tokraft_admin_text_field('hero_shop_label', array('label' => '商店按钮文字', 'description' => '例如：浏览产品商店'));
     tokraft_admin_text_field('hero_shop_url', array('label' => '商店按钮链接', 'description' => '默认：/shop/', 'placeholder' => '/shop/'));
     echo '</div>';
@@ -1244,6 +1593,109 @@ function tokraft_render_home_settings_page() {
     echo '</form></div>';
 }
 
+/**
+ * Renders the "报价表单" settings screen: slider ranges, choice options,
+ * help copy and the live-estimate coefficients used by assets/theme.js.
+ */
+function tokraft_render_quote_settings_page() {
+    if (!current_user_can('edit_others_posts')) {
+        return;
+    }
+
+    $slider_groups = array(
+        'infill' => array(
+            'title' => __('填充率 Infill', 'tokraft'),
+            'description' => __('控制零件内部填充密度滑块的取值范围、默认值与说明文案。', 'tokraft'),
+            'step' => '01',
+            'number_step' => '1',
+        ),
+        'walls' => array(
+            'title' => __('壁厚 Wall perimeters', 'tokraft'),
+            'description' => __('控制外壁层数滑块的取值范围、默认值与说明文案。', 'tokraft'),
+            'step' => '02',
+            'number_step' => '1',
+        ),
+        'layer' => array(
+            'title' => __('层高 Layer height', 'tokraft'),
+            'description' => __('控制层高滑块的取值范围、默认值与说明文案，单位毫米。', 'tokraft'),
+            'step' => '03',
+            'number_step' => '0.01',
+        ),
+    );
+
+    echo '<div class="wrap tokraft-home-settings">';
+    if (isset($_GET['settings-updated'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('报价表单配置已保存。', 'tokraft') . '</p></div>';
+    }
+    echo '<h1>' . esc_html__('报价表单配置', 'tokraft') . '</h1>';
+    echo '<p class="description">' . esc_html(sprintf(__('这些设置直接驱动 %s 上的打印参数与实时估价，保存后前台立即生效。', 'tokraft'), home_url('/quote/'))) . '</p>';
+    echo '<form method="post" action="options.php">';
+    settings_fields('tokraft_quote_settings_group');
+
+    foreach ($slider_groups as $group => $meta) {
+        tokraft_admin_section_open('tokraft-quote-' . $group, $meta['step'], $meta['title'], $meta['description']);
+        tokraft_admin_checkbox_field($group . '_enabled', array(
+            'option' => 'tokraft_quote_settings',
+            'label' => __('显示状态', 'tokraft'),
+            'checkbox_label' => __('在报价表单上显示这个参数', 'tokraft'),
+        ));
+        echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-four">';
+        tokraft_admin_text_field($group . '_label', array('option' => 'tokraft_quote_settings', 'label' => __('前台标题', 'tokraft')));
+        tokraft_admin_text_field($group . '_min', array('option' => 'tokraft_quote_settings', 'label' => __('最小值', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => $meta['number_step'])));
+        tokraft_admin_text_field($group . '_max', array('option' => 'tokraft_quote_settings', 'label' => __('最大值', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => $meta['number_step'])));
+        tokraft_admin_text_field($group . '_step', array('option' => 'tokraft_quote_settings', 'label' => __('步长', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => $meta['number_step'])));
+        tokraft_admin_text_field($group . '_default', array('option' => 'tokraft_quote_settings', 'label' => __('默认值', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => $meta['number_step'])));
+        echo '</div>';
+        tokraft_admin_text_field($group . '_help', array('option' => 'tokraft_quote_settings', 'label' => __('问号提示文案', 'tokraft'), 'type' => 'textarea', 'description' => __('点击参数旁的问号时弹出的解释。', 'tokraft')));
+        echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-four">';
+        tokraft_admin_text_field($group . '_impact_low', array('option' => 'tokraft_quote_settings', 'label' => __('低档影响描述', 'tokraft'), 'type' => 'textarea'));
+        tokraft_admin_text_field($group . '_impact_mid', array('option' => 'tokraft_quote_settings', 'label' => __('中档影响描述', 'tokraft'), 'type' => 'textarea'));
+        tokraft_admin_text_field($group . '_impact_high', array('option' => 'tokraft_quote_settings', 'label' => __('高档影响描述', 'tokraft'), 'type' => 'textarea'));
+        echo '</div>';
+        tokraft_admin_section_close();
+    }
+
+    $choice_groups = array(
+        'support' => array('title' => __('支撑 Support', 'tokraft'), 'step' => '04'),
+        'adhesion' => array('title' => __('附着 Brim / Raft', 'tokraft'), 'step' => '05'),
+    );
+    foreach ($choice_groups as $group => $meta) {
+        tokraft_admin_section_open('tokraft-quote-' . $group, $meta['step'], $meta['title'], __('二选一按钮组：显示状态、标题、提示文案与可选项。', 'tokraft'));
+        tokraft_admin_checkbox_field($group . '_enabled', array(
+            'option' => 'tokraft_quote_settings',
+            'label' => __('显示状态', 'tokraft'),
+            'checkbox_label' => __('在报价表单上显示这个参数', 'tokraft'),
+        ));
+        echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-two">';
+        tokraft_admin_text_field($group . '_label', array('option' => 'tokraft_quote_settings', 'label' => __('前台标题', 'tokraft')));
+        tokraft_admin_text_field($group . '_default', array('option' => 'tokraft_quote_settings', 'label' => __('默认选中的提交值', 'tokraft')));
+        echo '</div>';
+        tokraft_admin_text_field($group . '_options', array(
+            'option' => 'tokraft_quote_settings',
+            'label' => __('可选项', 'tokraft'),
+            'type' => 'textarea',
+            'description' => __('每行一个选项，格式「前台显示文案|提交值」。省略竖线时两者相同。', 'tokraft'),
+        ));
+        tokraft_admin_text_field($group . '_help', array('option' => 'tokraft_quote_settings', 'label' => __('问号提示文案', 'tokraft'), 'type' => 'textarea'));
+        tokraft_admin_section_close();
+    }
+
+    tokraft_admin_section_open('tokraft-quote-estimate', '06', __('实时估价公式', 'tokraft'), __('右侧「Live estimate」的计算系数。系数 = 1 + (填充 − 默认填充) × A + (壁厚 − 默认壁厚) × B + (基准层高 − 层高) × C；低价 = max(最低价, 材料单价 × 数量 × 系数)，高价 = 低价 × 上限倍率。', 'tokraft'));
+    echo '<div class="tokraft-admin-field-grid tokraft-admin-field-grid-four">';
+    tokraft_admin_text_field('estimate_infill_coefficient', array('option' => 'tokraft_quote_settings', 'label' => __('A 填充系数', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '0.001')));
+    tokraft_admin_text_field('estimate_wall_coefficient', array('option' => 'tokraft_quote_settings', 'label' => __('B 壁厚系数', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '0.01')));
+    tokraft_admin_text_field('estimate_layer_coefficient', array('option' => 'tokraft_quote_settings', 'label' => __('C 层高系数', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '0.1')));
+    tokraft_admin_text_field('estimate_layer_baseline', array('option' => 'tokraft_quote_settings', 'label' => __('基准层高（mm）', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '0.01')));
+    tokraft_admin_text_field('estimate_high_multiplier', array('option' => 'tokraft_quote_settings', 'label' => __('高位上限倍率', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '0.05')));
+    tokraft_admin_text_field('estimate_minimum', array('option' => 'tokraft_quote_settings', 'label' => __('最低报价（CAD）', 'tokraft'), 'type' => 'number', 'input_attributes' => array('step' => '1')));
+    echo '</div>';
+    echo '<p class="description">' . esc_html__('每个材料自己的起步单价在「材料库」里逐个设置。', 'tokraft') . '</p>';
+    tokraft_admin_section_close();
+
+    submit_button(__('保存报价表单配置', 'tokraft'));
+    echo '</form></div>';
+}
+
 function tokraft_material_image_spec_text() {
     return 'Recommended image: 1200 × 900 px (4:3 landscape), JPG or WebP, under 1.5 MB. The front page crops to a fixed 4:3 frame — avoid tall portrait photos. Same image is reused on the homepage material cards.';
 }
@@ -1255,7 +1707,10 @@ function tokraft_material_add_fields() {
         echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
     }
     echo '</select><p>Used by the filter on the material library page.</p></div>';
-    echo '<div class="form-field"><label for="tokraft_material_color">Brand color</label><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="#d9d9d9" class="regular-text"><p>Fallback color when no material image is uploaded.</p></div>';
+    echo '<div class="form-field"><label for="tokraft_material_color">Brand color</label><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="#d9d9d9" class="tokraft-color-field regular-text" data-default-color="#d9d9d9"><p>Fallback color when no material image is uploaded.</p></div>';
+    echo '<div class="form-field"><label>Printable colours</label>';
+    tokraft_material_colors_control();
+    echo '<p>Shown as swatches on the material library card and used as the colour choices on the quote form.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_short_description">One-line summary</label><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2"></textarea><p>Used on the homepage cards and quote dropdown. Keep it to one clear sentence.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_best_for">Best for</label><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3"></textarea><p>Typical jobs this material is recommended for.</p></div>';
     echo '<div class="form-field"><label for="tokraft_material_avoid">Not ideal for</label><textarea id="tokraft_material_avoid" name="tokraft_material_avoid" rows="3"></textarea><p>Situations where another material is usually better.</p></div>';
@@ -1285,7 +1740,10 @@ function tokraft_material_edit_fields($term) {
         echo '<option value="' . esc_attr($value) . '" ' . selected($type, $value, false) . '>' . esc_html($label) . '</option>';
     }
     echo '</select><p class="description">Used by the filter on the material library page.</p></td></tr>';
-    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_color">Brand color</label></th><td><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="' . esc_attr($color) . '" class="regular-text"><p class="description">Fallback color when no image is uploaded.</p></td></tr>';
+    echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_color">Brand color</label></th><td><input type="text" id="tokraft_material_color" name="tokraft_material_color" value="' . esc_attr($color) . '" class="tokraft-color-field regular-text" data-default-color="' . esc_attr($color) . '"><p class="description">Fallback color when no image is uploaded.</p></td></tr>';
+    echo '<tr class="form-field"><th scope="row">Printable colours</th><td>';
+    tokraft_material_colors_control($term);
+    echo '<p class="description">Shown as swatches on the material library card and used as the colour choices on the quote form.</p></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_short_description">One-line summary</label></th><td><textarea id="tokraft_material_short_description" name="tokraft_material_short_description" rows="2" class="large-text">' . esc_textarea($short_description) . '</textarea><p class="description">Homepage cards and quote dropdown. One clear sentence.</p></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_best_for">Best for</label></th><td><textarea id="tokraft_material_best_for" name="tokraft_material_best_for" rows="3" class="large-text">' . esc_textarea($best_for) . '</textarea></td></tr>';
     echo '<tr class="form-field"><th scope="row"><label for="tokraft_material_avoid">Not ideal for</label></th><td><textarea id="tokraft_material_avoid" name="tokraft_material_avoid" rows="3" class="large-text">' . esc_textarea($avoid) . '</textarea></td></tr>';
@@ -1323,6 +1781,24 @@ function tokraft_save_material_fields($term_id) {
     }
     if (isset($_POST['tokraft_material_image_id'])) {
         update_term_meta($term_id, '_tokraft_material_image_id', absint($_POST['tokraft_material_image_id']));
+    }
+    if (isset($_POST['tokraft_material_colors'])) {
+        $colors = array();
+        $seen = array();
+        foreach ((array) wp_unslash($_POST['tokraft_material_colors']) as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $label = sanitize_text_field($row['label'] ?? '');
+            $hex = sanitize_hex_color($row['hex'] ?? '');
+            $key = strtolower($label);
+            if ('' === $label || !$hex || isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $colors[] = array('label' => $label, 'hex' => $hex);
+        }
+        update_term_meta($term_id, '_tokraft_material_colors', $colors);
     }
     update_term_meta($term_id, '_tokraft_material_featured', isset($_POST['tokraft_material_featured']) ? '1' : '0');
 }
@@ -1559,17 +2035,22 @@ function tokraft_admin_ui_strings() {
 
 function tokraft_admin_assets($hook) {
     $screen = get_current_screen();
-    if ('toplevel_page_tokraft-home' !== $hook && (!$screen || 'tokraft_material' !== $screen->taxonomy)) {
+    $tokraft_pages = array('toplevel_page_tokraft-home', 'tokraft_page_tokraft-quote-settings');
+    $is_material_taxonomy = $screen && 'tokraft_material' === $screen->taxonomy;
+    if (!in_array($hook, $tokraft_pages, true) && !$is_material_taxonomy) {
         return;
     }
     wp_enqueue_style(
         'tokraft-admin',
         get_template_directory_uri() . '/assets/admin.css',
         array(),
-        '2.5.5'
+        '2.6.0'
     );
     wp_enqueue_media();
-    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery'), '2.5.5', true);
+    if ($is_material_taxonomy) {
+        wp_enqueue_style('wp-color-picker');
+    }
+    wp_enqueue_script('tokraft-admin', get_template_directory_uri() . '/assets/admin.js', array('jquery', 'wp-color-picker'), '2.6.0', true);
     wp_localize_script('tokraft-admin', 'tokraftAdminI18n', tokraft_admin_ui_strings());
 }
 add_action('admin_enqueue_scripts', 'tokraft_admin_assets');
@@ -1611,3 +2092,29 @@ function tokraft_refresh_content_rewrites() {
     update_option('tokraft_content_rewrite_version', '1.2.0');
 }
 add_action('init', 'tokraft_refresh_content_rewrites', 99);
+
+/**
+ * toKraft only ships to the US and Canada, so keep both the classic and Store API
+ * country lists to those two. WooCommerce Blocks checkout reads these filters.
+ */
+function tokraft_allowed_countries($countries) {
+    return array_intersect_key((array) $countries, array_flip(array('US', 'CA')));
+}
+add_filter('woocommerce_countries_allowed_countries', 'tokraft_allowed_countries');
+add_filter('woocommerce_countries_shipping_countries', 'tokraft_allowed_countries');
+
+/**
+ * Mirror the filters above into the WooCommerce settings so the admin UI agrees
+ * with what customers actually see at checkout. Runs once per version bump.
+ */
+function tokraft_sync_selling_locations() {
+    if ('1.0.0' === get_option('tokraft_selling_locations_version')) {
+        return;
+    }
+    update_option('woocommerce_allowed_countries', 'specific');
+    update_option('woocommerce_specific_allowed_countries', array('US', 'CA'));
+    update_option('woocommerce_ship_to_countries', 'specific');
+    update_option('woocommerce_specific_ship_to_countries', array('US', 'CA'));
+    update_option('tokraft_selling_locations_version', '1.0.0');
+}
+add_action('init', 'tokraft_sync_selling_locations', 31);

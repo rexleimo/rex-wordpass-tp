@@ -357,6 +357,42 @@
     });
   };
 
+  const initColorPickers = (scope) => {
+    if (!$.fn.wpColorPicker) return;
+    $(scope || document).find('.tokraft-color-field').each((index, input) => {
+      const field = $(input);
+      if (field.data('tokraftColorPicker')) return;
+      field.data('tokraftColorPicker', true).wpColorPicker();
+    });
+  };
+
+  $(document).on('click', '[data-color-add]', (event) => {
+    event.preventDefault();
+    const repeater = event.currentTarget.closest('[data-color-repeater]');
+    const template = repeater?.querySelector('[data-color-template]');
+    const rows = repeater?.querySelector('[data-color-rows]');
+    if (!template || !rows) return;
+    // Index only has to be unique within the form; the server re-indexes on save.
+    const markup = template.innerHTML.replace(/__index__/g, `new-${Date.now()}-${rows.children.length}`);
+    rows.insertAdjacentHTML('beforeend', markup);
+    initColorPickers(rows.lastElementChild);
+    rows.lastElementChild?.querySelector('.tokraft-color-label')?.focus();
+  });
+
+  $(document).on('click', '[data-color-remove]', (event) => {
+    event.preventDefault();
+    const row = event.currentTarget.closest('[data-color-row]');
+    const rows = row?.parentElement;
+    if (!row || !rows) return;
+    if (rows.children.length > 1) {
+      row.remove();
+      return;
+    }
+    // Keep one empty row so the field never disappears; an empty label is dropped on save.
+    row.querySelector('.tokraft-color-label').value = '';
+  });
+
   $(initBlockManager);
   $(initHeroVisualOptions);
+  $(() => initColorPickers());
 })(jQuery));

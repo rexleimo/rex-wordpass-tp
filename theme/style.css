@@ -149,8 +149,12 @@ h3 { font-size: 26px; }
 .choice span { display: block; min-height: 46px; border: 1px solid #b5bec5; padding: 11px 9px; text-align: center; font-size: 13px; font-weight: 700; transition: .15s; }
 .choice input:checked + span { border-color: var(--blue); color: var(--blue); background: #edf5fb; box-shadow: inset 0 0 0 1px var(--blue); }
 .color-choice { display: flex; flex-wrap: wrap; gap: 9px; }
-.color-choice .choice span { width: 35px; min-height: 35px; border-radius: 50%; padding: 0; border: 3px solid transparent; box-shadow: 0 0 0 1px #aab6bf; }
+/* The palette is swapped per material with the `hidden` attribute, which display:flex would otherwise win against. */
+.color-choice[hidden] { display: none; }
+.color-choice .choice span { position: relative; width: 35px; min-height: 35px; border-radius: 50%; padding: 0; border: 3px solid transparent; box-shadow: 0 0 0 1px #aab6bf; }
 .color-choice .choice input:checked + span { border-color: #fff; box-shadow: 0 0 0 2px var(--blue); }
+.color-choice .choice input[type="checkbox"]:checked + span::after { position: absolute; inset: 0; display: grid; place-items: center; color: var(--blue); font-size: 15px; font-weight: 900; text-shadow: 0 0 3px #fff, 0 0 6px #fff; content: "✓"; }
+.field-colors .color-choice { margin-top: 2px; }
 .range-field { padding: 19px 0 21px; border-top: 1px solid var(--line); }
 .range-field:first-child { border-top: 0; padding-top: 0; }
 .range-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
@@ -160,7 +164,7 @@ h3 { font-size: 26px; }
 input[type="range"] { appearance: none; width: 100%; height: 5px; margin: 19px 0 10px; background: linear-gradient(90deg, var(--blue) var(--progress, 50%), #d6dde2 var(--progress, 50%)); }
 input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; width: 18px; background: var(--gold); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px var(--gold); }
 .range-impact { color: var(--ink-soft); font-size: 12px; }
-.toggle-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.toggle-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
 .notice { margin-bottom: 20px; padding: 14px 16px; border-left: 4px solid var(--success); background: #edf8f2; color: #14543b; font-size: 14px; }
 .quote-summary { position: sticky; top: 100px; background: var(--ink); color: #fff; padding: 26px; }
 .quote-summary h2 { font-size: 29px; }

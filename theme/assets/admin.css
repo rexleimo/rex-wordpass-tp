@@ -1478,3 +1478,43 @@
     justify-self: start;
   }
 }
+
+/* Material printable-colour repeater (taxonomy add/edit screens). */
+.tokraft-color-repeater .tokraft-color-rows {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tokraft-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tokraft-color-row .tokraft-color-label {
+  flex: 1 1 auto;
+  max-width: 260px;
+}
+
+.tokraft-color-row .wp-picker-container {
+  flex: 0 0 auto;
+}
+
+.tokraft-color-row .tokraft-color-remove {
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+/* Toggle field used on the quote form settings screen. */
+.tokraft-admin-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.tokraft-admin-checkbox input[type="checkbox"] {
+  margin: 0;
+}

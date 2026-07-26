@@ -155,6 +155,12 @@
     let activeType = 'all';
     let swiper;
 
+    const requestedSlug = (() => {
+      const param = new URLSearchParams(window.location.search).get('material');
+      if (param) return param;
+      return window.location.hash.startsWith('#material-') ? window.location.hash.slice('#material-'.length) : '';
+    })();
+
     const buildSlider = () => {
       if (swiper) swiper.destroy(true, false);
       wrapper.replaceChildren(...slides.filter((slide) => activeType === 'all' || slide.dataset.materialType === activeType));
@@ -174,6 +180,14 @@
           1101: { slidesPerView: 3, spaceBetween: 18 },
         },
       });
+    };
+
+    const focusRequestedMaterial = () => {
+      if (!requestedSlug) return;
+      const index = Array.from(wrapper.children).findIndex((slide) => slide.dataset.materialSlug === requestedSlug);
+      if (index < 0) return;
+      swiper.slideTo(index, 0);
+      slider.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
     };
 
     const selectFilter = (filter) => {
@@ -197,6 +211,7 @@
       });
     });
     buildSlider();
+    focusRequestedMaterial();
   };
 
   initHomeProofRail();
@@ -221,59 +236,144 @@
   const form = document.querySelector('.quote-form');
   if (form) {
     const $ = (selector) => document.querySelector(selector);
+    // Ranges, toggles and the estimate formula are all configurable in wp-admin; fall back to the
+    // shipped defaults when the localised config is unavailable.
+    const config = window.tokraftQuoteConfig || {};
+    const fallbackImpact = {
+      infill: [
+        'Balanced strength, efficient material use and standard lead time.',
+        'Stronger internal structure with more material and print time.',
+        'High-density part: maximum strength, material use and production time.',
+      ],
+      walls: [
+        'A dependable balance for functional prototypes.',
+        'More durable surfaces and stronger mounting features.',
+        'Heavy-duty shells for demanding, load-bearing use.',
+      ],
+      layer: [
+        'Fine surface detail and smoother curves; expect a longer print time.',
+        'Standard detail with a balanced production time.',
+        'Faster production with a more visible layer texture.',
+      ],
+    };
+    const estimate = Object.assign({
+      infillCoefficient: .006,
+      wallCoefficient: .1,
+      layerCoefficient: 1.1,
+      layerBaseline: .2,
+      highMultiplier: 1.4,
+      minimum: 10,
+      infillBaseline: 20,
+      wallBaseline: 3,
+    }, config.estimate || {});
+    const noColorLabel = config.labels?.noColor || 'Select a colour';
+
     const fileInput = $('#model-file');
     const fileStatus = $('#file-status');
     const material = $('#material');
     const quantity = $('#quantity');
-    const ranges = ['infill', 'walls', 'layer-height'].map((id) => $('#' + id)).filter(Boolean);
+    // Each group may be switched off in the settings page, so every lookup stays optional.
+    const sliders = {
+      infill: $('#infill'),
+      walls: $('#walls'),
+      layer: $('#layer-height'),
+    };
+    const colorGroups = Array.from(form.querySelectorAll('[data-color-group]'));
 
     function rangeProgress(input) {
       const progress = ((input.value - input.min) / (input.max - input.min)) * 100;
       input.style.setProperty('--progress', `${progress}%`);
     }
 
+    function sliderValue(group, fallback) {
+      const input = sliders[group];
+      return input ? Number(input.value) : fallback;
+    }
+
+    function impactCopy(group, input) {
+      const copy = config[group]?.impact || fallbackImpact[group];
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const span = max - min;
+      const position = span > 0 ? (Number(input.value) - min) / span : 0;
+      return copy[position < 1 / 3 ? 0 : position < 2 / 3 ? 1 : 2];
+    }
+
     function updateImpacts() {
-      const infill = Number($('#infill').value);
-      const walls = Number($('#walls').value);
-      const layer = Number($('#layer-height').value);
-      $('#infill-impact').textContent = infill <= 20 ? 'Balanced strength, efficient material use and standard lead time.' : infill <= 50 ? 'Stronger internal structure with more material and print time.' : 'High-density part: maximum strength, material use and production time.';
-      $('#walls-impact').textContent = walls <= 3 ? 'A dependable balance for functional prototypes.' : walls <= 4 ? 'More durable surfaces and stronger mounting features.' : 'Heavy-duty shells for demanding, load-bearing use.';
-      $('#layer-impact').textContent = layer <= .16 ? 'Fine surface detail and smoother curves; expect a longer print time.' : layer <= .24 ? 'Standard detail with a balanced production time.' : 'Faster production with a more visible layer texture.';
+      Object.keys(sliders).forEach((group) => {
+        const input = sliders[group];
+        if (!input) return;
+        const target = $('#' + input.dataset.impact);
+        if (target) target.textContent = impactCopy(group, input);
+      });
+    }
+
+    function selectedColors() {
+      return Array.from(form.querySelectorAll('input[name="color[]"]:checked')).map((input) => input.value);
+    }
+
+    function setText(selector, value) {
+      const node = $(selector);
+      if (node) node.textContent = value;
     }
 
     function updateSummary() {
-      const infill = Number($('#infill').value);
-      const walls = Number($('#walls').value);
-      const layer = Number($('#layer-height').value);
+      const infill = sliderValue('infill', estimate.infillBaseline);
+      const walls = sliderValue('walls', estimate.wallBaseline);
+      const layer = sliderValue('layer', estimate.layerBaseline);
       const qty = Math.max(1, Number(quantity.value) || 1);
-      const color = document.querySelector('input[name="color"]:checked')?.value || 'Natural';
-      const factor = 1 + ((infill - 20) * .006) + ((walls - 3) * .1) + ((.2 - layer) * 1.1);
+      const colors = selectedColors();
+      const factor = 1
+        + ((infill - estimate.infillBaseline) * estimate.infillCoefficient)
+        + ((walls - estimate.wallBaseline) * estimate.wallCoefficient)
+        + ((estimate.layerBaseline - layer) * estimate.layerCoefficient);
       const base = Number(material.selectedOptions[0]?.dataset.estimate) || 24;
-      const low = Math.max(10, Math.round(base * qty * factor));
-      const high = Math.round(low * 1.4);
-      $('#summary-material').textContent = material.value;
-      $('#summary-color').textContent = color;
-      $('#summary-quantity').textContent = `${qty} ${qty === 1 ? 'part' : 'parts'}`;
-      $('#summary-infill').textContent = `${infill}%`;
-      $('#summary-walls').textContent = walls;
-      $('#summary-layer').textContent = `${layer.toFixed(2)} mm`;
-      $('#estimate-price').textContent = `$${low}–$${high}`;
+      const low = Math.max(estimate.minimum, Math.round(base * qty * factor));
+      const high = Math.round(low * estimate.highMultiplier);
+      setText('#summary-material', material.value);
+      setText('#summary-color', colors.length ? colors.join(', ') : noColorLabel);
+      setText('#summary-quantity', `${qty} ${qty === 1 ? 'part' : 'parts'}`);
+      setText('#summary-infill', `${infill}%`);
+      setText('#summary-walls', walls);
+      setText('#summary-layer', `${layer.toFixed(2)} mm`);
+      setText('#estimate-price', `$${low}–$${high}`);
       updateImpacts();
     }
 
-    ranges.forEach((input) => {
+    // Colours belong to a material, so swap the visible palette and drop selections that no longer apply.
+    function syncColorGroups() {
+      const slug = material.selectedOptions[0]?.dataset.materialSlug;
+      colorGroups.forEach((group) => {
+        const active = group.dataset.colorGroup === slug;
+        group.hidden = !active;
+        if (active) return;
+        group.querySelectorAll('input[name="color[]"]:checked').forEach((input) => {
+          input.checked = false;
+        });
+      });
+    }
+
+    Object.values(sliders).forEach((input) => {
+      if (!input) return;
       rangeProgress(input);
       input.addEventListener('input', () => {
         const output = $('#' + input.dataset.output);
-        const value = Number(input.value);
-        output.textContent = input.id === 'layer-height' ? `${value.toFixed(2)}${input.dataset.suffix}` : `${value}${input.dataset.suffix}`;
+        const decimals = Number(input.dataset.decimals) || 0;
+        if (output) output.textContent = `${Number(input.value).toFixed(decimals)}${input.dataset.suffix}`;
         rangeProgress(input);
         updateSummary();
       });
     });
 
-    [material, quantity, ...document.querySelectorAll('input[name="color"]')].forEach((input) => input?.addEventListener('change', updateSummary));
+    material?.addEventListener('change', () => {
+      syncColorGroups();
+      updateSummary();
+    });
+    quantity?.addEventListener('change', updateSummary);
     quantity?.addEventListener('input', updateSummary);
+    form.addEventListener('change', (event) => {
+      if (event.target.name === 'color[]') updateSummary();
+    });
     fileInput?.addEventListener('change', () => {
       fileStatus.textContent = fileInput.files[0] ? `Selected: ${fileInput.files[0].name}` : '';
     });
@@ -286,6 +386,7 @@
       }));
       dialog.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => dialog.close()));
     }
+    syncColorGroups();
     updateSummary();
   }
 

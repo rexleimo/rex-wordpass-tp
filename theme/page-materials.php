@@ -75,7 +75,7 @@ if ($has_materials) {
                         $type = tokraft_material_type($material);
                         $quote_url = add_query_arg('material', $material->slug, home_url('/quote/'));
                         ?>
-                        <article class="material-library-card swiper-slide" data-material-type="<?php echo esc_attr($type); ?>" style="--swatch:<?php echo esc_attr($color); ?>">
+                        <article id="material-<?php echo esc_attr($material->slug); ?>" class="material-library-card swiper-slide" data-material-type="<?php echo esc_attr($type); ?>" data-material-slug="<?php echo esc_attr($material->slug); ?>" style="--swatch:<?php echo esc_attr($color); ?>">
                             <div class="material-library-image<?php echo $image_id ? ' has-image' : ''; ?>">
                                 <span class="material-library-index"><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span>
                                 <?php if ($image_id) {
@@ -89,6 +89,20 @@ if ($has_materials) {
                                 </div>
                                 <h2><?php echo esc_html($material->name); ?></h2>
                                 <p class="material-library-summary"><?php echo esc_html($summary ?: __('A production material selected to balance performance, finish and repeatability.', 'tokraft')); ?></p>
+                                <?php $printable_colors = tokraft_material_colors($material); ?>
+                                <?php if ($printable_colors) : ?>
+                                    <div class="material-library-colors">
+                                        <span class="material-library-colors-label"><?php esc_html_e('Available colours', 'tokraft'); ?></span>
+                                        <ul class="material-library-color-list">
+                                            <?php foreach ($printable_colors as $printable_color) : ?>
+                                                <li>
+                                                    <span class="material-library-color-dot" style="--dot:<?php echo esc_attr($printable_color['hex']); ?>" aria-hidden="true"></span>
+                                                    <span class="material-library-color-name"><?php echo esc_html($printable_color['label']); ?></span>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
                                 <div class="material-library-guidance" aria-label="<?php echo esc_attr(sprintf(__('Production guidance for %s', 'tokraft'), $material->name)); ?>">
                                     <section class="material-library-block">
                                         <span>Best for</span>

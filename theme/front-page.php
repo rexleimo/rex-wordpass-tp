@@ -191,13 +191,13 @@ ob_start();
                 $image_id = absint(get_term_meta($material->term_id, '_tokraft_material_image_id', true));
                 $color = sanitize_hex_color(get_term_meta($material->term_id, '_tokraft_material_color', true)) ?: '#d9d9d9';
                 $description = get_term_meta($material->term_id, '_tokraft_material_short_description', true);
-                $quote_url = add_query_arg('material', $material->slug, home_url('/quote/')); ?>
-                <a id="material-<?php echo esc_attr($material->slug); ?>" class="home-material-card swiper-slide<?php echo $image_id ? ' has-image' : ''; ?>" href="<?php echo esc_url($quote_url); ?>" style="--material-color: <?php echo esc_attr($color); ?>" role="listitem">
+                $material_url = add_query_arg('material', $material->slug, $materials_url); ?>
+                <a id="material-<?php echo esc_attr($material->slug); ?>" class="home-material-card swiper-slide<?php echo $image_id ? ' has-image' : ''; ?>" href="<?php echo esc_url($material_url); ?>" style="--material-color: <?php echo esc_attr($color); ?>" role="listitem">
                     <div class="home-material-image"><?php if ($image_id) { echo wp_get_attachment_image($image_id, 'medium_large', false, array('loading' => 'lazy')); } ?></div>
                     <span class="home-material-card-number" aria-hidden="true">0<?php echo esc_html($index + 1); ?></span>
                     <span class="home-material-card-title"><?php echo esc_html($material->name); ?></span>
                     <small><?php echo esc_html($description); ?></small>
-                    <span class="home-material-card-action"><?php esc_html_e('Start a quote', 'tokraft'); ?><b aria-hidden="true">&rarr;</b></span>
+                    <span class="home-material-card-action"><?php esc_html_e('View material', 'tokraft'); ?><b aria-hidden="true">&rarr;</b></span>
                 </a>
             <?php endforeach; ?>
         </div>

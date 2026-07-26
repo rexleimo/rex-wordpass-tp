@@ -38,6 +38,9 @@
 .material-library-stage { position: relative; padding: 1px; overflow: hidden; border: 1px solid var(--line); border-radius: 3px; background: var(--line); box-shadow: var(--shadow); }
 .material-library-swiper { overflow: hidden; }
 .material-library-card { position: relative; display: flex; flex-direction: column; min-height: 622px; overflow: hidden; background: var(--surface); color: var(--ink); }
+/* Swiper's bundle CSS loads after this file and resets .swiper-slide to display:block / height:100%,
+   which kills the column layout and leaves card bottoms and CTAs ragged. */
+.material-library-card.swiper-slide { display: flex; flex-direction: column; height: auto; align-self: stretch; }
 .material-library-image { min-height: 242px; aspect-ratio: 1.18 / 1; }
 .material-library-image { position: relative; min-height: 0; overflow: hidden; background: linear-gradient(145deg, color-mix(in srgb, var(--swatch) 34%, #fff), #e8edf6); }
 .material-library-image::after { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,255,255,.04), rgba(20,27,52,.24)); content: ""; }
@@ -51,7 +54,12 @@
 .material-library-swatch { width: 15px; height: 15px; border: 2px solid #fff; border-radius: 50%; background: var(--swatch); box-shadow: 0 0 0 1px rgba(20,27,52,.24); }
 .material-library-copy h2 { margin: 17px 0 0; color: var(--ink); font-size: clamp(39px, 3.25vw, 51px); font-weight: 400; line-height: .9; letter-spacing: -.07em; }
 .material-library-summary { margin: 13px 0 17px; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
-.material-library-guidance { display: grid; gap: 0; margin-bottom: 20px; border-top: 1px solid var(--line); }
+.material-library-colors { margin: 0 0 17px; }
+.material-library-colors-label { display: block; margin-bottom: 7px; color: var(--blue); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.material-library-color-list { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 0; padding: 0; list-style: none; }
+.material-library-color-list li { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-size: 11px; line-height: 1.2; }
+.material-library-color-dot { width: 13px; height: 13px; border: 1px solid #fff; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(20,27,52,.24); }
+.material-library-guidance { display: grid; flex: 1; align-content: stretch; gap: 0; margin-bottom: 20px; border-top: 1px solid var(--line); }
 .material-library-block { padding: 10px 0 11px; border-bottom: 1px solid var(--line); }
 .material-library-block > span { display: block; margin-bottom: 5px; color: var(--blue); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .material-library-block p { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.42; }
