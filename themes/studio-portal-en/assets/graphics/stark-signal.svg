@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Stark Bridge signal</title>
+  <desc id="desc">A black and cream transaction monitor with an orange waveform.</desc>
+  <rect width="1600" height="900" fill="#f2f0e9"/>
+  <rect x="80" y="70" width="1440" height="760" fill="#1b1b1b" stroke="#1b1b1b" stroke-width="4"/>
+  <text x="120" y="130" fill="#f2f0e9" font-family="monospace" font-size="18">STARK BRIDGE / TRANSACTION SIGNAL</text>
+  <text x="1340" y="130" fill="#ff4d00" font-family="monospace" font-size="18">BLOCK 88721</text>
+  <g stroke="#4f4f4b" stroke-width="2"><path d="M120 200h1360M120 320h1360M120 440h1360M120 560h1360M120 680h1360M260 180v570M500 180v570M740 180v570M980 180v570M1220 180v570"/></g>
+  <path d="M120 570L220 560L270 610L340 590L410 330L470 590L560 550L630 580L700 470L760 510L830 230L900 550L990 520L1060 570L1140 360L1210 530L1300 490L1380 560L1480 540" fill="none" stroke="#ff4d00" stroke-width="12" stroke-linejoin="bevel"/>
+  <g fill="#f2f0e9"><circle cx="410" cy="330" r="12"/><circle cx="830" cy="230" r="12"/><circle cx="1140" cy="360" r="12"/></g>
+  <rect x="120" y="700" width="410" height="82" fill="#ff4d00"/>
+  <text x="150" y="752" font-family="Arial Black" font-size="34" fill="#1b1b1b">CONFIRMED / 08s</text>
+  <text x="1270" y="758" fill="#f2f0e9" font-family="monospace" font-size="16">RISK 0.014</text>
+</svg>

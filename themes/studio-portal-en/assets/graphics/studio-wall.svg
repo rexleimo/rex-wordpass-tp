@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+  <title id="title">Studio critique wall</title>
+  <desc id="desc">A graphic studio wall with pinned interface studies, typography and orange notes.</desc>
+  <rect width="1600" height="1100" fill="#c9c4b4"/>
+  <path d="M0 920h1600M130 0v1100M1470 0v1100" stroke="#1b1b1b" stroke-width="3"/>
+  <rect x="170" y="110" width="400" height="610" fill="#f2f0e9" stroke="#1b1b1b" stroke-width="4" transform="rotate(-2 370 415)"/>
+  <text x="210" y="180" font-family="monospace" font-size="17" transform="rotate(-2 370 415)">TYPE STUDY / 04</text>
+  <text x="210" y="310" font-family="Arial Black" font-size="120" transform="rotate(-2 370 415)">A+</text>
+  <text x="210" y="450" font-family="Arial Black" font-size="78" transform="rotate(-2 370 415)">SYSTEM</text>
+  <path d="M210 500h300M210 550h210M210 600h260" stroke="#1b1b1b" stroke-width="12" transform="rotate(-2 370 415)"/>
+  <rect x="600" y="170" width="650" height="430" fill="#1b1b1b" stroke="#f2f0e9" stroke-width="4" transform="rotate(1.5 925 385)"/>
+  <rect x="650" y="230" width="250" height="300" fill="#ff4d00" transform="rotate(1.5 925 385)"/>
+  <circle cx="1060" cy="350" r="112" fill="none" stroke="#ff4d00" stroke-width="22" transform="rotate(1.5 925 385)"/>
+  <text x="948" y="535" fill="#f2f0e9" font-family="monospace" font-size="16" transform="rotate(1.5 925 385)">INTERACTION / STATE 06</text>
+  <rect x="1040" y="650" width="390" height="260" fill="#ff4d00" stroke="#1b1b1b" stroke-width="4" transform="rotate(-4 1235 780)"/>
+  <text x="1090" y="735" font-family="Arial Black" font-size="45" transform="rotate(-4 1235 780)">DOES IT</text>
+  <text x="1090" y="800" font-family="Arial Black" font-size="45" transform="rotate(-4 1235 780)">SURVIVE</text>
+  <text x="1090" y="865" font-family="Arial Black" font-size="45" transform="rotate(-4 1235 780)">PRODUCTION?</text>
+  <rect x="500" y="690" width="430" height="260" fill="#e8e4d8" stroke="#1b1b1b" stroke-width="4" transform="rotate(3 715 820)"/>
+  <g stroke="#1b1b1b" stroke-width="3" transform="rotate(3 715 820)"><path d="M540 745h350M540 800h350M540 855h350M650 720v190M780 720v190"/></g>
+  <circle cx="174" cy="106" r="10" fill="#ff4d00"/><circle cx="610" cy="167" r="10" fill="#ff4d00"/><circle cx="1048" cy="650" r="10" fill="#1b1b1b"/>
+  <text x="70" y="1040" font-family="monospace" font-size="18">FIG.04 - THURSDAY CRITIQUE / BERLIN MITTE</text>
+</svg>

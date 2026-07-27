@@ -1,0 +1,9 @@
+.en-scroll-progress { position: fixed; z-index: 300; top: 0; left: 0; width: 100%; height: 4px; pointer-events: none; }
+.en-scroll-progress span { display: block; width: 100%; height: 100%; background: var(--flame); transform: scaleX(0); transform-origin: left center; }
+.en-motion-ready [data-reveal],
+.en-motion-ready [data-stagger] > * { will-change: transform, opacity; }
+.en-motion-media { will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+    .en-ticker > div { animation: none; }
+    .en-scroll-progress { display: none; }
+}

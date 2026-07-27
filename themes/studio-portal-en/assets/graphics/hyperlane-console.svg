@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Hyperlane interchain console</title>
+  <desc id="desc">A dark product dashboard with orange routing paths and modular data panels.</desc>
+  <rect width="1600" height="900" fill="#111111"/>
+  <path d="M0 110h1600M0 790h1600M160 0v900M1440 0v900" stroke="#4a4945" stroke-width="2"/>
+  <text x="46" y="70" fill="#f2f0e9" font-family="monospace" font-size="18">HYPERLANE / INTERCHAIN CONSOLE</text>
+  <text x="1325" y="70" fill="#ff4d00" font-family="monospace" font-size="18">LIVE_26</text>
+  <rect x="205" y="160" width="1190" height="575" fill="#1b1b1b" stroke="#f2f0e9" stroke-width="3"/>
+  <rect x="205" y="160" width="1190" height="64" fill="#f2f0e9"/>
+  <circle cx="244" cy="192" r="8" fill="#ff4d00"/>
+  <text x="270" y="199" fill="#1b1b1b" font-family="monospace" font-size="17">ROUTE / NEW MESSAGE</text>
+  <text x="1260" y="199" fill="#1b1b1b" font-family="monospace" font-size="15">0x45...A91</text>
+  <rect x="245" y="267" width="290" height="420" fill="#242424" stroke="#777266" stroke-width="2"/>
+  <text x="275" y="309" fill="#777266" font-family="monospace" font-size="14">ORIGIN</text>
+  <text x="275" y="354" fill="#f2f0e9" font-family="Arial Black" font-size="34">ETHEREUM</text>
+  <path d="M275 394h230" stroke="#777266" stroke-width="2"/>
+  <text x="275" y="436" fill="#777266" font-family="monospace" font-size="14">DESTINATION</text>
+  <text x="275" y="481" fill="#f2f0e9" font-family="Arial Black" font-size="34">BASE</text>
+  <rect x="275" y="591" width="230" height="56" fill="#ff4d00"/>
+  <text x="296" y="626" fill="#1b1b1b" font-family="monospace" font-size="16">CONNECT WALLET &gt;</text>
+  <g stroke="#777266" stroke-width="2" fill="none">
+    <circle cx="800" cy="430" r="125"/><circle cx="800" cy="430" r="74"/><circle cx="800" cy="430" r="22" fill="#ff4d00" stroke="#ff4d00"/>
+    <path d="M800 305V235M800 625V555M675 430H568M1032 430H925M712 342l-68-68M956 586l-68-68"/>
+  </g>
+  <path d="M568 430C660 250 927 246 1032 430C920 620 665 616 568 430Z" stroke="#ff4d00" stroke-width="5" fill="none"/>
+  <circle cx="568" cy="430" r="14" fill="#f2f0e9"/><circle cx="1032" cy="430" r="14" fill="#f2f0e9"/>
+  <rect x="1085" y="267" width="270" height="180" fill="#242424" stroke="#777266" stroke-width="2"/>
+  <text x="1115" y="305" fill="#777266" font-family="monospace" font-size="13">ESTIMATED TIME</text>
+  <text x="1115" y="375" fill="#f2f0e9" font-family="Arial Black" font-size="65">08:42</text>
+  <rect x="1085" y="477" width="270" height="210" fill="#ff4d00"/>
+  <text x="1115" y="519" fill="#1b1b1b" font-family="monospace" font-size="13">ROUTE CONFIDENCE</text>
+  <text x="1115" y="620" fill="#1b1b1b" font-family="Arial Black" font-size="88">98%</text>
+  <text x="205" y="780" fill="#777266" font-family="monospace" font-size="13">FIG.01 / SYSTEM STATE: READY</text>
+</svg>

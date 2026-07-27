@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Safe interface system grid</title>
+  <desc id="desc">A warm paper component system board with structured black and orange interface modules.</desc>
+  <rect width="1600" height="900" fill="#e8e4d8"/>
+  <path d="M0 100h1600M0 800h1600M100 0v900M1500 0v900" stroke="#1b1b1b" stroke-width="2"/>
+  <text x="130" y="64" font-family="monospace" font-size="18">SAFE{WALLET} / COMPONENT LAB</text>
+  <text x="1340" y="64" font-family="monospace" font-size="18">46 UNITS</text>
+  <rect x="150" y="150" width="560" height="580" fill="#f2f0e9" stroke="#1b1b1b" stroke-width="3"/>
+  <rect x="150" y="150" width="560" height="68" fill="#1b1b1b"/>
+  <text x="180" y="193" font-family="monospace" font-size="17" fill="#f2f0e9">TRANSACTION / REVIEW</text>
+  <text x="180" y="280" font-family="monospace" font-size="14" fill="#777266">SENDING</text>
+  <text x="180" y="342" font-family="Arial Black" font-size="68" fill="#1b1b1b">24.50 ETH</text>
+  <path d="M180 385h500M180 505h500" stroke="#1b1b1b" stroke-width="2"/>
+  <text x="180" y="430" font-family="monospace" font-size="15">TO     0x7A2...E14</text>
+  <text x="180" y="474" font-family="monospace" font-size="15">FEE    0.0024 ETH</text>
+  <rect x="180" y="570" width="235" height="82" fill="#1b1b1b"/>
+  <text x="232" y="620" font-family="monospace" font-size="17" fill="#f2f0e9">CONFIRM</text>
+  <rect x="445" y="570" width="235" height="82" fill="#ff4d00" stroke="#1b1b1b" stroke-width="2"/>
+  <text x="512" y="620" font-family="monospace" font-size="17">REJECT</text>
+  <g transform="translate(760 150)">
+    <rect width="680" height="180" fill="#1b1b1b"/>
+    <text x="30" y="45" font-family="monospace" font-size="14" fill="#777266">SIGNATURE STATUS</text>
+    <text x="30" y="126" font-family="Arial Black" font-size="74" fill="#f2f0e9">02 / 03</text>
+    <rect x="470" y="36" width="170" height="108" fill="#ff4d00"/>
+    <path d="M508 90h94M555 52v76" stroke="#1b1b1b" stroke-width="8"/>
+  </g>
+  <g transform="translate(760 370)">
+    <rect width="320" height="360" fill="#f2f0e9" stroke="#1b1b1b" stroke-width="3"/>
+    <text x="24" y="48" font-family="monospace" font-size="14">TOKEN / COLOR</text>
+    <rect x="24" y="86" width="272" height="68" fill="#1b1b1b"/>
+    <rect x="24" y="176" width="272" height="68" fill="#ff4d00"/>
+    <rect x="24" y="266" width="272" height="68" fill="#e8e4d8" stroke="#1b1b1b" stroke-width="2"/>
+  </g>
+  <g transform="translate(1120 370)">
+    <rect width="320" height="360" fill="#ff4d00" stroke="#1b1b1b" stroke-width="3"/>
+    <text x="24" y="48" font-family="monospace" font-size="14">STATE / SUCCESS</text>
+    <circle cx="160" cy="175" r="82" fill="#1b1b1b"/>
+    <path d="M115 175l30 30 64-72" fill="none" stroke="#f2f0e9" stroke-width="14"/>
+    <text x="63" y="310" font-family="Arial Black" font-size="32">SIGNED OK</text>
+  </g>
+</svg>
