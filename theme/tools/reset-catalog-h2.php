@@ -67,6 +67,18 @@ function tokraft_h2_find_product_by_title($title) {
     return 0;
 }
 
+/** Resolve an existing, licensed library image without duplicating media records. */
+function tokraft_h2_attachment_id($filename) {
+    global $wpdb;
+
+    $attachment_id = $wpdb->get_var($wpdb->prepare(
+        "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s LIMIT 1",
+        '%/' . $wpdb->esc_like($filename)
+    ));
+
+    return (int) $attachment_id;
+}
+
 function tokraft_h2_upsert_product($config, $category_id) {
     $product_id = tokraft_h2_find_product_by_title($config['title']);
     $product = $product_id ? wc_get_product($product_id) : null;
@@ -89,6 +101,15 @@ function tokraft_h2_upsert_product($config, $category_id) {
     $product->set_sold_individually(false);
     $product->set_menu_order($config['menu_order']);
     $product->set_category_ids(array_filter(array($category_id)));
+
+    // Keep an admin-supplied photo, but give new catalogue products a real cover.
+    $image_id = (int) $product->get_image_id();
+    if (!$image_id && !empty($config['cover_filename'])) {
+        $image_id = tokraft_h2_attachment_id($config['cover_filename']);
+        if ($image_id) {
+            $product->set_image_id($image_id);
+        }
+    }
     $saved_id = $product->save();
 
     update_post_meta($saved_id, '_tokraft_specifications', $config['specs']);
@@ -96,9 +117,9 @@ function tokraft_h2_upsert_product($config, $category_id) {
     update_post_meta($saved_id, '_tokraft_disclaimer', $config['disclaimer']);
     update_post_meta($saved_id, '_tokraft_features', $config['features']);
     update_post_meta($saved_id, '_tokraft_cautions', $config['cautions']);
-    // Leave cover empty so ops can upload their own authorised photos.
-    if (!get_post_meta($saved_id, '_tokraft_showcase_cover_id', true)) {
-        update_post_meta($saved_id, '_tokraft_showcase_cover_id', 0);
+    // The dedicated showcase cover may later be replaced in the product editor.
+    if (!get_post_meta($saved_id, '_tokraft_showcase_cover_id', true) && $image_id) {
+        update_post_meta($saved_id, '_tokraft_showcase_cover_id', $image_id);
     }
 
     tokraft_h2_log(($product_id ? 'UPDATED' : 'CREATED') . ' #' . $saved_id . ' ' . $config['title'] . ' ' . get_permalink($saved_id));
@@ -144,6 +165,7 @@ $catalog = array(
         'sku' => 'TK-H2D',
         'price' => '3299.00',
         'menu_order' => 1,
+        'cover_filename' => 'hero.jpg',
         'short' => 'Dual-nozzle production printer for shops that need multi-material throughput without babysitting every plate.',
         'content' => <<<HTML
 <!-- wp:paragraph -->
@@ -191,6 +213,7 @@ HTML,
         'sku' => 'TK-H2S',
         'price' => '2499.00',
         'menu_order' => 2,
+        'cover_filename' => 'shop.jpg',
         'short' => 'Single-nozzle H2-series printer with a large chamber, high-flow tooling and the sensor stack we use for everyday production.',
         'content' => <<<HTML
 <!-- wp:paragraph -->

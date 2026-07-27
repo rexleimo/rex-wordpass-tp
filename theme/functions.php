@@ -132,12 +132,16 @@ add_action('wp_enqueue_scripts', 'tokraft_assets');
 function tokraft_theme_routes() {
     add_rewrite_rule('^quote/?$', 'index.php?tokraft_quote=1', 'top');
     add_rewrite_rule('^materials/?$', 'index.php?tokraft_material_library=1', 'top');
+    add_rewrite_rule('^studio/?$', 'index.php?tokraft_studio=1', 'top');
+    add_rewrite_rule('^contact/?$', 'index.php?tokraft_contact=1', 'top');
 }
 add_action('init', 'tokraft_theme_routes');
 
 function tokraft_quote_query_var($vars) {
     $vars[] = 'tokraft_quote';
     $vars[] = 'tokraft_material_library';
+    $vars[] = 'tokraft_studio';
+    $vars[] = 'tokraft_contact';
     return $vars;
 }
 add_filter('query_vars', 'tokraft_quote_query_var');
@@ -148,6 +152,12 @@ function tokraft_quote_template($template) {
     }
     if (get_query_var('tokraft_material_library')) {
         return get_template_directory() . '/page-materials.php';
+    }
+    if (get_query_var('tokraft_studio')) {
+        return get_template_directory() . '/page-studio.php';
+    }
+    if (get_query_var('tokraft_contact')) {
+        return get_template_directory() . '/page-contact.php';
     }
     return $template;
 }
@@ -169,8 +179,56 @@ function tokraft_default_menu() {
     echo '<a href="' . esc_url(home_url('/materials/')) . '">Materials</a>';
     echo '<a href="' . esc_url($case_url) . '">Case Studies</a>';
     echo '<a href="' . esc_url($blog_url) . '">Blog</a>';
-    echo '<a href="' . esc_url(home_url('/#equipment')) . '">Equipment</a>';
+    echo '<a href="' . esc_url(home_url('/studio/')) . '">Studio</a>';
+    echo '<a href="' . esc_url(home_url('/contact/')) . '">Contact</a>';
 }
+
+function tokraft_contact_submission() {
+    if (!isset($_POST['tokraft_contact_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['tokraft_contact_nonce'])), 'tokraft_contact')) {
+        wp_die(__('Unable to verify this contact request. Please try again.', 'tokraft'));
+    }
+
+    if (!empty($_POST['air_confirm'])) {
+        wp_safe_redirect(add_query_arg('air_error', '1', wp_get_referer() ?: home_url('/contact/')));
+        exit;
+    }
+
+    $errors = array();
+    $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    $subject = isset($_POST['subject']) ? sanitize_text_field(wp_unslash($_POST['subject'])) : '';
+    $message = isset($_POST['message']) ? sanitize_textarea_field(wp_unslash($_POST['message'])) : '';
+
+    if ('' === $name) {
+        $errors[] = 'name';
+    }
+    if ('' === $email || !is_email($email)) {
+        $errors[] = 'email';
+    }
+    if ('' === $message) {
+        $errors[] = 'message';
+    }
+
+    if ($errors) {
+        wp_safe_redirect(add_query_arg('contact_error', implode(',', $errors), wp_get_referer() ?: home_url('/contact/')));
+        exit;
+    }
+
+    $body = "New toKraft contact message\n\n";
+    $body .= 'Name: ' . $name . "\n";
+    $body .= 'Email: ' . $email . "\n";
+    $body .= 'Subject: ' . ($subject ?: 'General inquiry') . "\n";
+    $body .= "Message:\n" . $message . "\n";
+    $body .= 'From page: ' . esc_url_raw(wp_get_referer() ?: home_url('/contact/')) . "\n";
+
+    $to = get_option('admin_email');
+    wp_mail($to, 'New toKraft contact message: ' . ($subject ?: 'General inquiry'), $body, array('Reply-To: ' . $email));
+
+    wp_safe_redirect(add_query_arg('contact_sent', '1', home_url('/contact/')));
+    exit;
+}
+add_action('admin_post_tokraft_contact', 'tokraft_contact_submission');
+add_action('admin_post_nopriv_tokraft_contact', 'tokraft_contact_submission');
 
 function tokraft_quote_submission() {
     if (!isset($_POST['tokraft_quote_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['tokraft_quote_nonce'])), 'tokraft_quote')) {
