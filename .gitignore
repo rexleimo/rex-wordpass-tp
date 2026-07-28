@@ -1,0 +1,8 @@
+# Local agent planning data and generated design exports.
+.hermes/
+export/
+
+# WordPress core themes copied into the bind-mounted themes directory.
+themes/twentytwentythree/
+themes/twentytwentyfour/
+themes/twentytwentyfive/
