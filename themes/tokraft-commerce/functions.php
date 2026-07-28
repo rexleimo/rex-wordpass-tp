@@ -45,14 +45,29 @@ function tokraft_uppercase($text) {
 
 function tokraft_assets() {
     $theme_script_dependencies = array('jquery');
+    $is_home = is_front_page();
     $is_material_library = (bool) get_query_var('tokraft_material_library');
-    $uses_swiper = is_front_page() || $is_material_library;
+    $uses_swiper = $is_home || $is_material_library;
     wp_enqueue_style(
         'tokraft-style',
         get_stylesheet_uri(),
         array(),
         (string) filemtime(get_stylesheet_directory() . '/style.css')
     );
+    wp_enqueue_style(
+        'tokraft-account-search',
+        get_template_directory_uri() . '/assets/account-search.css',
+        array('tokraft-style'),
+        (string) filemtime(get_template_directory() . '/assets/account-search.css')
+    );
+    if ($is_home) {
+        wp_enqueue_style(
+            'tokraft-home-motion',
+            get_template_directory_uri() . '/assets/home-motion.css',
+            array('tokraft-style'),
+            (string) filemtime(get_template_directory() . '/assets/home-motion.css')
+        );
+    }
     wp_enqueue_style(
         'tokraft-shop-product',
         get_template_directory_uri() . '/assets/shop-product.css',
@@ -123,6 +138,36 @@ function tokraft_assets() {
         (string) filemtime(get_template_directory() . '/assets/theme.js'),
         true
     );
+    wp_enqueue_script(
+        'tokraft-account-search',
+        get_template_directory_uri() . '/assets/account-search.js',
+        array('tokraft-theme'),
+        (string) filemtime(get_template_directory() . '/assets/account-search.js'),
+        true
+    );
+    if ($is_home) {
+        wp_enqueue_script(
+            'tokraft-gsap',
+            get_template_directory_uri() . '/assets/vendor/gsap/gsap.min.js',
+            array(),
+            (string) filemtime(get_template_directory() . '/assets/vendor/gsap/gsap.min.js'),
+            true
+        );
+        wp_enqueue_script(
+            'tokraft-scroll-trigger',
+            get_template_directory_uri() . '/assets/vendor/gsap/ScrollTrigger.min.js',
+            array('tokraft-gsap'),
+            (string) filemtime(get_template_directory() . '/assets/vendor/gsap/ScrollTrigger.min.js'),
+            true
+        );
+        wp_enqueue_script(
+            'tokraft-home-motion',
+            get_template_directory_uri() . '/assets/home-motion.js',
+            array('tokraft-theme', 'tokraft-scroll-trigger'),
+            (string) filemtime(get_template_directory() . '/assets/home-motion.js'),
+            true
+        );
+    }
     if (is_page_template('page-quote.php')) {
         wp_localize_script('tokraft-theme', 'tokraftQuoteConfig', tokraft_quote_js_config());
     }
@@ -2314,6 +2359,58 @@ function tokraft_allowed_countries($countries) {
 }
 add_filter('woocommerce_countries_allowed_countries', 'tokraft_allowed_countries');
 add_filter('woocommerce_countries_shipping_countries', 'tokraft_allowed_countries');
+
+/**
+ * Keep customer accounts owned by WooCommerce so saved addresses are reused by
+ * its account, checkout, order, and Store API flows instead of duplicated here.
+ */
+function tokraft_account_page_is_ready($page_id) {
+    $page = get_post((int) $page_id);
+    return $page instanceof WP_Post
+        && 'page' === $page->post_type
+        && 'publish' === $page->post_status
+        && has_shortcode($page->post_content, 'woocommerce_my_account');
+}
+
+function tokraft_setup_customer_accounts() {
+    if (!class_exists('WooCommerce')) {
+        return;
+    }
+
+    $account_page_id = (int) get_option('woocommerce_myaccount_page_id');
+    if (!tokraft_account_page_is_ready($account_page_id)) {
+        $account_page = get_page_by_path('my-account');
+        if ($account_page instanceof WP_Post && tokraft_account_page_is_ready($account_page->ID)) {
+            $account_page_id = (int) $account_page->ID;
+        } else {
+            $account_page_id = (int) wp_insert_post(array(
+                'post_title' => __('My account', 'tokraft'),
+                'post_name' => 'my-account',
+                'post_content' => '[woocommerce_my_account]',
+                'post_status' => 'publish',
+                'post_type' => 'page',
+            ));
+        }
+
+        if (tokraft_account_page_is_ready($account_page_id)) {
+            update_option('woocommerce_myaccount_page_id', $account_page_id);
+        } else {
+            return;
+        }
+    }
+
+    if ('1.1.0' === get_option('tokraft_customer_accounts_version')) {
+        return;
+    }
+
+    update_option('woocommerce_enable_myaccount_registration', 'yes');
+    update_option('woocommerce_enable_signup_and_login_from_checkout', 'yes');
+    update_option('woocommerce_enable_checkout_login_reminder', 'yes');
+    update_option('woocommerce_registration_generate_username', 'yes');
+    update_option('woocommerce_registration_generate_password', 'no');
+    update_option('tokraft_customer_accounts_version', '1.1.0');
+}
+add_action('init', 'tokraft_setup_customer_accounts', 32);
 
 /**
  * Mirror the filters above into the WooCommerce settings so the admin UI agrees

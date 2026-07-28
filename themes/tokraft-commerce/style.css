@@ -3,7 +3,7 @@ Theme Name: toKraft Manufacturing
 Theme URI: https://tokraft.local
 Author: toKraft
 Description: A manufacturing-first WordPress theme for 3D printing services and products.
-Version: 1.0.0
+Version: 1.2.0
 Text Domain: tokraft
 */
 
@@ -673,11 +673,15 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
   display: flex;
   align-items: flex-end;
   min-height: 0;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 2.35 / 1;
   overflow: hidden;
   background: var(--ink);
   border: 1px solid var(--line);
   isolation: isolate;
+}
+/* Equipment profiles are reference pages, so keep the cover subordinate to specs. */
+.single-tokraft_equipment .blog-single-hero {
+  aspect-ratio: 3.2 / 1;
 }
 .blog-single-hero::after {
   position: absolute;
@@ -705,8 +709,8 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
 .blog-single-hero-copy {
   position: relative;
   z-index: 2;
-  width: min(100%, 800px);
-  padding: clamp(30px, 5vw, 76px);
+  width: min(100%, 680px);
+  padding: clamp(24px, 3.2vw, 48px);
   color: #fff;
 }
 .blog-single-hero .eyebrow {
@@ -714,17 +718,17 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
 }
 .blog-single-hero h1 {
   max-width: 12ch;
-  margin: 14px 0 16px;
+  margin: 10px 0 12px;
   color: #fff;
-  font-size: clamp(46px, 5.8vw, 82px);
-  line-height: .98;
+  font-size: clamp(38px, 4vw, 60px);
+  line-height: 1;
   letter-spacing: -.05em;
 }
 .blog-single-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   color: rgba(255, 255, 255, .78);
   font-size: 13px;
   font-weight: 650;
@@ -733,14 +737,12 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
   max-width: 58ch;
   margin: 0;
   color: rgba(255, 255, 255, .9);
-  font-size: 18px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.45;
 }
 .blog-single-body {
-  display: grid;
-  grid-template-columns: minmax(0, 780px) 280px;
-  justify-content: space-between;
-  gap: 64px;
+  max-width: 780px;
+  margin: 0 auto;
   padding-top: 52px;
 }
 .blog-single-content {
@@ -875,41 +877,44 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
   text-transform: uppercase;
 }
 
-/* Blog sidebar */
-.blog-single-aside {
+/* Keep follow-up actions compact and subordinate to the article itself. */
+.blog-single-footer {
   display: grid;
-  gap: 14px;
-  align-content: start;
-  position: sticky;
-  top: 96px;
+  grid-template-columns: minmax(150px, .8fr) minmax(180px, 1.35fr) auto minmax(260px, 1.5fr);
+  gap: 24px;
+  align-items: center;
+  max-width: 1120px;
+  margin: 58px auto 0;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
-.blog-single-card {
-  display: grid;
-  gap: 10px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  background: #fff;
-}
-.blog-single-card.is-muted {
-  background: #f7f8fa;
-}
-.blog-single-card h2 {
+.blog-single-footer-intro h2 {
   margin: 0;
-  font-size: 24px;
-  line-height: 1.15;
+  font-size: 21px;
+  line-height: 1.2;
 }
-.blog-single-card p {
+.blog-single-footer > p {
   margin: 0;
   color: var(--ink-soft);
   font-size: 13px;
   line-height: 1.55;
 }
-.blog-single-card a:not(.btn) {
+.blog-single-footer-links {
+  display: grid;
+  gap: 8px;
+}
+.blog-single-footer-links > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.blog-single-footer-links a {
   color: var(--ink);
   font-size: 13px;
   font-weight: 650;
 }
-.blog-single-card a:not(.btn):hover {
+.blog-single-footer-links a:hover {
   color: var(--blue);
 }
 
@@ -917,12 +922,11 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
   .blog-archive-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .blog-single-hero,
-  .blog-single-body {
-    grid-template-columns: 1fr;
+  .blog-single-footer {
+    grid-template-columns: minmax(150px, 1fr) minmax(220px, 1.5fr);
   }
-  .blog-single-aside {
-    position: static;
+  .blog-single-footer > .btn {
+    justify-self: start;
   }
 }
 @media (max-width: 720px) {
@@ -939,16 +943,28 @@ input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; widt
     padding-right: 18px;
   }
   .blog-single-hero {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
+  }
+  .single-tokraft_equipment .blog-single-hero {
+    aspect-ratio: 1.35 / 1;
   }
   .blog-single-hero-copy {
     padding: 28px 24px;
   }
   .blog-single-hero h1 {
-    font-size: clamp(42px, 12vw, 58px);
+    font-size: clamp(36px, 10vw, 48px);
   }
   .blog-single-dek {
-    font-size: 16px;
+    font-size: 15px;
+  }
+  .blog-single-footer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 42px;
+    padding: 20px 0;
+  }
+  .blog-single-footer > .btn {
+    width: fit-content;
   }
 }
 

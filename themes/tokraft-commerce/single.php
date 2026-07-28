@@ -25,21 +25,23 @@
         <div class="blog-single-content entry-content">
             <?php the_content(); ?>
         </div>
-        <aside class="blog-single-aside">
-            <div class="blog-single-card">
-                <span class="eyebrow"><?php esc_html_e('Next step', 'tokraft'); ?></span>
-                <h2><?php esc_html_e('Ready to print a part?', 'tokraft'); ?></h2>
-                <p><?php esc_html_e('Upload your model, set materials and print preferences, and we will review the file before confirming price and schedule.', 'tokraft'); ?></p>
-                <a class="btn btn-primary btn-small" href="<?php echo esc_url(home_url('/quote/')); ?>"><?php esc_html_e('Start a quote', 'tokraft'); ?> <span aria-hidden="true">&rarr;</span></a>
-            </div>
-            <div class="blog-single-card is-muted">
-                <span class="eyebrow"><?php esc_html_e('Also useful', 'tokraft'); ?></span>
+    </div>
+    <footer class="blog-single-footer">
+        <div class="blog-single-footer-intro">
+            <span class="eyebrow"><?php esc_html_e('Next step', 'tokraft'); ?></span>
+            <h2><?php esc_html_e('Ready to print a part?', 'tokraft'); ?></h2>
+        </div>
+        <p><?php esc_html_e('Upload your model and preferences; we will review the file before confirming price and schedule.', 'tokraft'); ?></p>
+        <a class="btn btn-primary btn-small" href="<?php echo esc_url(home_url('/quote/')); ?>"><?php esc_html_e('Start a quote', 'tokraft'); ?> <span aria-hidden="true">&rarr;</span></a>
+        <nav class="blog-single-footer-links" aria-label="<?php esc_attr_e('Related resources', 'tokraft'); ?>">
+            <span class="eyebrow"><?php esc_html_e('Also useful', 'tokraft'); ?></span>
+            <div>
                 <a href="<?php echo esc_url(home_url('/materials/')); ?>"><?php esc_html_e('Material library', 'tokraft'); ?></a>
                 <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>"><?php esc_html_e('Ready-to-order shop', 'tokraft'); ?></a>
                 <a href="<?php echo esc_url(get_post_type_archive_link('tokraft_case_study') ?: home_url('/case-studies/')); ?>"><?php esc_html_e('Application examples', 'tokraft'); ?></a>
             </div>
-        </aside>
-    </div>
+        </nav>
+    </footer>
 </article>
 <?php endwhile; ?>
 <?php get_footer(); ?>

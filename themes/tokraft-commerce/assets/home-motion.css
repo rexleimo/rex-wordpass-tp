@@ -1,0 +1,55 @@
+.tk-home-progress {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  pointer-events: none;
+}
+
+.tk-home-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), #5065ff 72%, var(--gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.tk-home-motion-ready .home-hero-stage,
+.tk-home-motion-ready .home-section-heading > *,
+.tk-home-motion-ready .home-materials-intro > *,
+.tk-home-motion-ready .home-route-card,
+.tk-home-motion-ready .home-config-card,
+.tk-home-motion-ready .home-material-card,
+.tk-home-motion-ready .home-product-card,
+.tk-home-motion-ready .home-case-card,
+.tk-home-motion-ready .home-final-facts > div {
+  will-change: transform, opacity;
+}
+
+.tk-home-motion-ready .home-route-media img.tk-motion-media,
+.tk-home-motion-ready .home-config-image img.tk-motion-media,
+.tk-home-motion-ready .home-material-image img.tk-motion-media,
+.tk-home-motion-ready .home-product-image img.tk-motion-media,
+.tk-home-motion-ready .home-case-image img.tk-motion-media,
+.tk-home-motion-ready .home-hero-stage img.tk-motion-media {
+  --tk-motion-y: 0%;
+  --tk-motion-scale: 1.045;
+  transform: translate3d(0, var(--tk-motion-y), 0) scale(var(--tk-motion-scale));
+  transform-origin: center;
+  will-change: transform;
+}
+
+.tk-home-motion-ready .home-route-card:hover .home-route-media img.tk-motion-media,
+.tk-home-motion-ready .home-config-card:hover .home-config-image img.tk-motion-media,
+.tk-home-motion-ready .home-product-card:hover .home-product-image img.tk-motion-media,
+.tk-home-motion-ready .home-case-card:hover .home-case-image img.tk-motion-media {
+  --tk-motion-scale: 1.075;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-home-progress { display: none; }
+  .tk-motion-media { transform: none !important; }
+}

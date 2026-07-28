@@ -32,7 +32,9 @@ services:
         }
     volumes:
       - wordpress_data:/var/www/html
-      - ./theme:/var/www/html/wp-content/themes/tokraft
+      # Mount the entire product catalog so one local WordPress admin can
+      # install and switch between independently shippable themes.
+      - ./themes:/var/www/html/wp-content/themes
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - ./wordpress/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
 

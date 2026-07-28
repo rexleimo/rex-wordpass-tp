@@ -261,6 +261,31 @@ foreach ($material_data as $name => $data) {
 tokraft_seed_log('Materials updated (6)');
 
 // --- Equipment ---
+$x1_carbon_content = <<<'HTML'
+<p>The Bambu Lab X1 Carbon is a strong option when a project needs a compact, enclosed FDM workflow with dependable dimensional repeatability. It is especially useful for functional prototypes, small production runs and engineering parts where the print needs to do more than look good on a desk.</p>
+<div class="blog-callout"><strong>Project fit</strong><p>Use this profile when the part needs controlled material handling, repeatable functional features and a practical route from CAD file to review. Final material, orientation and tolerances are always confirmed against the actual geometry.</p></div>
+<h2>Where the X1 Carbon profile works best</h2>
+<p>An enclosed CoreXY platform gives us a useful balance of speed, consistency and material flexibility. For everyday prototype work, this means less time spent compensating for open-frame variables and more attention paid to wall thickness, hole size, surface orientation and the way the part meets the next component in an assembly.</p>
+<p>It is a good starting point for brackets, enclosures, fixtures, jigs, covers, low-volume product housings and fit-check models. Every job still begins with the part's load, temperature, finish and tolerance requirements.</p>
+<h2>Choose the material around the use case</h2>
+<table class="blog-compare"><thead><tr><th>Material direction</th><th>Best fit</th><th>Review point</th></tr></thead><tbody>
+<tr><td>PLA</td><td>Fast visual models, low-stress fit checks and presentation pieces.</td><td>Not the default for heat, outdoor exposure or loaded mechanical parts.</td></tr>
+<tr><td>PETG</td><td>General-purpose functional parts that need toughness and everyday chemical resistance.</td><td>Support contact and surface finish need to be planned around the part geometry.</td></tr>
+<tr><td>ASA</td><td>Outdoor fixtures, covers and parts exposed to UV or weather.</td><td>We review warping risk, wall balance and ventilation requirements before production.</td></tr>
+<tr><td>Carbon-fibre reinforced grades</td><td>Stiff fixtures, structural interfaces and technical-looking functional components.</td><td>Thin sections, mating features and finish expectations need a closer check.</td></tr>
+</tbody></table>
+<h2>What we check before printing</h2>
+<div class="blog-steps"><div class="blog-step"><span>01</span><div><h3>Part intent</h3><p>We identify what the part must do: carry load, protect an assembly, guide a tool, test a fit or present a finished concept.</p></div></div><div class="blog-step"><span>02</span><div><h3>Geometry and orientation</h3><p>Critical faces, holes, overhangs and interfaces are reviewed so the print direction supports the way the part will be used.</p></div></div><div class="blog-step"><span>03</span><div><h3>Material and finish</h3><p>We match the material to heat, impact, UV exposure and surface expectations before the job is released.</p></div></div><div class="blog-step"><span>04</span><div><h3>Quote and production plan</h3><p>You receive a confirmed price and schedule after file review, rather than relying only on an early estimate.</p></div></div></div>
+<h2>Prepare a cleaner handover</h2>
+<p>A STEP file is helpful when a revision or manufacturing check may be needed; STL and 3MF are suitable when the geometry is already final. Include the intended material, quantity, deadline, colour preference and any dimensions that must work with another part.</p>
+<p>For critical fits, provide the mating part dimensions or a drawing that identifies the no-compromise features. This lets us plan clearance, orientation and post-processing before the first print.</p>
+<div class="blog-callout"><strong>Good to know</strong><p>Print time alone does not define the lead time. File readiness, material availability, finish requirements and the number of review rounds all affect the confirmed production schedule.</p></div>
+<h2>When to use another route</h2>
+<p>The X1 Carbon profile is not the right answer for every job. Very large parts may need to be split or moved to a larger build volume; highly cosmetic parts may need a different finish process; and heavy, long-term load cases may point to another material or manufacturing method.</p>
+<h2>Next step</h2>
+<p>Send the model with a brief note about how the part will be used. We will review the geometry, recommend a practical material and confirm the production route before moving forward.</p>
+HTML;
+
 $equipment = array(
     array(
         'Bambu Lab H2D',
@@ -275,6 +300,7 @@ $equipment = array(
         'Enclosed CoreXY profile suited to engineering materials and repeatable functional parts. Useful when dimensional consistency and protected material handling matter more than open-frame flexibility.',
         $img('shop.jpg'),
         2,
+        $x1_carbon_content,
     ),
     array(
         'Bambu Lab P1S',
@@ -293,7 +319,9 @@ $equipment = array(
 );
 
 foreach ($equipment as $item) {
-    $content = '<p>' . esc_html($item[2]) . '</p><ul><li>Profile used for customer-facing capability notes</li><li>Final process settings are confirmed during file review</li><li>Not every material is available on every machine</li></ul>';
+    $content = !empty($item[5])
+        ? $item[5]
+        : '<p>' . esc_html($item[2]) . '</p><ul><li>Profile used for customer-facing capability notes</li><li>Final process settings are confirmed during file review</li><li>Not every material is available on every machine</li></ul>';
     tokraft_seed_upsert_post('tokraft_equipment', $item[0], $item[1], $content, wp_trim_words($item[2], 22), $item[3], $item[4]);
 }
 tokraft_seed_log('Equipment updated');
